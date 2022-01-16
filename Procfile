@@ -1,0 +1,1 @@
+web: npm run build && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js
