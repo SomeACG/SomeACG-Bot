@@ -1,1 +1,1 @@
-web: npm run build && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js
+web: npm run build && cd ./dist && mkdir -p ./temp && crossenv TS_NODE_BASEURL=./ node -r tsconfig-paths/register dist/src/app.js
