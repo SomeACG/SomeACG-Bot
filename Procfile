@@ -1,1 +1,1 @@
-web: mkdir ./temp && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register dist/app.js
+ts-node -r tsconfig-paths/register src/app.ts
