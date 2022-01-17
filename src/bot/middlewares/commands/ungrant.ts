@@ -17,10 +17,10 @@ export default Telegraf.command('ungrant', async ctx => {
     if (ctx.message.reply_to_message) user_id = ctx.message.reply_to_message.from.id
     try{
         let succeed = await removePermissions(user_id)
-        if(succeed) await ctx.reply('成功移除用户 ' + user_id + ' 的所有权限', {
+        if(succeed) return await ctx.reply('成功移除用户 ' + user_id + ' 的所有权限', {
             reply_to_message_id: ctx.message.message_id
         })
-        await ctx.reply('移除用户权限失败，请检查该用户是否具有权限', {
+        return await ctx.reply('移除用户权限失败，请检查该用户是否具有权限', {
             reply_to_message_id: ctx.message.message_id
         })
     }
