@@ -8,6 +8,10 @@ import { Artwork } from "~/types/Artwork"
 import { parseParams } from "~/utils/param-parser"
 
 export default Telegraf.command('tag', async ctx => {
+    let waiting_message: Message
+    setTimeout(async () => {
+        if(waiting_message) await ctx.deleteMessage(waiting_message.message_id)
+    },10000)
     let command = parseParams(ctx.message.text)
     if (!ctx.message.reply_to_message && !command.params['index']) {
         return await ctx.reply('参数不正确，请回复一条消息或在在参数中指定作品序号！', {
@@ -19,7 +23,7 @@ export default Telegraf.command('tag', async ctx => {
             reply_to_message_id: ctx.message.message_id
         })
     }
-    let waiting_message = await ctx.reply('正在设置作品标签...', {
+    waiting_message = await ctx.reply('正在设置作品标签...', {
         reply_to_message_id: ctx.message.message_id
     })
     let tag_array = command.target.split(',')

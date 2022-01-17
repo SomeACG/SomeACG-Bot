@@ -1,14 +1,21 @@
 import { Telegraf } from "telegraf";
+import { Message } from "telegraf/typings/core/types/typegram";
 import { getArtwork } from "~/database/operations/artwork";
 import { modifyArtwork } from "~/services/artwork-service";
 import { parseParams } from "~/utils/param-parser";
 
 export default Telegraf.command('update', async ctx => {
     let command = parseParams(ctx.message.text)
+    let waiting_message: Message
+    setTimeout(async () => {
+        if (waiting_message) { 
+            await ctx.deleteMessage(waiting_message.message_id) 
+        }
+    }, 10000)
     if (!command.params['index']) return await ctx.reply('没有指定要更改的作品序号!', {
         reply_to_message_id: ctx.message.message_id
     })
-    let waiting_message = await ctx.reply('正在更新作品信息...', {
+    waiting_message = await ctx.reply('正在更新作品信息...', {
         reply_to_message_id: ctx.message.message_id
     })
     try {

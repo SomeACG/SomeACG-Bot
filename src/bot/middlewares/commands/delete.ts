@@ -6,6 +6,10 @@ import { Message } from "telegraf/typings/core/types/typegram";
 
 export default Telegraf.command('delete', async ctx => {
     let command = parseParams(ctx.message.text)
+    let waiting_message: Message
+    setTimeout(async () => {
+        if(waiting_message) await ctx.deleteMessage(waiting_message.message_id)
+    },10000)
     if (!command.params['index'] && !ctx.message.reply_to_message) {
         return await ctx.reply('命令语法不正确，请回复一条消息或指定要删除的作品序号!', {
             reply_to_message_id: ctx.message.message_id
@@ -14,7 +18,7 @@ export default Telegraf.command('delete', async ctx => {
     let artwork_index = -1
 
     ctx.message.forward_from_message_id
-    let waiting_message = await ctx.reply('正在删除作品...', {
+    waiting_message = await ctx.reply('正在删除作品...', {
         reply_to_message_id: ctx.message.message_id
     })
     try {
