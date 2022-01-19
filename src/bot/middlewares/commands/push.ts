@@ -35,7 +35,7 @@ export default Telegraf.command('push', async ctx => {
         let result = await publishArtwork(artwork_info, {
             is_quality: command.params['quality'] ? true : false,
             picture_index: command.params['picture_index'] ? parseInt(command.params['picture_index']) : 0,
-            artwork_tags: tags_string.search(',') == -1 ? [ tags_string ] : tags_string.split(','),
+            artwork_tags: tags_string.search(',') == -1 ? [ tags_string ] : tags_string.split(/,|，/),
             origin_file_id: reply_to_message ? (reply_to_message as Message.DocumentMessage).document.file_id : undefined,
             contribution: contribution
         })
