@@ -26,7 +26,7 @@ export default Telegraf.command('tag', async ctx => {
     waiting_message = await ctx.reply('正在设置作品标签...', {
         reply_to_message_id: ctx.message.message_id
     })
-    let tag_array = command.target.split(',')
+    let tag_array = command.target.split(/,|，/)
     try {
         let artwork: Artwork
         if (ctx.message.reply_to_message) {
