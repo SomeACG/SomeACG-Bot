@@ -24,7 +24,7 @@ export async function publishArtwork(artworkInfo: ArtworkInfo, publish_event: Pu
             file_name_origin = await downloadFile(origin_file_link.href, path.basename(new URL(origin_file_link.href).pathname))
         }
         // 上传到OSS和OneDrive
-        await uploadOSS(file_name_thumb)
+        // await uploadOSS(file_name_thumb)
         await uploadOneDrive(file_name_origin)
 
         // 获取标签ID
