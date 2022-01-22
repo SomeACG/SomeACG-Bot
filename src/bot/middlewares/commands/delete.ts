@@ -17,7 +17,6 @@ export default Telegraf.command('delete', async ctx => {
     }
     let artwork_index = -1
 
-    ctx.message.forward_from_message_id
     waiting_message = await ctx.reply('正在删除作品...', {
         reply_to_message_id: ctx.message.message_id
     })

@@ -10,6 +10,7 @@
 		"koa": "^2.13.4",
 		"koa-bodyparser": "^4.3.0",
 		"koa-router": "^10.1.1",
+		"minio": "^7.0.26",
 		"module-alias": "^2.2.2",
 		"mongoose": "^6.1.4",
 		"telegraf": "^4.5.2",
@@ -22,5 +23,8 @@
 		"build": "tsc --outDir ./dist",
 		"dev": "npm run build && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js",
 		"start": "mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js"
+	},
+	"devDependencies": {
+		"@types/minio": "^7.0.11"
 	}
 }

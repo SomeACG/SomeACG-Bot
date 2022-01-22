@@ -32,6 +32,7 @@ export default Telegraf.command('push', async ctx => {
     try {
         let artwork_info = await getArtworkInfoByUrl(command.target)
         let contribution: Contribution | undefined
+        if (command.params['contribute_from']) contribution = await getContributionById(command.params['contribute_from'])
         let result = await publishArtwork(artwork_info, {
             is_quality: command.params['quality'] ? true : false,
             picture_index: command.params['picture_index'] ? parseInt(command.params['picture_index']) : 0,
@@ -41,8 +42,7 @@ export default Telegraf.command('push', async ctx => {
         })
         if (result.succeed) {
             await ctx.telegram.editMessageText(waiting_message.chat.id, waiting_message.message_id, undefined, '作品发布成功~')
-            if (command.params['contribute_from']) {
-                let contribution = await getContributionById(command.params['contribute_from'])
+            if (contribution) {
                 ctx.telegram.editMessageText(contribution.chat_id, contribution.reply_message_id, undefined, "您的投稿已经审核通过并发布到频道~")
             }
             return
