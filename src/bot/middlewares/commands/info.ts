@@ -8,7 +8,7 @@ import { parseParams } from "~/utils/param-parser";
 export default Telegraf.command('info', async ctx => {
     let command = parseParams(ctx.message.text)
     if (!command.target) {
-        return await ctx.reply(`使用方法:\n/pixiv <参数> [作品链接]\n可选参数: picture_index 图片序号，默认为0`, {
+        return await ctx.reply(`使用方法:\n/info <参数> [作品链接]\n可选参数: picture_index 图片序号，默认为0`, {
             reply_to_message_id: ctx.message.message_id
         })
     }
