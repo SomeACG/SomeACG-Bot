@@ -15,10 +15,12 @@ bot.use(Telegraf.command('version', async ctx => {
 // Commands
 import startCommand from "./middlewares/commands/start"
 bot.use(startCommand)
-import pixivCommand from "./middlewares/commands/pixiv"
-bot.use(pixivCommand)
+import infoCommand from "./middlewares/commands/info"
+bot.use(infoCommand)
 import randomCommand from "./middlewares/commands/random"
 bot.use(randomCommand)
+import helpCommand from "./middlewares/commands/help"
+bot.use(helpCommand)
 import debugCommand from "./middlewares/commands/debug"
 bot.use(Telegraf.optional(genAdminPredicate(),debugCommand))
 import pushCommand from "./middlewares/commands/push"
@@ -53,8 +55,8 @@ bot.telegram.setMyCommands([
         description: '随机获取一张图片'
     },
     {
-        command: 'pixiv',
-        description: '获取Pixiv原图以及作品信息'
+        command: 'info',
+        description: '获取作品原图以及作品信息'
     },
     {
         command: 'push',
@@ -79,6 +81,10 @@ bot.telegram.setMyCommands([
     {
         command: 'ungrant',
         description: '[管理员]撤销某用户的权限'
+    },
+    {
+        command: 'help',
+        description: '获取命令使用帮助'
     },
     {
         command: 'version',

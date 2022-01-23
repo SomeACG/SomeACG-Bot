@@ -1,7 +1,6 @@
 import { Telegraf } from "telegraf";
 import config from "~/config"
 import path from 'path'
-import fs from 'fs'
 import getArtworkInfo from "~/platforms/pixiv";
 import downloadFile from "~/utils/download";
 import { parseParams } from "~/utils/param-parser";

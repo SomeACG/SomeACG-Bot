@@ -74,6 +74,7 @@
   "include": [
     "src/**/*",
     "test/**/*",
+    "docs/**/*"
   ],
   "exclude": [
     "node_modules",

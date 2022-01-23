@@ -13,7 +13,7 @@ export default async function getArtworkInfo(post_url: string, picture_index: nu
     
     if (!tweet.entities.media) throw new Error('This tweet does not have any photos.')
 
-    let media = tweet.entities.media[picture_index]
+    let media = tweet.extended_entities?.media ? tweet.extended_entities.media[picture_index] : tweet.entities.media[0]
 
     return {
         source_type: 'twitter',

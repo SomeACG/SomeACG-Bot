@@ -23,7 +23,7 @@
 	"scripts": {
 		"build": "tsc --outDir ./dist",
 		"dev": "npm run build && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js",
-		"start": "mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js"
+		"start": "mkdir -p ./dist/temp && cp -r docs ./dist && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js"
 	},
 	"devDependencies": {
 		"@types/minio": "^7.0.11"
