@@ -4,6 +4,7 @@
 		"@types/koa-bodyparser": "^4.3.5",
 		"@types/koa-router": "^7.4.4",
 		"axios": "^0.24.0",
+		"basic-ftp": "^4.6.6",
 		"crossenv": "^0.0.2-security",
 		"dotenv": "^10.0.0",
 		"env-var": "^7.1.1",

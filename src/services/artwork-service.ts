@@ -9,6 +9,7 @@ import { genCaption, pushArtwork } from "~/bot/modules/push"
 import { deleteMessagesByArtwork, getMessageByArtwork , getMessagesByArtwork, insertMessages } from "~/database/operations/message"
 import { insertArtwork, updateArtwork, deleteArtwork } from '~/database/operations/artwork'
 import { uploadOneDrive, uploadOSS } from "./storage/upload"
+import { uploadFTP } from "./storage/ftp"
 
 // @ErrCatch 不会用，暂时不用了
 export async function publishArtwork(artworkInfo: ArtworkInfo, publish_event: PublishEvent): Promise<ExecResult> {
@@ -21,10 +22,11 @@ export async function publishArtwork(artworkInfo: ArtworkInfo, publish_event: Pu
         if (!publish_event.origin_file_id) { file_name_origin = await downloadFile(artworkInfo.url_origin, path.basename(new URL(artworkInfo.url_origin).pathname)) }
         else {
             let origin_file_link = await bot.telegram.getFileLink(publish_event.origin_file_id)
-            file_name_origin = await downloadFile(origin_file_link.href, path.basename(new URL(origin_file_link.href).pathname))
+            file_name_origin = await downloadFile(origin_file_link.href, path.basename(new URL(artworkInfo.url_origin).pathname))
         }
         // 上传到OSS和OneDrive
         // await uploadOSS(file_name_thumb)
+        await uploadFTP(file_name_origin)
         await uploadOneDrive(file_name_origin)
 
         // 获取标签ID

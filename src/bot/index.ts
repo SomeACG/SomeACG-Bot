@@ -37,6 +37,8 @@ bot.use(Telegraf.optional(genAdminPredicate(AdminPermission.GRANT), ungrantComma
 // Actions
 import contributionPublishAction from "./middlewares/actions/contribution-publish"
 bot.use(Telegraf.optional(genAdminPredicate(AdminPermission.PUBLISH), contributionPublishAction))
+import deleteAction from "./middlewares/actions/delete"
+bot.use(deleteAction)
 
 // Hears
 import contributeHear from "./middlewares/hears/contribute"

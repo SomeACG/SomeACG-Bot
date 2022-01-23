@@ -17,8 +17,8 @@ export default {
     OSS_PUT_BASE_PATH: env.get('PUT_URL').required().asString(),
     ADMIN_LIST: env.get('ADMIN_LIST').required().asArray(),
     THUMB_BASE: env.get('THUMB_BASE').required().asString(),
-    // MINIO_ENDPOINT: env.get('MINIO_ENDPOINT').required().asString(),
-    // MINIO_ACCESS_KEY: env.get('MINIO_ACCESS_KEY').required().asString(),
-    // MINIO_SECRET_KEY: env.get('MINIO_SECRET_KEY').required().asString(),
+    FTP_HOST: env.get('FTP_HOST').required().asString(),
+    FTP_USERNAME: env.get('FTP_USERNAME').required().asString(),
+    FTP_PASSWORD: env.get('FTP_PASSWORD').required().asString(),
     VERSION: env.get('VERSION').required().asString()
 }
