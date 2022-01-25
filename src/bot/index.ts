@@ -22,7 +22,7 @@ bot.use(randomCommand)
 import helpCommand from "./middlewares/commands/help"
 bot.use(helpCommand)
 import debugCommand from "./middlewares/commands/debug"
-bot.use(Telegraf.optional(genAdminPredicate(),debugCommand))
+bot.use(Telegraf.optional(genAdminPredicate(), debugCommand))
 import pushCommand from "./middlewares/commands/push"
 bot.use(Telegraf.optional(genAdminPredicate(AdminPermission.PUBLISH), pushCommand))
 import tagCommand from "./middlewares/commands/tag"
@@ -40,7 +40,7 @@ bot.use(Telegraf.optional(genAdminPredicate(AdminPermission.GRANT), ungrantComma
 import contributionPublishAction from "./middlewares/actions/contribution-publish"
 bot.use(Telegraf.optional(genAdminPredicate(AdminPermission.PUBLISH), contributionPublishAction))
 import deleteAction from "./middlewares/actions/delete"
-bot.use(deleteAction)
+bot.use(Telegraf.optional(genAdminPredicate(AdminPermission.PUBLISH), deleteAction))
 
 // Hears
 import contributeHear from "./middlewares/hears/contribute"
