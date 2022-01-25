@@ -9,8 +9,8 @@ export default Telegraf.command('update', async ctx => {
     let command = parseParams(ctx.message.text)
     let waiting_message: Message
     setTimeout(async () => {
-        if (waiting_message) { 
-            await ctx.deleteMessage(waiting_message.message_id) 
+        if (waiting_message) {
+            await ctx.deleteMessage(waiting_message.message_id)
         }
     }, 10000)
     if (!command.params['index'] && !ctx.message.reply_to_message) return await ctx.reply('请回复一条消息或指定要更改的作品序号!', {
@@ -22,20 +22,24 @@ export default Telegraf.command('update', async ctx => {
     try {
 
         let artwork_index = -1
-        if(command.params['index'])artwork_index = parseInt(command.params['index'])
-        if(ctx.message.reply_to_message)
-        {
+        if (command.params['index']) artwork_index = parseInt(command.params['index'])
+        if (ctx.message.reply_to_message) {
             let reply_to_message = ctx.message.reply_to_message as Message.CommonMessage
             if (!reply_to_message.forward_from_message_id) return await ctx.reply('回复的消息不是有效的频道消息！', {
                 reply_to_message_id: ctx.message.message_id
             })
+
             let message = await getMessage(reply_to_message.forward_from_message_id)
             artwork_index = message.artwork_index
         }
         let artwork = await getArtwork(artwork_index)
         let param_keys = Object.keys(command.params)
         for (let key of param_keys) {
+            console.log(`${key} in artwork: ${key in artwork}`);
+            console.log(`Artwork[key]: ${artwork[key]}`);
+
             if (key in artwork && typeof artwork[key] == 'string') artwork[key] = command.params[key]
+            if (key in artwork && typeof artwork[key] == 'boolean') artwork[key] = Boolean(command.params[key])
         }
         let result = await modifyArtwork(artwork)
         if (result.succeed) return await ctx.telegram.editMessageText(waiting_message.chat.id, waiting_message.message_id, undefined, '作品信息更新成功~')
