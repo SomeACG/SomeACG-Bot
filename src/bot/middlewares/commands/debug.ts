@@ -1,4 +1,7 @@
 import { Telegraf } from "telegraf";
+import { Message } from "telegraf/typings/core/types/typegram";
+import { getArtwork } from "~/database/operations/artwork";
+import { getMessage } from "~/database/operations/message";
 import { parseParams } from "~/utils/param-parser";
 
 export default Telegraf.command('debug', async ctx => {
@@ -18,6 +21,23 @@ export default Telegraf.command('debug', async ctx => {
                 reply_to_message_id: ctx.message.message_id,
                 parse_mode: 'HTML'
             })
+        case 'artwork':
+            try {
+                let reply_to_message = ctx.message.reply_to_message as Message.CommonMessage
+                if (!reply_to_message.forward_from_message_id) return
+                let message = await getMessage(reply_to_message.forward_from_message_id)
+                let artwork = await getArtwork(message.artwork_index)
+                return await ctx.reply('<pre>' + JSON.stringify(artwork, undefined, '    ') + '</pre>', {
+                    reply_to_message_id: ctx.message.message_id,
+                    parse_mode: 'HTML'
+                })
+            }
+            catch(err)
+            {
+                return await ctx.reply('Cannot get artwork info', {
+                    reply_to_message_id: ctx.message.message_id
+                })
+            }
         default:
             return await ctx.reply('Debug target not found', {
                 reply_to_message_id: ctx.message.message_id
