@@ -12,7 +12,7 @@ export default Telegraf.command('update', async ctx => {
             await ctx.deleteMessage(waiting_message.message_id) 
         }
     }, 10000)
-    if (!command.params['index']) return await ctx.reply('没有指定要更改的作品序号!', {
+    if (!command.params['index']) return await ctx.reply('请回复一条消息或指定要更改的作品序号!', {
         reply_to_message_id: ctx.message.message_id
     })
     waiting_message = await ctx.reply('正在更新作品信息...', {

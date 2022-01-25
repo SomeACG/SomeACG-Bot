@@ -8,7 +8,7 @@ import { Message } from "telegraf/typings/core/types/typegram";
 export default Telegraf.command('help', async ctx => {
     let waiting_reply: Message
     setTimeout(async () => {
-        if (waiting_reply) await ctx.deleteMessage(waiting_reply.message_id)
+        if (waiting_reply && waiting_reply.chat.type != 'private') await ctx.deleteMessage(waiting_reply.message_id)
     }, 10000)
     let command = parseParams(ctx.message.text)
     if (!command.target) return waiting_reply = await ctx.reply("使用 /help [命令名称] 来查看一条命令的使用方法", {
