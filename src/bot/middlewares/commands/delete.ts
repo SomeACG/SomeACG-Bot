@@ -1,8 +1,27 @@
 import { Telegraf } from "telegraf";
 import { parseParams } from "~/utils/param-parser"
 import { delArtwork } from '~/services/artwork-service'
-import { getMessage } from "~/database/operations/message";
-import { Message } from "telegraf/typings/core/types/typegram";
+import { getMessage } from "~/database/operations/message"
+import { Message } from "telegraf/typings/core/types/typegram"
+import { wrapCommand } from "~/bot/wrappers/command-wrapper";
+
+/* export default */ wrapCommand('delete', async ctx => {
+    if(!ctx.command.params['index'] && !ctx.is_reply) 
+    return await ctx.directlyReply('命令语法不正确，请回复一条消息或指定要删除的作品序号!')
+    await ctx.wait('正在删除作品...')
+    let artwork_index = -1
+    if(ctx.is_reply)
+    {
+        if(!ctx.reply_to_message?.forward_from_message_id) 
+        return await ctx.resolveWait('回复的消息不是有效的频道消息！')
+        let message = await getMessage(ctx.reply_to_message.forward_from_message_id)
+        artwork_index = message.artwork_index
+    }
+    if (ctx.command.params['index']) artwork_index = parseInt(ctx.command.params['index'])
+    let result = await delArtwork(artwork_index)
+    if(result.succeed) return
+    else await ctx.resolveWait('作品删除失败: ' + result.message)
+})
 
 export default Telegraf.command('delete', async ctx => {
     let command = parseParams(ctx.message.text)
