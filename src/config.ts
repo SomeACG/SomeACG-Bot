@@ -20,5 +20,6 @@ export default {
     FTP_HOST: env.get('FTP_HOST').required().asString(),
     FTP_USERNAME: env.get('FTP_USERNAME').required().asString(),
     FTP_PASSWORD: env.get('FTP_PASSWORD').required().asString(),
-    VERSION: env.get('VERSION').required().asString()
+    VERSION: env.get('VERSION').required().asString(),
+    DEV_MODE: env.get('DEV_MODE').asBool()
 }
