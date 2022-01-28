@@ -36,8 +36,4 @@ export type ArtworkInfo = {
     url_thumb: string
     url_origin: string
     size: ImageSize
-}
-
-export interface getArtworkInfoInterface { 
-    (post_url: string, picture_index: number): Promise<ArtworkInfo> 
-}
+}?

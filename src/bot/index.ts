@@ -1,8 +1,28 @@
 import config from "~/config"
 import { Telegraf } from "telegraf"
 import { genAdminPredicate } from "./middlewares/guard"
+import { HttpsProxyAgent } from 'https-proxy-agent'
 
-const bot = new Telegraf(config.BOT_TOKEN)
+// Development Mode
+
+const { HTTPS_PROXY_HOST, HTTPS_PROXY_PORT } = process.env
+
+const agent = new HttpsProxyAgent({
+  host: HTTPS_PROXY_HOST,
+  port: HTTPS_PROXY_PORT
+})
+
+const bot = new Telegraf(config.BOT_TOKEN, config.DEV_MODE ? {
+    telegram: { agent }
+} : undefined)
+
+bot.use(async (ctx, next) => {
+    if (config.DEV_MODE && ctx.from?.id)
+    {
+        if(!config.ADMIN_LIST.includes(ctx.from.id.toString())) return
+    }
+    await next()
+})
 
 // Version 
 
