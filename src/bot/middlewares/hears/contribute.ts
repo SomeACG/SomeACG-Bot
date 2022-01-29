@@ -7,7 +7,11 @@ export default Telegraf.hears(/#投稿/, async ctx => {
 
     if(ctx.chat.type == "private" && !config.ADMIN_LIST.includes(ctx.from?.id.toString()))
     {
-        return await ctx.reply("不能在私聊中使用投稿，请在群里进行投稿")
+        return await ctx.reply("不能在私聊中使用投稿，请在群里进行投稿", {
+            ...Markup.inlineKeyboard([
+                Markup.button.url('点这里加群','https://t.me/+scMXNDMsTXVjODVl')
+            ])
+        })
     }
 
     try {
