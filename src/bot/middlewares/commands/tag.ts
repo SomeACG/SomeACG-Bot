@@ -9,11 +9,11 @@ export default wrapCommand('tag', async ctx => {
     if (!ctx.is_reply && !ctx.command.params['index'])
         return await ctx.directlyReply('参数不正确，请回复一条消息或在在参数中指定作品序号！')
     if (!ctx.command.target) return await ctx.directlyReply('参数不正确，请在命令中设置标签并用英文逗号隔开！')
+    if (ctx.is_reply && !ctx.reply_to_message.forward_from_message_id) return await ctx.resolveWait('回复的消息不是有效的频道消息！')
     await ctx.wait('正在修改作品标签...', true)
     let tag_array = ctx.command.target.split(/,|，/)
     let artwork: Artwork
     if (ctx.reply_to_message) {
-        if (!ctx.reply_to_message.forward_from_message_id) return await ctx.resolveWait('回复的消息不是有效的频道消息！')
         let message_id: number = ctx.reply_to_message.forward_from_message_id
         let message = await getMessage(message_id)
         artwork = await getArtwork(message.artwork_index)
