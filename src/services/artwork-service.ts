@@ -25,8 +25,8 @@ export async function publishArtwork(artworkInfo: ArtworkInfo, publish_event: Pu
     }
     // 上传到OSS和OneDrive
     // await uploadOSS(file_name_thumb)
-    await uploadFTP(file_name_origin)
-    await uploadOneDrive(file_name_origin)
+    // await uploadFTP(file_name_origin)
+    // await uploadOneDrive(file_name_origin)
 
     // 获取标签ID
     let tags = await getTagsByNamesAndInsert(publish_event.artwork_tags)
@@ -34,7 +34,7 @@ export async function publishArtwork(artworkInfo: ArtworkInfo, publish_event: Pu
         index: -1,
         file_name: file_name_origin,
         quality: publish_event.is_quality,
-        img_thumb: path.resolve(config.THUMB_BASE, file_name_thumb),
+        img_thumb: path.resolve(config.THUMB_BASE, file_name_origin),
         size: artworkInfo.size,
         title: artworkInfo.title,
         desc: artworkInfo.desc,
