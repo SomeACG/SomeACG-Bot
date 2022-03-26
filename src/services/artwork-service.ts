@@ -25,7 +25,7 @@ export async function publishArtwork(artworkInfo: ArtworkInfo, publish_event: Pu
     }
     // 上传到OSS和OneDrive
     // await uploadOSS(file_name_thumb)
-    // await uploadFTP(file_name_origin)
+    await uploadFTP(file_name_origin)
     await uploadOneDrive(file_name_origin)
 
     // 获取标签ID
