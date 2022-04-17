@@ -14,7 +14,7 @@ export default wrapCommand('push', async ctx => {
         return await ctx.directlyReply("回复的消息必须是一个文件!")
     await ctx.wait('正在发布作品...')
     let tags_string = ctx.command.params['tags'] as string
-    let artwork_info = await getArtworkInfoByUrl(ctx.command.target)
+    let artwork_info = await getArtworkInfoByUrl(ctx.command.target, ctx.command.params['picture_index'])
     let contribution: Contribution | undefined
     if (ctx.command.params['contribute_from']) contribution = await getContributionById(parseInt(ctx.command.params['contribute_from']))
     let result = await publishArtwork(artwork_info, {

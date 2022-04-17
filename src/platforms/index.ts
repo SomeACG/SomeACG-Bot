@@ -5,6 +5,8 @@ export default async function getArtworkInfoByUrl(url: string, picture_index?: n
     let matchTwitter = url.match(/https:\/\/twitter.com\/(.+)\/status\/(\d+)/)
     let matchDanbooru = url.match(/https:\/\/danbooru.donmai.us\/posts\/(\d+)/)
 
+    if(!picture_index) picture_index = 0
+
     let module: any = {}
 
     if (matchPixiv) {
