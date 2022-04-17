@@ -1,6 +1,8 @@
 import { delArtwork } from '~/services/artwork-service'
 import { getMessage } from "~/database/operations/message"
 import { wrapCommand } from "~/bot/wrappers/command-wrapper";
+import { Artwork } from '~/types/Artwork';
+import { getArtwork } from '~/database/operations/artwork';
 
 export default wrapCommand('delete', async ctx => {
     if(!ctx.command.params['index'] && !ctx.is_reply) 
@@ -14,7 +16,14 @@ export default wrapCommand('delete', async ctx => {
         let message = await getMessage(ctx.reply_to_message.forward_from_message_id)
         artwork_index = message.artwork_index
     }
-    if (ctx.command.params['index']) artwork_index = parseInt(ctx.command.params['index'])
+    let artwork: Artwork
+    if (ctx.reply_to_message) {
+        let message_id: number = ctx.reply_to_message.forward_from_message_id
+        let message = await getMessage(message_id)
+        artwork = await getArtwork(message.artwork_index)
+        artwork_index = artwork.index
+    }
+    else if (ctx.command.params['index']) artwork_index = parseInt(ctx.command.params['index'])
     let result = await delArtwork(artwork_index)
     if(result.succeed) return
     else await ctx.resolveWait('作品删除失败: ' + result.message)
