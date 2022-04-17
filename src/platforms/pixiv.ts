@@ -7,7 +7,7 @@ export default async function getArtworkInfo(post_url: string, picture_index: nu
     let { data: responseData } = await axios.get('https://www.pixiv.net/ajax/illust/' + pixiv_id)
     if (responseData['error']) throw new Error(responseData['message'])
     let pixivData = responseData['body']
-    if (picture_index > pixivData['sl'] - 1) throw new Error('Picture index out of range')
+    if (picture_index > pixivData['pageCount'] - 1) throw new Error('Picture index out of range')
     let urls = pixivData['urls']
     let size: ImageSize = {
         width: pixivData['width'],
