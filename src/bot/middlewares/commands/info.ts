@@ -14,8 +14,7 @@ export default wrapCommand('info', async ctx => {
     if (artwork_info.desc) caption += `<b>作品描述:</b> <pre>${artwork_info.desc}</pre>\n`
     caption += `<b>尺寸:</b> ${artwork_info.size.width}x${artwork_info.size.height}`
     await ctx.replyWithDocument({
-        source: path.resolve(config.TEMP_DIR, file_name),
-        filename: file_name
+        source: path.resolve(config.TEMP_DIR, file_name)
     }, {
         caption: caption,
         parse_mode: 'HTML',
