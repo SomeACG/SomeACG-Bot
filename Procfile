@@ -1,1 +1,1 @@
-web: mkdir temp && ts-node -r tsconfig-paths/register src/app.ts
+web: mkdir /app/temp && ts-node -r tsconfig-paths/register src/app.ts
