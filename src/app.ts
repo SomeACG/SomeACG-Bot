@@ -11,9 +11,6 @@ console.log('import bot')
 //     return await ctx.reply("喵喵喵喵")
 // }))
 
-import fs from 'fs'
-
-fs.mkdirSync(config.TEMP_DIR)
 
 console.log('bot launch')
 bot.launch()
