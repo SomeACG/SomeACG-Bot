@@ -13,8 +13,11 @@ export default async function downloadFile(url: string, file_name?: string): Pro
         }
     })
 
-    let stream = fs.createWriteStream(file_path)
-    stream.write(response.data)
+    // 用 Stream 经常会出现这边写完那边读不到的问题，很奇怪
+    // let stream = fs.createWriteStream(file_path)
+    // stream.write(response.data)
+
+    fs.writeFileSync(file_path, response.data)
 
     return file_name
 }
