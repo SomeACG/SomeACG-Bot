@@ -12,7 +12,7 @@ const agent = new HttpsProxyAgent({
   port: HTTPS_PROXY_PORT
 })
 
-const bot = new Telegraf(config.BOT_TOKEN, config.DEV_MODE ? {
+const bot = new Telegraf(config.BOT_TOKEN, config.USE_PROXY ? {
     telegram: { agent }
 } : undefined)
 

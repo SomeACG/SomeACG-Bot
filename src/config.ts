@@ -8,7 +8,7 @@ export default {
     PORT: process.env.PORT || 3000,
     PUSH_CHANNEL: env.get('PUSH_CHANNEL').required().asString(),
     BASE_DIR: path.resolve(__dirname, '..'),
-    TEMP_DIR: path.resolve(__dirname, '../temp'),
+    TEMP_DIR: env.get('DEV_MODE').asBool() ? path.resolve(__dirname, '../temp') : '/tmp',
     TWITTER_API_KEY: env.get('TWITTER_API_KEY').required().asString(),
     TWITTER_API_SECRET: env.get('TWITTER_API_SECRET').required().asString(),
     CLIENT_ID: env.get('CLIENT_ID').required().asString(),
@@ -21,5 +21,6 @@ export default {
     FTP_USERNAME: env.get('FTP_USERNAME').required().asString(),
     FTP_PASSWORD: env.get('FTP_PASSWORD').required().asString(),
     VERSION: env.get('VERSION').required().asString(),
-    DEV_MODE: env.get('DEV_MODE').asBool()
+    DEV_MODE: env.get('DEV_MODE').asBool(),
+    USE_PROXY: env.get('USE_PROXY').asBool()
 }
