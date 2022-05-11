@@ -1,5 +1,5 @@
-import { Telegraf } from "telegraf";
 import { wrapCommand } from "~/bot/wrappers/command-wrapper";
+import { getFileByName } from "~/database/operations/file";
 import { getMessageByArtwork } from "~/database/operations/message";
 
 export default wrapCommand('start', async ctx => {
@@ -7,14 +7,27 @@ export default wrapCommand('start', async ctx => {
     {
         if(!ctx.command.target) return await ctx.reply('喵喵喵~')
         let start_params = ctx.command.target.search('-') == -1 ? [ ctx.command.target ] : ctx.command.target.split('-')
-        if(start_params[0] == 'document')
+
+        switch(start_params[0])
         {
-            let artwork_index = parseInt(start_params[1])
-            let document_message = await getMessageByArtwork(artwork_index, 'document')
-            await ctx.replyWithDocument(document_message.file_id, {
-                caption: '这是你要的原图~'
-            })
+            case 'document':
+                let artwork_index = parseInt(start_params[1])
+                let document_message = await getMessageByArtwork(artwork_index, 'document')
+                await ctx.replyWithDocument(document_message.file_id, {
+                    caption: '这是你要的原图~'
+                })
+                break;
+            case 'file':
+                let file_name = start_params[1]
+                let file = await getFileByName(file_name);
+                await ctx.replyWithDocument(file.file_id, {
+                    caption: '这是你要的文件，请自取~'
+                })
+                break;
+            default:
+                break;
         }
+        
     }
 })
 
