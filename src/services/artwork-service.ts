@@ -34,7 +34,7 @@ export async function publishArtwork(artworkInfo: ArtworkInfo, publish_event: Pu
         index: -1,
         file_name: file_name_origin,
         quality: publish_event.is_quality,
-        img_thumb: path.resolve(config.THUMB_BASE, file_name_origin),
+        img_thumb: path.resolve(config.THUMB_BASE, file_name_thumb),
         size: artworkInfo.size,
         title: artworkInfo.title,
         desc: artworkInfo.desc,
