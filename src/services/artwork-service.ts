@@ -15,7 +15,7 @@ import { uploadFTP } from "./storage/ftp"
 export async function publishArtwork(artworkInfo: ArtworkInfo, publish_event: PublishEvent): Promise<ExecResult> {
 
     // 下载文件
-    let file_name_thumb = await downloadFile(artworkInfo.url_thumb, path.basename(new URL(artworkInfo.url_thumb).pathname))
+    let file_name_thumb = await downloadFile(artworkInfo.url_thumb,'thumb-' + path.basename(new URL(artworkInfo.url_thumb).pathname))
     let file_name_origin
     // 判断是否有文件ID传入
     if (!publish_event.origin_file_id) { file_name_origin = await downloadFile(artworkInfo.url_origin, path.basename(new URL(artworkInfo.url_origin).pathname)) }
