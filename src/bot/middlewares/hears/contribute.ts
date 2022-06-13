@@ -32,7 +32,7 @@ export default Telegraf.hears(/#投稿/, async ctx => {
             post_url: artworkInfo.post_url,
             chat_id: ctx.message.chat.id,
             user_id: ctx.message.from.id,
-            user_name: ctx.message.from.username,
+            user_name: ctx.message.from.first_name,
             message_id: ctx.message.message_id,
             reply_message_id: replyMessage.message_id
         })
