@@ -21,7 +21,7 @@ export default wrapCommand('start', async ctx => {
                 let file_name = start_params[1]
                 let file = await getFileByName(file_name);
                 await ctx.replyWithDocument(file.file_id, {
-                    caption: '这是你要的文件，请自取~'
+                    caption: file.description ? file.description : '这是你要的文件，请自取~'
                 })
                 break;
             default:
