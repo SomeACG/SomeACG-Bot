@@ -5,6 +5,7 @@ import { File } from "~/types/File";
 const fileSchema = new Mongoose.Schema<File>({
     name: String,
     file_id: String,
+    description: String,
     create_time: {
         type: Date,
         default: new Date()
