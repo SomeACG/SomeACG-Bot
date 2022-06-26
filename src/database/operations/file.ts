@@ -10,3 +10,15 @@ export async function getFileByName(name: string): Promise<File> {
 
     return file
 }
+
+export async function insertFile(file:File): Promise<void> {
+    let existFile = await FileModel.findOne({
+        name: file.name
+    })
+
+    if(existFile) throw new Error('该文件名已被占用。')
+
+    let doc = new FileModel(file);
+    await doc.save();
+    
+}

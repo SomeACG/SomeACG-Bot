@@ -55,6 +55,8 @@ import grantCommand from "./middlewares/commands/grant"
 bot.use(Telegraf.optional(genAdminPredicate(AdminPermission.GRANT), grantCommand))
 import ungrantCommand from "./middlewares/commands/ungrant"
 bot.use(Telegraf.optional(genAdminPredicate(AdminPermission.GRANT), ungrantCommand))
+import fileCommand from "./middlewares/commands/file"
+bot.use(Telegraf.optional(genAdminPredicate(AdminPermission.PUBLISH), fileCommand))
 
 // Actions
 import contributionPublishAction from "./middlewares/actions/contribution-publish"
