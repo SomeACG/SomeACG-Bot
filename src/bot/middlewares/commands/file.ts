@@ -6,7 +6,6 @@ import { File } from "~/types/File";
 export default wrapCommand('file', async ctx => {
     let documet_message = ctx.reply_to_message as Message.DocumentMessage
     if(!documet_message?.document) return ctx.directlyReply('请回复一个文件消息！')
-    if(!documet_message.document)
     if(!ctx.command.target) return ctx.directlyReply('请指定一个文件名称！')
     let file_name = ctx.command.target
     let regex = /^[a-zA-Z0-9_]+$/
