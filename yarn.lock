@@ -1090,6 +1090,11 @@ minimist@^1.2.0, minimist@^1.2.5:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
 
+minimist@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.npmmirror.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
+  integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
+
 minio@^7.0.26:
   version "7.0.26"
   resolved "https://registry.npmmirror.com/minio/download/minio-7.0.26.tgz#83bcda813ed486a8bc7f028efa135d49b02d9bc8"
@@ -1446,20 +1451,20 @@ strnum@^1.0.4:
   resolved "https://registry.npmmirror.com/strnum/download/strnum-1.0.5.tgz#5c4e829fe15ad4ff0d20c3db5ac97b73c9b072db"
   integrity sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==
 
-telegraf@^4.7.0:
-  version "4.7.0"
-  resolved "https://registry.npmmirror.com/telegraf/-/telegraf-4.7.0.tgz#6ee8a8f98900a67472f1ca935c0aba3e8fa49f05"
-  integrity sha512-rspH4kiVHE1zpnyQvlGFj+Tzu7zN02gSOcdLUayvnkaTwww2E6xBkwne+DKkDPdaRhvQ61J+dcVhLQv9fL+FsQ==
+telegraf@^4.8.5:
+  version "4.8.5"
+  resolved "https://registry.npmmirror.com/telegraf/-/telegraf-4.8.5.tgz#0df238ae01e44f98ce28785f5d465127d712151b"
+  integrity sha512-BTnXBvQ2sRnPCuDvMCvZhMfanJxycWNmAEd+23yBliKXddqt/fFWkj/2OQMD/L3YPD1c1elK5F4WEkJUW3khQQ==
   dependencies:
     abort-controller "^3.0.0"
     debug "^4.3.3"
-    minimist "^1.2.5"
+    minimist "^1.2.6"
     module-alias "^2.2.2"
     node-fetch "^2.6.7"
     p-timeout "^4.1.0"
     safe-compare "^1.1.4"
     sandwich-stream "^2.0.2"
-    typegram "^3.8.0"
+    typegram "^3.9.0"
 
 through2@^3.0.1:
   version "3.0.2"
@@ -1532,10 +1537,10 @@ type-is@^1.6.16:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typegram@^3.8.0:
-  version "3.8.0"
-  resolved "https://registry.npmmirror.com/typegram/-/typegram-3.8.0.tgz#6f09e1f3d27bb4659dcf6e294603550584c7b39c"
-  integrity sha512-MdlbWu0HfmgFJf4+xj6eqGYuanV2LJxBYTzLrD0kTV+woQ5dxDD2k8UVVjYnbBGkAagAyxzQevPiFZRWLFHSBw==
+typegram@^3.9.0:
+  version "3.10.0"
+  resolved "https://registry.npmmirror.com/typegram/-/typegram-3.10.0.tgz#8f02c2a7748f019f0566279318d2be396d103bd8"
+  integrity sha512-kma7ZF7SFRqcUCgo5sHg1MbPwc9/KYjVkbvrqIZK7oXfPdLBGz1s7wF9d7o4yjHp+AOGke8cyYGhI/+4xYYC4Q==
 
 typescript@^4.5.4:
   version "4.5.4"
