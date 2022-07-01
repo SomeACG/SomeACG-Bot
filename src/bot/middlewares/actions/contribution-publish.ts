@@ -3,8 +3,8 @@ import { CallbackQuery } from "telegraf/typings/core/types/typegram"
 import { getContributionById } from "~/database/operations/contribution"
 
 export default Telegraf.action(/publish-/, async ctx => {
-    let query = ctx.callbackQuery as CallbackQuery.DataCallbackQuery
-    let query_params = query.data.split('-')
+    let query = ctx.callbackQuery
+    let query_params = query.data?.split('-')
     try{
         let contribution = await getContributionById(parseInt(query_params[1]))
 

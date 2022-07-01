@@ -28,6 +28,7 @@ export type Artwork = {
     source: ArtworkSource
     create_time?: Date
 }
+
 export type ArtworkInfo = {
     source_type: ArtworkSourceType
     post_url: string
@@ -36,4 +37,9 @@ export type ArtworkInfo = {
     url_thumb: string
     url_origin: string
     size: ImageSize
-}?
+}
+
+export type ArtworkWithFileId = Pick<Artwork, 'index' | 'source'> & {
+    photo_file_id: string,
+    document_file_id: string
+}
