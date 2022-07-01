@@ -3,8 +3,8 @@ import { CallbackQuery } from "telegraf/typings/core/types/typegram"
 import { deleteContribution } from "~/database/operations/contribution"
 
 export default Telegraf.action(/delete-/, async ctx => {
-    let query = ctx.callbackQuery as CallbackQuery.DataCallbackQuery
-    let message_id = parseInt(query.data.split('-')[1])
+    let query = ctx.callbackQuery
+    let message_id = parseInt(query.data?.split('-')[1])
 
     try {
         let delete_count = await deleteContribution(message_id)

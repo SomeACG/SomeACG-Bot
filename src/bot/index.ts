@@ -69,6 +69,11 @@ import contributeHear from "./middlewares/hears/contribute"
 import { AdminPermission } from "~/types/Admin"
 bot.use(contributeHear)
 
+// Inline Search
+
+import inlineSearch from "./middlewares/inline"
+bot.use(inlineSearch)
+
 // Setup my commands
 
 bot.telegram.setMyCommands([

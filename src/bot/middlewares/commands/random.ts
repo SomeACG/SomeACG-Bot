@@ -1,4 +1,4 @@
-import { Markup, Telegraf } from "telegraf"
+import { Markup } from "telegraf"
 import { wrapCommand } from "~/bot/wrappers/command-wrapper"
 import MessageModel from "~/database/models/MessageModel"
 import { getArtwork } from "~/database/operations/artwork"
