@@ -1,7 +1,7 @@
 import { ArtworkInfo } from "~/types/Artwork";
 
 export default async function getArtworkInfoByUrl(url: string, picture_index?: number): Promise<ArtworkInfo> {
-    let matchPixiv = url.match(/https:\/\/www.pixiv.net(\/en)?\/artworks\/(\d{8})(\/)?/)
+    let matchPixiv = url.match(/https:\/\/www.pixiv.net(\/en)?\/artworks\/(\d{1,9})(\/)?/)
     let matchTwitter = url.match(/https:\/\/twitter.com\/(.+)\/status\/(\d+)/)
     let matchDanbooru = url.match(/https:\/\/danbooru.donmai.us\/posts\/(\d+)/)
 
