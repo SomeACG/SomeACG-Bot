@@ -1,1 +1,1 @@
-web: ts-node -r tsconfig-paths/register src/app.ts
+web: ts-node -r tsconfig-paths/register src/app.ts --max_old_space_size=4096
