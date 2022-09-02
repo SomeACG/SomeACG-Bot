@@ -22,5 +22,8 @@ export default {
     FTP_PASSWORD: env.get('FTP_PASSWORD').required().asString(),
     VERSION: env.get('VERSION').required().asString(),
     DEV_MODE: env.get('DEV_MODE').asBool(),
-    USE_PROXY: env.get('USE_PROXY').asBool()
+    USE_PROXY: env.get('USE_PROXY').asBool(),
+    B2_ENDPOINT: env.get('B2_ENDPOINT').required().asString(),
+    B2_KEY_ID: env.get('B2_KEY_ID').required().asString(),
+    B2_KEY: env.get('B2_KEY').required().asString()
 }

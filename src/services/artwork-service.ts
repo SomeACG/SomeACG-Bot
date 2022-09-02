@@ -8,8 +8,9 @@ import { getTagsByNamesAndInsert } from "~/database/operations/tag"
 import { genCaption, pushArtwork } from "~/bot/modules/push"
 import { deleteMessagesByArtwork, getMessageByArtwork, getMessagesByArtwork, insertMessages } from "~/database/operations/message"
 import { insertArtwork, updateArtwork, deleteArtwork } from '~/database/operations/artwork'
-import { uploadOneDrive, uploadOSS } from "./storage/upload"
+import { uploadOneDrive } from "./storage/upload"
 import { uploadFTP } from "./storage/ftp"
+import { uploadFileB2 } from "./storage/blackblaze"
 
 // @ErrCatch 不会用，暂时不用了
 export async function publishArtwork(artworkInfo: ArtworkInfo, publish_event: PublishEvent): Promise<ExecResult> {
@@ -26,6 +27,7 @@ export async function publishArtwork(artworkInfo: ArtworkInfo, publish_event: Pu
     // 上传到OSS和OneDrive
     // await uploadOSS(file_name_thumb)
     await uploadFTP(file_name_origin)
+    await uploadFileB2(file_name_thumb)
     await uploadOneDrive(file_name_origin)
 
     // 获取标签ID
@@ -34,7 +36,7 @@ export async function publishArtwork(artworkInfo: ArtworkInfo, publish_event: Pu
         index: -1,
         file_name: file_name_origin,
         quality: publish_event.is_quality,
-        img_thumb: path.resolve(config.THUMB_BASE, file_name_thumb),
+        img_thumb: file_name_thumb,
         size: artworkInfo.size,
         title: artworkInfo.title,
         desc: artworkInfo.desc,
