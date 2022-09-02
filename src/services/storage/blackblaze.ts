@@ -8,14 +8,18 @@ AWS.config.credentials = credentials
 
 let endpoint = new AWS.Endpoint(config.B2_ENDPOINT)
 
-const s3 = new AWS.S3({ endpoint })
+const s3 = new AWS.S3({ 
+    endpoint: endpoint,
+    credentials: credentials
+ })
 
 export async function uploadFileB2(file_name: string) {
 
     s3.putObject({ 
         Bucket: 'someacg',
         Key: 'thumbs/' + file_name,
-        Body: fs.createReadStream(path.resolve(config.TEMP_DIR, file_name))
+        Body: fs.createReadStream(path.resolve(config.TEMP_DIR, file_name)),
+        ContentType: 'image/' + path.extname(file_name).substring(1)
      }, err => {
         if(err) {
             console.log('文件', file_name, 'B2上传失败:')
