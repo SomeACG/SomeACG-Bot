@@ -19,6 +19,7 @@
 		"crossenv": "^0.0.2-security",
 		"dotenv": "^10.0.0",
 		"env-var": "^7.1.1",
+		"gm": "^1.25.0",
 		"https-proxy-agent": "^5.0.0",
 		"koa": "^2.13.4",
 		"koa-bodyparser": "^4.3.0",
@@ -38,6 +39,7 @@
 		"start": "mkdir -p ./dist/temp && cp -r docs ./dist && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js"
 	},
 	"devDependencies": {
+		"@types/gm": "^1.18.12",
 		"@types/minio": "^7.0.11"
 	}
 }

@@ -15,6 +15,10 @@ const s3 = new AWS.S3({
 
 export async function uploadFileB2(file_name: string) {
 
+    let extname = path.extname(file_name).substring(1)
+
+    if(extname == 'jpg') extname = 'jpeg'
+
     s3.putObject({ 
         Bucket: 'someacg',
         Key: 'thumbs/' + file_name,
@@ -29,4 +33,16 @@ export async function uploadFileB2(file_name: string) {
             console.log('文件', file_name, 'B2上传成功')
         }
      })
+}
+
+export async function isB2FileExist(file_path: string): Promise<boolean> {
+    return new Promise(resolve => {
+        s3.getObject({
+            Bucket: 'someacg',
+            Key: file_path
+        }, (err, _) => {
+            if(err) return resolve(false)
+            return resolve(true)
+        })
+    })
 }
