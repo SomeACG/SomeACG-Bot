@@ -5,7 +5,15 @@ import { Artwork } from '~/types/Artwork'
 import { PushEvent } from '~/types/Event'
 import { ChannelMessage } from '~/types/Message'
 
+function encodeHtmlChars(text: string) {
+    return text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+}
+
 export function genCaption(artwork: Artwork, event_info?: PushEvent): string {
+
+    // Replace special chars
+    artwork.title = encodeHtmlChars(artwork.title)
+    artwork.desc = encodeHtmlChars(artwork.desc)
 
     let caption = ""
     if (artwork.quality) caption += "#精选\n"
