@@ -13,7 +13,7 @@ export function wrapCommand(command: string, fn: (ctx: WarpperContext) => Promis
         catch (err) {
             console.log(err)
             if (err instanceof Error) {
-                return await _ctx.resolveWait("操作失败: " + err.message)
+                return await _ctx.resolveWait(`操作失败: <pre>${err.message}</pre>`, 'HTML')
             }
             return await _ctx.resolveWait("操作失败: 未知原因")
         }
