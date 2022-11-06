@@ -20,7 +20,7 @@ export function genCaption(artwork: Artwork, event_info?: PushEvent): string {
     if (artwork.title) caption += `<b>作品标题:</b> ${artwork.title}\n`
     if (artwork.desc) caption += `<b>作品描述:</b> <pre>${artwork.desc}</pre>\n\n`
     caption += `\n来源: ${artwork.source.post_url}\n`
-    if (event_info?.contribution) caption += `投稿 by <a href="tg://user?id=${event_info.contribution.user_id}">${event_info.contribution.user_name}</a>`
+    if (event_info?.contribution) caption += `投稿 by <a href="tg://user?id=${event_info.contribution.user_id}">${event_info.contribution.user_name}</a>\n`
 
     for (let tag of artwork.tags) {
         caption += `#${tag.name} `
