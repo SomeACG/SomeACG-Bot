@@ -1,5 +1,4 @@
 import { Telegraf } from "telegraf"
-import { CallbackQuery } from "telegraf/typings/core/types/typegram"
 import { getContributionById } from "~/database/operations/contribution"
 
 export default Telegraf.action(/publish-/, async ctx => {

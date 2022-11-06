@@ -26,7 +26,12 @@ export default wrapCommand('push', async ctx => {
     })
     if (result.succeed) {
         await ctx.resolveWait('作品发布成功~')
-        if (contribution) await ctx.telegram.editMessageText(contribution.chat_id, contribution.reply_message_id, undefined, "您的投稿已经审核通过并发布到频道~")
+        if (contribution) {
+            await ctx.telegram.sendMessage(contribution.chat_id, "您的投稿已经审核通过并发布到频道~", {
+                reply_to_message_id: contribution.message_id
+            })
+            await ctx.telegram.deleteMessage(contribution.chat_id, contribution.reply_message_id)
+        }
         return
     }
     await ctx.resolveWait('作品发布失败: ' + result.message)
