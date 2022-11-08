@@ -1,18 +1,26 @@
-import { wrapCommand } from "~/bot/wrappers/command-wrapper";
-import { removePermissions } from "~/database/operations/admin";
+import { wrapCommand } from '~/bot/wrappers/command-wrapper';
+import { removePermissions } from '~/database/operations/admin';
 
 export default wrapCommand('ungrant', async ctx => {
     if (!ctx.command.params['user'] && !ctx.is_reply)
-        return await ctx.directlyReply('命令语法不正确，请回复一条消息或撤销权限的用户ID!')
+        return await ctx.directlyReply(
+            '命令语法不正确，请回复一条消息或撤销权限的用户ID!'
+        );
     if (!ctx.command.params['user'] && !ctx.reply_to_message?.from)
-        return await ctx.directlyReply('命令语法不正确，请回复一条用户发送的消息!')
-    let user_id = -1
-    if(ctx.command.params['user']) user_id = parseInt(ctx.command.params['user'])
-    if(ctx.reply_to_message?.from) user_id = ctx.reply_to_message?.from.id
-    let succeed = await removePermissions(user_id)
-    if(succeed) return await ctx.resolveWait('成功移除用户 ' + user_id + ' 的所有权限')
-    return await ctx.resolveWait('移除用户权限失败，请检查该用户是否具有管理权限')
-})
+        return await ctx.directlyReply(
+            '命令语法不正确，请回复一条用户发送的消息!'
+        );
+    let user_id = -1;
+    if (ctx.command.params['user'])
+        user_id = parseInt(ctx.command.params['user']);
+    if (ctx.reply_to_message?.from) user_id = ctx.reply_to_message?.from.id;
+    const succeed = await removePermissions(user_id);
+    if (succeed)
+        return await ctx.resolveWait('成功移除用户 ' + user_id + ' 的所有权限');
+    return await ctx.resolveWait(
+        '移除用户权限失败，请检查该用户是否具有管理权限'
+    );
+});
 
 // export default Telegraf.command('ungrant', async ctx => {
 //     let command = parseParams(ctx.message.text)

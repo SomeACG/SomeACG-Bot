@@ -1,24 +1,23 @@
-import { File } from "~/types/File";
-import FileModel from "../models/FileModel";
+import { File } from '~/types/File';
+import FileModel from '../models/FileModel';
 
 export async function getFileByName(name: string): Promise<File> {
-    let file = await FileModel.findOne({
+    const file = await FileModel.findOne({
         name: name
-    })
+    });
 
-    if(!file) throw new Error('指定的文件不存在！')
+    if (!file) throw new Error('指定的文件不存在！');
 
-    return file
+    return file;
 }
 
-export async function insertFile(file:File): Promise<void> {
-    let existFile = await FileModel.findOne({
+export async function insertFile(file: File): Promise<void> {
+    const existFile = await FileModel.findOne({
         name: file.name
-    })
+    });
 
-    if(existFile) throw new Error('该文件名已被占用。')
+    if (existFile) throw new Error('该文件名已被占用。');
 
-    let doc = new FileModel(file);
+    const doc = new FileModel(file);
     await doc.save();
-    
 }

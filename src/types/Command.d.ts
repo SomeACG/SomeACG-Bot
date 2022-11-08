@@ -4,7 +4,9 @@
 // }
 
 export type CommandEntity = {
-    name: string
-    target?: string
-    params?: any
-}
+    name: string;
+    target?: string;
+    params?: {
+        [param_name]: string;
+    };
+};

@@ -1,6 +1,6 @@
-import Mongoose from "~/database";
+import Mongoose from '~/database';
 
-import { File } from "~/types/File";
+import { File } from '~/types/File';
 
 const fileSchema = new Mongoose.Schema<File>({
     name: String,
@@ -10,8 +10,8 @@ const fileSchema = new Mongoose.Schema<File>({
         type: Date,
         default: new Date()
     }
-})
+});
 
-const FileModel = Mongoose.model('File', fileSchema)
+const FileModel = Mongoose.model('File', fileSchema);
 
-export default FileModel
+export default FileModel;

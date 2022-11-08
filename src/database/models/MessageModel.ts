@@ -1,5 +1,5 @@
-import Mongoose from "~/database"
-import { ChannelMessage } from "~/types/Message"
+import Mongoose from '~/database';
+import { ChannelMessage } from '~/types/Message';
 
 const messageSchema = new Mongoose.Schema<ChannelMessage>({
     type: String,
@@ -10,8 +10,8 @@ const messageSchema = new Mongoose.Schema<ChannelMessage>({
         type: Date,
         default: new Date()
     }
-})
+});
 
-const MessageModel = Mongoose.model('Message', messageSchema)
+const MessageModel = Mongoose.model('Message', messageSchema);
 
-export default MessageModel
+export default MessageModel;

@@ -1,45 +1,45 @@
-type ArtworkSourceType = "pixiv" | "twitter" | "danbooru"
+type ArtworkSourceType = 'pixiv' | 'twitter' | 'danbooru';
 
 export type ArtworkSource = {
-    type: ArtworkSourceType
-    post_url: string
-    picture_index: number
-}
+    type: ArtworkSourceType;
+    post_url: string;
+    picture_index: number;
+};
 
 export type ArtworkTag = {
-    _id: string
-    name: string
-}
+    _id: string;
+    name: string;
+};
 
 export type ImageSize = {
-    width: number
-    height: number
-}
+    width: number;
+    height: number;
+};
 
 export type Artwork = {
-    index: number
-    quality: boolean
-    title?: string
-    desc?: string
-    file_name: string
-    img_thumb: string
-    size: ImageSize
-    tags: Array<ArtworkTag>
-    source: ArtworkSource
-    create_time?: Date
-}
+    index: number;
+    quality: boolean;
+    title?: string;
+    desc?: string;
+    file_name: string;
+    img_thumb: string;
+    size: ImageSize;
+    tags: Array<ArtworkTag>;
+    source: ArtworkSource;
+    create_time?: Date;
+};
 
 export type ArtworkInfo = {
-    source_type: ArtworkSourceType
-    post_url: string
-    title?: string
-    desc?: string
-    url_thumb: string
-    url_origin: string
-    size: ImageSize
-}
+    source_type: ArtworkSourceType;
+    post_url: string;
+    title?: string;
+    desc?: string;
+    url_thumb: string;
+    url_origin: string;
+    size: ImageSize;
+};
 
 export type ArtworkWithFileId = Pick<Artwork, 'index' | 'source'> & {
-    photo_file_id: string,
-    document_file_id: string
-}
+    photo_file_id: string;
+    document_file_id: string;
+};

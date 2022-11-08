@@ -1,6 +1,7 @@
-import dotenv from 'dotenv'; dotenv.config()
-import path from 'path'
-import * as env from 'env-var'
+import dotenv from 'dotenv';
+dotenv.config();
+import path from 'path';
+import * as env from 'env-var';
 
 export default {
     DB_URL: env.get('DB_URL').required().asString(),
@@ -8,7 +9,9 @@ export default {
     PORT: process.env.PORT || 3000,
     PUSH_CHANNEL: env.get('PUSH_CHANNEL').required().asString(),
     BASE_DIR: path.resolve(__dirname, '..'),
-    TEMP_DIR: env.get('DEV_MODE').asBool() ? path.resolve(__dirname, '../temp') : '/tmp',
+    TEMP_DIR: env.get('DEV_MODE').asBool()
+        ? path.resolve(__dirname, '../temp')
+        : '/tmp',
     TWITTER_API_KEY: env.get('TWITTER_API_KEY').required().asString(),
     TWITTER_API_SECRET: env.get('TWITTER_API_SECRET').required().asString(),
     CLIENT_ID: env.get('CLIENT_ID').required().asString(),
@@ -26,4 +29,4 @@ export default {
     B2_ENDPOINT: env.get('B2_ENDPOINT').required().asString(),
     B2_KEY_ID: env.get('B2_KEY_ID').required().asString(),
     B2_KEY: env.get('B2_KEY').required().asString()
-}
+};
