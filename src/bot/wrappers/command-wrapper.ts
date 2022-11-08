@@ -37,7 +37,11 @@ export class WarpperContext extends Context<Update.MessageUpdate> {
     autoDelete(timeout?: number){
         if(!timeout) timeout = 20000
         setTimeout(async () => {
-            if(this.waiting_message) await this.deleteMessage(this.waiting_message.message_id)
+            if(this.waiting_message) {
+                try {
+                    await this.deleteMessage(this.waiting_message.message_id)
+                } catch(e){}
+            }
         }, timeout)
     }
     async directlyReply(message: string, parse_mode?: ParseMode) {
