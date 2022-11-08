@@ -13,7 +13,7 @@ export function genCaption(artwork: Artwork, event_info?: PushEvent): string {
 
     // Replace special chars
     artwork.title = encodeHtmlChars(artwork.title)
-    artwork.desc = encodeHtmlChars(artwork.desc)
+    // artwork.desc = encodeHtmlChars(artwork.desc)
 
     let caption = ""
     if (artwork.quality) caption += "#精选\n"
