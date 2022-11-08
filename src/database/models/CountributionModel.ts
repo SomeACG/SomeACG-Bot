@@ -1,6 +1,5 @@
-import Mongoose from "~/database";
-import { Contribution } from "~/types/Contribution";
-import { ArtworkInfo } from "~/types/Artwork";
+import Mongoose from '~/database';
+import { Contribution } from '~/types/Contribution';
 
 const contributionSchema = new Mongoose.Schema<Contribution>({
     post_url: String,
@@ -13,8 +12,8 @@ const contributionSchema = new Mongoose.Schema<Contribution>({
         type: Date,
         default: new Date()
     }
-})
+});
 
-const ContributionModel = Mongoose.model('Contribution', contributionSchema)
+const ContributionModel = Mongoose.model('Contribution', contributionSchema);
 
-export default ContributionModel
+export default ContributionModel;

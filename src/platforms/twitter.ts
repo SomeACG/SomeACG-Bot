@@ -1,19 +1,25 @@
-import path from 'path'
-import config from "~/config";
-import { ArtworkInfo } from "~/types/Artwork"
-import { TwitterApi } from 'twitter-api-v2'
+import path from 'path';
+import config from '~/config';
+import { ArtworkInfo } from '~/types/Artwork';
+import { TwitterApi } from 'twitter-api-v2';
 
 const twitterClient = new TwitterApi({
     appKey: config.TWITTER_API_KEY,
     appSecret: config.TWITTER_API_SECRET
-}).v1
+}).v1;
 
-export default async function getArtworkInfo(post_url: string, picture_index: number = 0): Promise<ArtworkInfo> { 
-    let tweet = await twitterClient.singleTweet(path.basename(post_url))
-    
-    if (!tweet.entities.media) throw new Error('This tweet does not have any photos.')
+export default async function getArtworkInfo(
+    post_url: string,
+    picture_index = 0
+): Promise<ArtworkInfo> {
+    const tweet = await twitterClient.singleTweet(path.basename(post_url));
 
-    let media = tweet.extended_entities?.media ? tweet.extended_entities.media[picture_index] : tweet.entities.media[0]
+    if (!tweet.entities.media)
+        throw new Error('This tweet does not have any photos.');
+
+    const media = tweet.extended_entities?.media
+        ? tweet.extended_entities.media[picture_index]
+        : tweet.entities.media[0];
 
     return {
         source_type: 'twitter',
@@ -25,5 +31,5 @@ export default async function getArtworkInfo(post_url: string, picture_index: nu
             width: media.sizes.large.w,
             height: media.sizes.large.h
         }
-    }
+    };
 }

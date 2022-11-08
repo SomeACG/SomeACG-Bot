@@ -1,38 +1,45 @@
-import { wrapCommand } from "~/bot/wrappers/command-wrapper";
-import { getArtwork } from "~/database/operations/artwork";
-import { getMessage } from "~/database/operations/message";
-import { modifyArtwork } from "~/services/artwork-service";
+import { wrapCommand } from '~/bot/wrappers/command-wrapper';
+import { getArtwork } from '~/database/operations/artwork';
+import { getMessage } from '~/database/operations/message';
+import { modifyArtwork } from '~/services/artwork-service';
 
 export default wrapCommand('update', async ctx => {
     if (!ctx.command.params['index'] && !ctx.is_reply)
-        return await ctx.directlyReply('请回复一条消息或指定要更改的作品序号!')
-    if (!ctx.command.params['index'] && !ctx.reply_to_message?.forward_from_message_id)
-        return await ctx.directlyReply('回复的消息不是有效的频道消息！')
-    await ctx.wait('正在更新作品信息...', true)
-    let artwork_index = -1
-    if (ctx.command.params['index']) artwork_index = parseInt(ctx.command.params['index'])
+        return await ctx.directlyReply('请回复一条消息或指定要更改的作品序号!');
+    if (
+        !ctx.command.params['index'] &&
+        !ctx.reply_to_message?.forward_from_message_id
+    )
+        return await ctx.directlyReply('回复的消息不是有效的频道消息！');
+    await ctx.wait('正在更新作品信息...', true);
+    let artwork_index = -1;
+    if (ctx.command.params['index'])
+        artwork_index = parseInt(ctx.command.params['index']);
     if (ctx.reply_to_message) {
-        let message = await getMessage(ctx.reply_to_message.forward_from_message_id!)
-        artwork_index = message.artwork_index
+        const message = await getMessage(
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            ctx.reply_to_message.forward_from_message_id!
+        );
+        artwork_index = message.artwork_index;
     }
-    let artwork = await getArtwork(artwork_index)
-    let param_keys = Object.keys(ctx.command.params)
-    for (let key of param_keys) {
+    const artwork = await getArtwork(artwork_index);
+    const param_keys = Object.keys(ctx.command.params);
+    for (const key of param_keys) {
         if (key in artwork) {
             switch (typeof artwork[key]) {
                 case 'string':
-                    artwork[key] = ctx.command.params[key]
-                    break
+                    artwork[key] = ctx.command.params[key];
+                    break;
                 case 'boolean':
-                    artwork[key] = Boolean(ctx.command.params[key])
-                    break
+                    artwork[key] = Boolean(ctx.command.params[key]);
+                    break;
             }
         }
     }
-    let result = await modifyArtwork(artwork)
-    if(result.succeed) return await ctx.resolveWait('作品信息更新成功~')
-    return await ctx.resolveWait('作品信息更新失败: ' + result.message)
-})
+    const result = await modifyArtwork(artwork);
+    if (result.succeed) return await ctx.resolveWait('作品信息更新成功~');
+    return await ctx.resolveWait('作品信息更新失败: ' + result.message);
+});
 
 // export default Telegraf.command('update', async ctx => {
 //     let command = parseParams(ctx.message.text)

@@ -8,8 +8,8 @@ export const enum AdminPermission {
 }
 
 export type AdminUser = {
-    user_id: number
-    grant_by: number,
-    permissions: Array<AdminPermission>
-    create_time?: Date
-}
+    user_id: number;
+    grant_by: number;
+    permissions: Array<AdminPermission>;
+    create_time?: Date;
+};

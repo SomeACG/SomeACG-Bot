@@ -1,23 +1,27 @@
-import path from 'path'
-import fs from 'fs'
-import axios from "./axios";
-import config from "~/config";
+import path from 'path';
+import fs from 'fs';
+import axios from './axios';
+import config from '~/config';
 
-export default async function downloadFile(url: string, file_name?: string): Promise<string> {
-    file_name = file_name ? file_name : path.basename(url)
-    let file_path = path.resolve(config.TEMP_DIR, file_name)
-    let response = await axios.get(url, {
+export default async function downloadFile(
+    url: string,
+    file_name?: string
+): Promise<string> {
+    file_name = file_name ? file_name : path.basename(url);
+    const file_path = path.resolve(config.TEMP_DIR, file_name);
+    const response = await axios.get(url, {
         responseType: 'arraybuffer',
         headers: {
-            'referer': url.search('pximg.net') == -1 ? '' : 'https://www.pixiv.net/'
+            referer:
+                url.search('pximg.net') == -1 ? '' : 'https://www.pixiv.net/'
         }
-    })
+    });
 
     // 用 Stream 经常会出现这边写完那边读不到的问题，很奇怪
     // let stream = fs.createWriteStream(file_path)
     // stream.write(response.data)
 
-    fs.writeFileSync(file_path, response.data)
+    fs.writeFileSync(file_path, response.data);
 
-    return file_name
+    return file_name;
 }
