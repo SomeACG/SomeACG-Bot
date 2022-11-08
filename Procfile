@@ -1,1 +1,1 @@
-web: ts-node -r tsconfig-paths/register src/app.ts --max_old_space_size=4096
+web: TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js
