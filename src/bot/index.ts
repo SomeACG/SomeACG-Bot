@@ -22,6 +22,7 @@ const bot = new Telegraf(
 );
 
 bot.use(async (ctx, next) => {
+    logger.debug(ctx.update, 'new update');
     if (config.DEV_MODE && ctx.from?.id) {
         if (!config.ADMIN_LIST.includes(ctx.from.id.toString())) return;
     }
@@ -97,6 +98,7 @@ bot.use(contributeHear);
 // Inline Search
 
 import inlineSearch from './middlewares/inline';
+import logger from '~/utils/logger';
 bot.use(inlineSearch);
 
 // Setup my commands

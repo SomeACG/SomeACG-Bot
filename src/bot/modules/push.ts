@@ -36,8 +36,6 @@ export async function pushArtwork(
 ): Promise<ChannelMessage[]> {
     const artworkCaption = genCaption(artwork, event_info);
 
-    console.log('Caption: ' + artworkCaption);
-
     const sendPhotoMessage = await bot.telegram.sendPhoto(
         config.PUSH_CHANNEL,
         {

@@ -8,6 +8,7 @@ import {
 import { CommandEntity } from '~/types/Command';
 import { parseParams } from '~/utils/param-parser';
 import * as tt from 'telegraf/src/telegram-types';
+import logger from '~/utils/logger';
 
 export function wrapCommand(
     command: string,
@@ -18,7 +19,10 @@ export function wrapCommand(
         try {
             await fn(_ctx);
         } catch (err) {
-            console.log(err);
+            logger.error(
+                err,
+                `error occured when processing ${command} command`
+            );
             if (err instanceof Error) {
                 return await _ctx.resolveWait(
                     `操作失败: <pre>${err.message}</pre>`,

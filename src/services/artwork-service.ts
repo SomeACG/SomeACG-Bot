@@ -95,7 +95,6 @@ export async function modifyArtwork(artwork: Artwork): Promise<ExecResult> {
         };
     }
     const photo_message = await getMessageByArtwork(artwork.index, 'photo');
-    console.log(photo_message.message_id);
 
     await bot.telegram.editMessageCaption(
         config.PUSH_CHANNEL,
