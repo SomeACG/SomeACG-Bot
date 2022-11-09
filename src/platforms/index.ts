@@ -33,7 +33,7 @@ export default async function getArtworkInfoByUrl(
         url = matchDanbooru[0];
     }
 
-    if (!module.default)
+    if (!module)
         throw new Error(
             '不支持的链接类型, 目前仅仅支持 Pixiv,Twitter,Danbooru'
         );

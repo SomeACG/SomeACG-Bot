@@ -1,5 +1,6 @@
 import { Telegraf } from 'telegraf';
 import { getContributionById } from '~/database/operations/contribution';
+import logger from '~/utils/logger';
 
 export default Telegraf.action(/publish-/, async ctx => {
     const query = ctx.callbackQuery;
@@ -28,7 +29,7 @@ export default Telegraf.action(/publish-/, async ctx => {
         );
         await ctx.answerCbQuery();
     } catch (err) {
-        console.log(err);
+        logger.error(err, "error occured when processing 'publish' action");
         if (err instanceof Error) return await ctx.answerCbQuery(err.message);
     }
 });

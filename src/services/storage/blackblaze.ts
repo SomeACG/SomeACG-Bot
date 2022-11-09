@@ -2,6 +2,7 @@ import AWS from 'aws-sdk';
 import fs from 'fs';
 import path from 'path';
 import config from '~/config';
+import logger from '~/utils/logger';
 
 const credentials = new AWS.Credentials({
     accessKeyId: config.B2_KEY_ID,
@@ -30,10 +31,12 @@ export async function uploadFileB2(file_name: string) {
         },
         err => {
             if (err) {
-                console.log('文件', file_name, 'B2上传失败:');
-                console.log(err);
+                logger.error(
+                    err,
+                    `Failed to upload ${file_name} to S3 storage`
+                );
             } else {
-                console.log('文件', file_name, 'B2上传成功');
+                logger.info(`Uploaded ${file_name} to S3 storage`);
             }
         }
     );
