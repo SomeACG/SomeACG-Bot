@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import path from 'path';
 import * as env from 'env-var';
+import package_info from 'package.json';
 
 export default {
     DB_URL: env.get('DB_URL').required().asString(),
@@ -19,10 +20,7 @@ export default {
     REFRESH_TOKEN: env.get('REFRESH_TOKEN').required().asString(),
     ADMIN_LIST: env.get('ADMIN_LIST').required().asArray(),
     THUMB_BASE: env.get('THUMB_BASE').required().asString(),
-    FTP_HOST: env.get('FTP_HOST').required().asString(),
-    FTP_USERNAME: env.get('FTP_USERNAME').required().asString(),
-    FTP_PASSWORD: env.get('FTP_PASSWORD').required().asString(),
-    VERSION: env.get('VERSION').required().asString(),
+    VERSION: env.get('VERSION').asString() || package_info.version,
     DEV_MODE: env.get('DEV_MODE').asBool(),
     USE_PROXY: env.get('USE_PROXY').asBool(),
     B2_ENDPOINT: env.get('B2_ENDPOINT').required().asString(),

@@ -29,13 +29,16 @@ bot.use(async (ctx, next) => {
     await next();
 });
 
-// Version
-
+// Version command middleware
 bot.use(
     Telegraf.command('version', async ctx => {
-        return await ctx.reply('当前版本: ' + config.VERSION, {
-            reply_to_message_id: ctx.message.message_id
-        });
+        const environment = process.env.DEV_MODE ? 'debug' : 'production';
+        return await ctx.reply(
+            `当前版本: ${config.VERSION}\n工作环境: ${environment}`,
+            {
+                reply_to_message_id: ctx.message.message_id
+            }
+        );
     })
 );
 
