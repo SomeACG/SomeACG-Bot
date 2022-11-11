@@ -34,9 +34,10 @@ bot.use(
     Telegraf.command('version', async ctx => {
         const environment = process.env.DEV_MODE ? 'debug' : 'production';
         return await ctx.reply(
-            `当前版本: ${config.VERSION}\n工作环境: ${environment}`,
+            `<b>当前版本：</b>${config.VERSION}\n<b>工作环境：</b>${environment}`,
             {
-                reply_to_message_id: ctx.message.message_id
+                reply_to_message_id: ctx.message.message_id,
+                parse_mode: 'HTML'
             }
         );
     })
