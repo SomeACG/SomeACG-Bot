@@ -3,8 +3,10 @@
 
 /.vscode
 
-.env
+.env*
 
 temp
 
 test
+
+yarn-error.log
