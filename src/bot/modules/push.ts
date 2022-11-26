@@ -11,7 +11,7 @@ function encodeHtmlChars(text: string) {
 
 export function genCaption(artwork: Artwork, event_info?: PushEvent): string {
     // Replace special chars
-    artwork.title = encodeHtmlChars(artwork.title);
+    if (artwork.title) artwork.title = encodeHtmlChars(artwork.title);
     // artwork.desc = encodeHtmlChars(artwork.desc)
 
     let caption = '';
