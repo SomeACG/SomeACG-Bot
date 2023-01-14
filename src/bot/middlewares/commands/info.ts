@@ -3,6 +3,7 @@ import config from '~/config';
 import path from 'path';
 import downloadFile from '~/utils/download';
 import { wrapCommand } from '~/bot/wrappers/command-wrapper';
+import { infoCmdCaption } from '~/utils/caption';
 
 export default wrapCommand('info', async ctx => {
     if (!ctx.command.target)
@@ -18,18 +19,13 @@ export default wrapCommand('info', async ctx => {
         artwork_info.url_origin,
         path.basename(new URL(artwork_info.url_origin).pathname)
     );
-    let caption = '图片下载成功!\n';
-    if (artwork_info.title)
-        caption += `<b>作品标题:</b> ${artwork_info.title}\n`;
-    if (artwork_info.desc)
-        caption += `<b>作品描述:</b> <pre>${artwork_info.desc}</pre>\n`;
-    caption += `<b>尺寸:</b> ${artwork_info.size.width}x${artwork_info.size.height}`;
+    const caption = infoCmdCaption(artwork_info);
     await ctx.replyWithDocument(
         {
             source: path.resolve(config.TEMP_DIR, file_name)
         },
         {
-            caption: caption,
+            caption,
             parse_mode: 'HTML',
             reply_to_message_id: ctx.message.message_id
         }

@@ -4,37 +4,13 @@ import config from '~/config';
 import { Artwork } from '~/types/Artwork';
 import { PushEvent } from '~/types/Event';
 import { ChannelMessage } from '~/types/Message';
-
-function encodeHtmlChars(text: string) {
-    return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
-export function genCaption(artwork: Artwork, event_info?: PushEvent): string {
-    // Replace special chars
-    if (artwork.title) artwork.title = encodeHtmlChars(artwork.title);
-    // artwork.desc = encodeHtmlChars(artwork.desc)
-
-    let caption = '';
-    if (artwork.quality) caption += '#精选\n';
-    if (artwork.title) caption += `<b>作品标题:</b> ${artwork.title}\n`;
-    if (artwork.desc)
-        caption += `<b>作品描述:</b> <pre>${artwork.desc}</pre>\n\n`;
-    caption += `\n来源: ${artwork.source.post_url}\n`;
-    if (event_info?.contribution)
-        caption += `投稿 by <a href="tg://user?id=${event_info.contribution.user_id}">${event_info.contribution.user_name}</a>\n`;
-
-    for (const tag of artwork.tags) {
-        caption += `#${tag.name} `;
-    }
-
-    return caption;
-}
+import { artworkCaption } from '~/utils/caption';
 
 export async function pushArtwork(
     artwork: Artwork,
     event_info: PushEvent
 ): Promise<ChannelMessage[]> {
-    const artworkCaption = genCaption(artwork, event_info);
+    const caption = artworkCaption(artwork, event_info);
 
     const sendPhotoMessage = await bot.telegram.sendPhoto(
         config.PUSH_CHANNEL,
@@ -42,7 +18,7 @@ export async function pushArtwork(
             source: path.resolve(config.TEMP_DIR, event_info.file_thumb_name)
         },
         {
-            caption: artworkCaption,
+            caption,
             parse_mode: 'HTML'
         }
     );

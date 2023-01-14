@@ -37,6 +37,7 @@ export type ArtworkInfo = {
     url_thumb: string;
     url_origin: string;
     size: ImageSize;
+    raw_tags?: string[];
 };
 
 export type ArtworkWithFileId = Pick<Artwork, 'index' | 'source'> & {

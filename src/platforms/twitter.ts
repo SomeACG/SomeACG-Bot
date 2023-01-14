@@ -21,10 +21,13 @@ export default async function getArtworkInfo(
         ? tweet.extended_entities.media[picture_index]
         : tweet.entities.media[0];
 
+    // Remove t.co Links
+    const desc = tweet.full_text.replace(/https:\/\/t.co\/(\w+)/, '');
+
     return {
         source_type: 'twitter',
         post_url: post_url,
-        desc: tweet.full_text,
+        desc,
         url_thumb: media.media_url_https + '?name=small',
         url_origin: media.media_url_https + '?name=4096x4096',
         size: {

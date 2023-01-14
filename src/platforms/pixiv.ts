@@ -1,47 +1,53 @@
-import axios from '~/utils/axios';
+import { pixivInstance as axios } from '~/utils/axios';
 import path from 'path';
-import { ArtworkInfo, ImageSize } from '~/types/Artwork';
-import logger from '~/utils/logger';
+import { ArtworkInfo } from '~/types/Artwork';
+import { PixivAjaxResp, PixivIllust, PixivIllustPages } from '~/types/Pixiv';
 
 export default async function getArtworkInfo(
     post_url: string,
     picture_index = 0
 ): Promise<ArtworkInfo> {
     const pixiv_id = path.basename(post_url);
-    const { data: responseData } = await axios.get(
+    const {
+        data: { body: illust }
+    } = await axios.get<PixivAjaxResp<PixivIllust>>(
         'https://www.pixiv.net/ajax/illust/' + pixiv_id
     );
-    if (responseData['error']) throw new Error(responseData['message']);
-    const pixivData = responseData['body'];
-    if (picture_index > pixivData['pageCount'] - 1)
-        throw new Error('Picture index out of range');
-    // let urls = pixivData['urls'];
-    // let size: ImageSize = {
-    //     width: pixivData['width'],
-    //     height: pixivData['height']
-    // };
 
-    const { data } = await axios.get(
+    if (picture_index > illust.pageCount - 1)
+        throw new Error('Picture index out of range');
+
+    const {
+        data: { body: illust_pages }
+    } = await axios.get<PixivAjaxResp<PixivIllustPages>>(
         `https://www.pixiv.net/ajax/illust/${pixiv_id}/pages?lang=zh`
     );
-    const pageData = data['body'];
-    const urls = pageData[picture_index]['urls'];
+
+    const urls = illust_pages[picture_index]['urls'];
     const size = {
-        width: pageData[picture_index]['width'],
-        height: pageData[picture_index]['height']
+        width: illust_pages[picture_index]['width'],
+        height: illust_pages[picture_index]['height']
     };
 
+    const tags = illust.tags.tags.map(item => {
+        if (item.tag === 'R-18') item.tag = 'R18';
+
+        return item.translation?.en ? item.translation.en : item.tag;
+    });
+
     // 处理一下
-    let desc = pixivData['description'] as string;
-    desc = desc.replace(/<br(\s+)?\/>/g, '\n');
+    const desc = illust.description.replace(/<br(\s+)?\/>/g, '\n');
+
     const artworkInfo: ArtworkInfo = {
         source_type: 'pixiv',
         post_url: post_url,
-        title: pixivData['title'],
+        title: illust.title,
         desc: desc,
-        url_thumb: urls['regular'],
-        url_origin: urls['original'],
-        size: size
+        url_thumb: urls.regular,
+        url_origin: urls.original,
+        size: size,
+        raw_tags: tags
     };
+
     return artworkInfo;
 }

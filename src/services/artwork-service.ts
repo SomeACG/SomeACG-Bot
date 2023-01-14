@@ -5,7 +5,7 @@ import config from '~/config';
 import path from 'path';
 import { ExecResult, PublishEvent, PushEvent } from '~/types/Event';
 import { getTagsByNamesAndInsert } from '~/database/operations/tag';
-import { genCaption, pushArtwork } from '~/bot/modules/push';
+import { pushArtwork } from '~/bot/modules/push';
 import {
     deleteMessagesByArtwork,
     getMessageByArtwork,
@@ -19,6 +19,7 @@ import {
 } from '~/database/operations/artwork';
 import { uploadOneDrive } from './storage/upload';
 import { uploadFileB2 } from './storage/blackblaze';
+import { artworkCaption } from '~/utils/caption';
 
 // @ErrCatch 不会用，暂时不用了
 export async function publishArtwork(
@@ -100,7 +101,7 @@ export async function modifyArtwork(artwork: Artwork): Promise<ExecResult> {
         config.PUSH_CHANNEL,
         photo_message.message_id,
         undefined,
-        genCaption(artwork),
+        artworkCaption(artwork),
         {
             parse_mode: 'HTML'
         }

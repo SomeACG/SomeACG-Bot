@@ -25,5 +25,6 @@ export default {
     USE_PROXY: env.get('USE_PROXY').asBool(),
     B2_ENDPOINT: env.get('B2_ENDPOINT').required().asString(),
     B2_KEY_ID: env.get('B2_KEY_ID').required().asString(),
-    B2_KEY: env.get('B2_KEY').required().asString()
+    B2_KEY: env.get('B2_KEY').required().asString(),
+    PIXIV_COOKIE: env.get('PIXIV_COOKIE').asString()
 };
