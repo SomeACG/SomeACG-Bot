@@ -60,6 +60,16 @@ export async function publishArtwork(
     // 获取标签ID
     const tags = await getTagsByNamesAndInsert(publish_event.artwork_tags);
 
+    let artist: Artist;
+
+    if (artworkInfo.artist) {
+        artist = await findOrInsertArtist({
+            type: artworkInfo.source_type,
+            uid: artworkInfo.artist.uid,
+            name: artworkInfo.artist.name
+        });
+    }
+
     const artwork = await insertArtwork({
         index: -1,
         file_name: file_name_origin,
@@ -73,26 +83,18 @@ export async function publishArtwork(
             type: artworkInfo.source_type,
             post_url: artworkInfo.post_url,
             picture_index: publish_event.picture_index
-        }
+        },
+        artist_id: artist.id
     });
-
-    let artist: Artist;
-
-    if (artworkInfo.artist) {
-        artist = await findOrInsertArtist({
-            type: artworkInfo.source_type,
-            uid: artworkInfo.artist.uid,
-            name: artworkInfo.artist.name
-        });
-    }
 
     const push_event: PushEvent = {
         file_thumb_name: file_name_thumb,
         contribution: publish_event.contribution,
-        origin_file_modified: publish_event.origin_file_id ? true : false
+        origin_file_modified: publish_event.origin_file_id ? true : false,
+        artist
     };
     // 推送作品到频道
-    const pushMessages = await pushArtwork(artwork, push_event, artist);
+    const pushMessages = await pushArtwork(artwork, push_event);
     // 将频道的消息存入数据库
 
     await insertMessages(pushMessages);

@@ -50,6 +50,7 @@ export type ArtworkWithFileId = Pick<Artwork, 'index' | 'source'> & {
 };
 
 export type Artist = {
+    id?: Mongoose.Types.ObjectId;
     type: ArtworkSourceType;
     uid: number;
     name: string;

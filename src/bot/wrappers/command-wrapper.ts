@@ -18,16 +18,22 @@ export function wrapCommand(
         let _ctx = new WarpperContext(ctx);
         try {
             await fn(_ctx);
-            global.currentMongoSession?.commitTransaction();
-            global.currentMongoSession?.endSession();
+            global.currentMongoSession?.commitTransaction().then(() => {
+                logger.debug('mongoose transaction commited');
+                global.currentMongoSession?.endSession();
+                global.currentMongoSession = undefined;
+            });
         } catch (err) {
             logger.error(
                 err,
                 `error occured when processing ${command} command`
             );
 
-            global.currentMongoSession?.abortTransaction();
-            global.currentMongoSession?.endSession();
+            global.currentMongoSession?.abortTransaction().then(() => {
+                logger.warn('mongoose transaction aborted');
+                global.currentMongoSession?.endSession();
+                global.currentMongoSession = undefined;
+            });
 
             if (err instanceof Error) {
                 return await _ctx.resolveWait(

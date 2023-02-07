@@ -8,10 +8,9 @@ import { artworkCaption } from '~/utils/caption';
 
 export async function pushArtwork(
     artwork: Artwork,
-    event_info: PushEvent,
-    artist?: Artist
+    event_info: PushEvent
 ): Promise<ChannelMessage[]> {
-    const caption = artworkCaption(artwork, event_info, artist);
+    const caption = artworkCaption(artwork, event_info);
 
     const sendPhotoMessage = await bot.telegram.sendPhoto(
         config.PUSH_CHANNEL,

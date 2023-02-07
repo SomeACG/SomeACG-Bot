@@ -1,9 +1,4 @@
-import {
-    Artist,
-    Artwork,
-    ArtworkInfo,
-    ArtworkSourceType
-} from '~/types/Artwork';
+import { Artist, Artwork, ArtworkInfo } from '~/types/Artwork';
 import { PushEvent } from '~/types/Event';
 
 function encodeHtmlChars(text: string) {
@@ -19,11 +14,7 @@ function genArtistUrl(artist: Artist) {
     }
 }
 
-export function artworkCaption(
-    artwork: Artwork,
-    event_info?: PushEvent,
-    artist?: Artist
-) {
+export function artworkCaption(artwork: Artwork, event_info?: PushEvent) {
     // Replace special chars
     if (artwork.title) artwork.title = encodeHtmlChars(artwork.title);
     // artwork.desc = encodeHtmlChars(artwork.desc)
@@ -31,9 +22,11 @@ export function artworkCaption(
     let caption = '';
     if (artwork.quality) caption += '#精选\n';
     if (artwork.title) caption += `<b>作品标题:</b> ${artwork.title}\n`;
-    if (artist) {
+    if (event_info.artist) {
         caption += `<b>画师主页: </b> `;
-        caption += `<a href="${genArtistUrl(artist)}">${artist.name}</a>\n`;
+        caption += `<a href="${genArtistUrl(event_info.artist)}">${
+            event_info.artist.name
+        }</a>\n`;
     }
     if (artwork.desc)
         caption += `<b>作品描述:</b> <pre>${artwork.desc}</pre>\n\n`;
@@ -54,6 +47,12 @@ export function infoCmdCaption(artwork_info: ArtworkInfo) {
         caption += `<b>作品标题:</b> ${artwork_info.title}\n`;
     if (artwork_info.desc)
         caption += `<b>作品描述:</b> <pre>${artwork_info.desc}</pre>\n`;
+    if (artwork_info.artist) {
+        caption += `<b>画师主页: </b> `;
+        caption += `<a href="${genArtistUrl(artwork_info.artist)}">${
+            artwork_info.artist.name
+        }</a>\n`;
+    }
     if (artwork_info.raw_tags && artwork_info.raw_tags.length > 0) {
         caption += '<b>原始标签:</b> ';
         caption += artwork_info.raw_tags.map(str => `#${str}`).join(' ');
