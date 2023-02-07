@@ -32,6 +32,8 @@ export default async function getArtworkInfo(
     const tags = illust.tags.tags.map(item => {
         if (item.tag === 'R-18') item.tag = 'R18';
 
+        item.tag = item.tag.replace(/\s/g, '_');
+
         return item.translation?.en ? item.translation.en : item.tag;
     });
 

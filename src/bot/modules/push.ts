@@ -1,7 +1,7 @@
 import path from 'path';
 import bot from '~/bot';
 import config from '~/config';
-import { Artist, Artwork } from '~/types/Artwork';
+import { Artwork } from '~/types/Artwork';
 import { PushEvent } from '~/types/Event';
 import { ChannelMessage } from '~/types/Message';
 import { artworkCaption } from '~/utils/caption';
