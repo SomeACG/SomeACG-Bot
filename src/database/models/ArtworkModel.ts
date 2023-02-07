@@ -27,7 +27,8 @@ const artworkSchema = new Mongoose.Schema<Artwork>({
     create_time: {
         type: Date,
         default: new Date()
-    }
+    },
+    artist_id: Mongoose.Types.ObjectId
 });
 
 artworkSchema.pre<Mongoose.Document<unknown, unknown, Artwork>>(

@@ -33,6 +33,11 @@ export default async function getArtworkInfo(
         size: {
             width: media.sizes.large.w,
             height: media.sizes.large.h
+        },
+        artist: {
+            type: 'twitter',
+            name: tweet.user.name,
+            uid: tweet.user.id
         }
     };
 }

@@ -1,16 +1,17 @@
 import path from 'path';
 import bot from '~/bot';
 import config from '~/config';
-import { Artwork } from '~/types/Artwork';
+import { Artist, Artwork } from '~/types/Artwork';
 import { PushEvent } from '~/types/Event';
 import { ChannelMessage } from '~/types/Message';
 import { artworkCaption } from '~/utils/caption';
 
 export async function pushArtwork(
     artwork: Artwork,
-    event_info: PushEvent
+    event_info: PushEvent,
+    artist?: Artist
 ): Promise<ChannelMessage[]> {
-    const caption = artworkCaption(artwork, event_info);
+    const caption = artworkCaption(artwork, event_info, artist);
 
     const sendPhotoMessage = await bot.telegram.sendPhoto(
         config.PUSH_CHANNEL,

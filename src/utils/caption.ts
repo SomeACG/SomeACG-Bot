@@ -1,11 +1,29 @@
-import { Artwork, ArtworkInfo } from '~/types/Artwork';
+import {
+    Artist,
+    Artwork,
+    ArtworkInfo,
+    ArtworkSourceType
+} from '~/types/Artwork';
 import { PushEvent } from '~/types/Event';
 
 function encodeHtmlChars(text: string) {
     return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-export function artworkCaption(artwork: Artwork, event_info?: PushEvent) {
+function genArtistUrl(artist: Artist) {
+    switch (artist.type) {
+        case 'pixiv':
+            return 'https://www.pixiv.net/users/' + artist.uid;
+        case 'twitter':
+            return 'https://twitter.com/' + artist.username;
+    }
+}
+
+export function artworkCaption(
+    artwork: Artwork,
+    event_info?: PushEvent,
+    artist?: Artist
+) {
     // Replace special chars
     if (artwork.title) artwork.title = encodeHtmlChars(artwork.title);
     // artwork.desc = encodeHtmlChars(artwork.desc)
@@ -13,6 +31,10 @@ export function artworkCaption(artwork: Artwork, event_info?: PushEvent) {
     let caption = '';
     if (artwork.quality) caption += '#精选\n';
     if (artwork.title) caption += `<b>作品标题:</b> ${artwork.title}\n`;
+    if (artist) {
+        caption += `<b>画师主页: </b> `;
+        caption += `<a href="${genArtistUrl(artist)}">${artist.name}</a>\n`;
+    }
     if (artwork.desc)
         caption += `<b>作品描述:</b> <pre>${artwork.desc}</pre>\n\n`;
     caption += `\n来源: ${artwork.source.post_url}\n`;

@@ -1,3 +1,5 @@
+import Mongoose from '~/database';
+
 type ArtworkSourceType = 'pixiv' | 'twitter' | 'danbooru';
 
 export type ArtworkSource = {
@@ -27,6 +29,7 @@ export type Artwork = {
     tags: Array<ArtworkTag>;
     source: ArtworkSource;
     create_time?: Date;
+    artist_id?: Mongoose.Types.ObjectId;
 };
 
 export type ArtworkInfo = {
@@ -38,9 +41,18 @@ export type ArtworkInfo = {
     url_origin: string;
     size: ImageSize;
     raw_tags?: string[];
+    artist?: Artist;
 };
 
 export type ArtworkWithFileId = Pick<Artwork, 'index' | 'source'> & {
     photo_file_id: string;
     document_file_id: string;
+};
+
+export type Artist = {
+    type: ArtworkSourceType;
+    uid: number;
+    name: string;
+    username?: string;
+    create_time?: Date;
 };

@@ -1,4 +1,4 @@
-import { Artwork, ArtworkInfo } from '~/types/Artwork';
+import { Artist, Artwork, ArtworkInfo } from '~/types/Artwork';
 import downloadFile from '~/utils/download';
 import bot from '~/bot';
 import config from '~/config';
@@ -20,12 +20,17 @@ import {
 import { uploadOneDrive } from './storage/upload';
 import { uploadFileB2 } from './storage/blackblaze';
 import { artworkCaption } from '~/utils/caption';
+import Mongoose from '~/database';
+import { findOrInsertArtist } from '~/database/operations/artist';
 
 // @ErrCatch 不会用，暂时不用了
 export async function publishArtwork(
     artworkInfo: ArtworkInfo,
     publish_event: PublishEvent
 ): Promise<ExecResult> {
+    global.currentMongoSession = await Mongoose.startSession();
+    global.currentMongoSession.startTransaction();
+
     // 下载文件
     const file_name_thumb = await downloadFile(
         artworkInfo.url_thumb,
@@ -54,7 +59,8 @@ export async function publishArtwork(
 
     // 获取标签ID
     const tags = await getTagsByNamesAndInsert(publish_event.artwork_tags);
-    let artwork: Artwork = {
+
+    const artwork = await insertArtwork({
         index: -1,
         file_name: file_name_origin,
         quality: publish_event.is_quality,
@@ -68,15 +74,25 @@ export async function publishArtwork(
             post_url: artworkInfo.post_url,
             picture_index: publish_event.picture_index
         }
-    };
-    artwork = await insertArtwork(artwork);
+    });
+
+    let artist: Artist;
+
+    if (artworkInfo.artist) {
+        artist = await findOrInsertArtist({
+            type: artworkInfo.source_type,
+            uid: artworkInfo.artist.uid,
+            name: artworkInfo.artist.name
+        });
+    }
+
     const push_event: PushEvent = {
         file_thumb_name: file_name_thumb,
         contribution: publish_event.contribution,
         origin_file_modified: publish_event.origin_file_id ? true : false
     };
     // 推送作品到频道
-    const pushMessages = await pushArtwork(artwork, push_event);
+    const pushMessages = await pushArtwork(artwork, push_event, artist);
     // 将频道的消息存入数据库
 
     await insertMessages(pushMessages);
@@ -88,6 +104,9 @@ export async function publishArtwork(
 }
 
 export async function modifyArtwork(artwork: Artwork): Promise<ExecResult> {
+    global.currentMongoSession = await Mongoose.startSession();
+    global.currentMongoSession.startTransaction();
+
     const count = await updateArtwork(artwork);
     if (count < 1) {
         return {
@@ -113,6 +132,9 @@ export async function modifyArtwork(artwork: Artwork): Promise<ExecResult> {
 }
 
 export async function delArtwork(artwork_index: number): Promise<ExecResult> {
+    global.currentMongoSession = await Mongoose.startSession();
+    global.currentMongoSession.startTransaction();
+
     const artwork_delete_count = await deleteArtwork(artwork_index);
     if (artwork_delete_count < 1) {
         return {

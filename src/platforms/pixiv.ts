@@ -46,7 +46,12 @@ export default async function getArtworkInfo(
         url_thumb: urls.regular,
         url_origin: urls.original,
         size: size,
-        raw_tags: tags
+        raw_tags: tags,
+        artist: {
+            type: 'pixiv',
+            uid: parseInt(illust.userId),
+            name: illust.userName
+        }
     };
 
     return artworkInfo;

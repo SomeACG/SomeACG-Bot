@@ -18,11 +18,17 @@ export function wrapCommand(
         let _ctx = new WarpperContext(ctx);
         try {
             await fn(_ctx);
+            global.currentMongoSession?.commitTransaction();
+            global.currentMongoSession?.endSession();
         } catch (err) {
             logger.error(
                 err,
                 `error occured when processing ${command} command`
             );
+
+            global.currentMongoSession?.abortTransaction();
+            global.currentMongoSession?.endSession();
+
             if (err instanceof Error) {
                 return await _ctx.resolveWait(
                     `操作失败: <pre>${err.message}</pre>`,
