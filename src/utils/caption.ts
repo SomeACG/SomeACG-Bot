@@ -23,7 +23,7 @@ export function artworkCaption(artwork: Artwork, event_info?: PushEvent) {
     if (artwork.quality) caption += '#精选\n';
     if (artwork.title) caption += `<b>作品标题:</b> ${artwork.title}\n`;
     if (event_info.artist) {
-        caption += `<b>画师主页: </b> `;
+        caption += `<b>画师主页:</b> `;
         caption += `<a href="${genArtistUrl(event_info.artist)}">${
             event_info.artist.name
         }</a>\n`;
@@ -48,7 +48,7 @@ export function infoCmdCaption(artwork_info: ArtworkInfo) {
     if (artwork_info.desc)
         caption += `<b>作品描述:</b> <pre>${artwork_info.desc}</pre>\n`;
     if (artwork_info.artist) {
-        caption += `<b>画师主页: </b> `;
+        caption += `<b>画师主页:</b> `;
         caption += `<a href="${genArtistUrl(artwork_info.artist)}">${
             artwork_info.artist.name
         }</a>\n`;
