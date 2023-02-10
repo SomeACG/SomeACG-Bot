@@ -37,7 +37,8 @@ export default async function getArtworkInfo(
         artist: {
             type: 'twitter',
             name: tweet.user.name,
-            uid: tweet.user.id
+            uid: tweet.user.id,
+            username: tweet.user.screen_name
         }
     };
 }

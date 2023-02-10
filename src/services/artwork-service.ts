@@ -91,7 +91,7 @@ export async function publishArtwork(
         file_thumb_name: file_name_thumb,
         contribution: publish_event.contribution,
         origin_file_modified: publish_event.origin_file_id ? true : false,
-        artist
+        artist: artworkInfo.artist
     };
     // 推送作品到频道
     const pushMessages = await pushArtwork(artwork, push_event);
