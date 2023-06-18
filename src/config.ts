@@ -13,8 +13,6 @@ export default {
     TEMP_DIR: env.get('DEV_MODE').asBool()
         ? path.resolve(__dirname, '../temp')
         : '/tmp',
-    TWITTER_API_KEY: env.get('TWITTER_API_KEY').required().asString(),
-    TWITTER_API_SECRET: env.get('TWITTER_API_SECRET').required().asString(),
     CLIENT_ID: env.get('CLIENT_ID').required().asString(),
     CLIENT_SECRET: env.get('CLIENT_SECRET').required().asString(),
     REFRESH_TOKEN: env.get('REFRESH_TOKEN').required().asString(),

@@ -1,18 +1,15 @@
 import path from 'path';
-import config from '~/config';
 import { ArtworkInfo } from '~/types/Artwork';
-import { TwitterApi } from 'twitter-api-v2';
-
-const twitterClient = new TwitterApi({
-    appKey: config.TWITTER_API_KEY,
-    appSecret: config.TWITTER_API_SECRET
-}).v1;
+import { getTweetDetails } from './twitter-web-api/tweet';
+import { get } from 'mongoose';
 
 export default async function getArtworkInfo(
     post_url: string,
     picture_index = 0
 ): Promise<ArtworkInfo> {
-    const tweet = await twitterClient.singleTweet(path.basename(post_url));
+    const tweet_url = new URL(post_url);
+    const url_paths = tweet_url.pathname.split('/');
+    const tweet = await getTweetDetails(url_paths[1], url_paths[3]);
 
     if (!tweet.entities.media)
         throw new Error('This tweet does not have any photos.');
