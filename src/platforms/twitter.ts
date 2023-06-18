@@ -25,7 +25,7 @@ export default async function getArtworkInfo(
         source_type: 'twitter',
         post_url: post_url,
         desc,
-        url_thumb: media.media_url_https + '?name=small',
+        url_thumb: media.media_url_https + '?name=medium',
         url_origin: media.media_url_https + '?name=4096x4096',
         size: {
             width: media.sizes.large.w,
