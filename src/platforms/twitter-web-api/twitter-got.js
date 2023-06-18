@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
 const { CookieJar, Cookie } = require('tough-cookie');
 const { promisify } = require('util');
 const axios = require('axios');
