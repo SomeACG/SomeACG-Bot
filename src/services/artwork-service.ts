@@ -66,7 +66,8 @@ export async function publishArtwork(
         artist = await findOrInsertArtist({
             type: artworkInfo.source_type,
             uid: artworkInfo.artist.uid,
-            name: artworkInfo.artist.name
+            name: artworkInfo.artist.name,
+            username: artworkInfo.artist.username
         });
     }
 
