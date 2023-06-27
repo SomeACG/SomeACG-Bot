@@ -5,11 +5,15 @@ import getAccessToken from '../graph/auth';
 import config from '~/config';
 import logger from '~/utils/logger';
 
+const ONEDRIVE_UPLOAD_PATH = process.env.DEV_MODE
+    ? '/SomeACG_Test'
+    : '/SomeACG';
+
 export async function uploadOneDrive(file_name: string): Promise<void> {
     const access_token = await getAccessToken();
     const file_path = path.resolve(config.TEMP_DIR, file_name);
     const uploadSession = await axios.post(
-        `https://graph.microsoft.com/v1.0/me/drive/root:/SomeACG/${file_name}:/createUploadSession`,
+        `https://graph.microsoft.com/v1.0/me/drive/root:${ONEDRIVE_UPLOAD_PATH}/${file_name}:/createUploadSession`,
         undefined,
         { headers: { Authorization: `Bearer ${access_token}` } }
     );

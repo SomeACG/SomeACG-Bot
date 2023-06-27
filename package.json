@@ -43,7 +43,8 @@
     "scripts": {
         "postinstall": "husky install",
         "build": "tsc --outDir ./dist && cp -r docs ./dist",
-        "dev": "tsc --outDir ./dist && cp -r docs ./dist && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist USE_PROXY=0 DEV_MODE=1 node --inspect -r tsconfig-paths/register ./dist/src/app.js",
+        "dev": "tsc --outDir ./dist && cp -r docs ./dist && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist USE_PROXY=0 DEV_MODE=1 DOTENV_NAME=development node --inspect -r tsconfig-paths/register ./dist/src/app.js",
+        "dev:prod": "tsc --outDir ./dist && cp -r docs ./dist && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist USE_PROXY=0 DOTENV_NAME=production node --inspect -r tsconfig-paths/register ./dist/src/app.js",
         "start": "mkdir -p ./dist/temp && cp -r docs ./dist && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js",
         "lint": "prettier --write . && eslint --ext .ts src --fix"
     },

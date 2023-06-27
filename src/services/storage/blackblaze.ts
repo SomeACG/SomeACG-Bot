@@ -8,6 +8,8 @@ const credentials = new AWS.Credentials({
     accessKeyId: config.B2_KEY_ID,
     secretAccessKey: config.B2_KEY
 });
+const B2_UPLOAD_PATH = process.env.DEV_MODE ? 'thumbs_test/' : 'thumbs/';
+
 AWS.config.credentials = credentials;
 
 const endpoint = new AWS.Endpoint(config.B2_ENDPOINT);
@@ -25,7 +27,7 @@ export async function uploadFileB2(file_name: string) {
     s3.putObject(
         {
             Bucket: 'someacg',
-            Key: 'thumbs/' + file_name,
+            Key: B2_UPLOAD_PATH + file_name,
             Body: fs.createReadStream(path.resolve(config.TEMP_DIR, file_name)),
             ContentType: 'image/' + path.extname(file_name).substring(1)
         },

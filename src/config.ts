@@ -1,5 +1,13 @@
 import dotenv from 'dotenv';
-dotenv.config();
+
+const DOTENV_PATH = process.env.DOTENV_NAME
+    ? `.env.${process.env.DOTENV_NAME}`
+    : '.env';
+
+dotenv.config({
+    path: DOTENV_PATH
+});
+
 import path from 'path';
 import * as env from 'env-var';
 import package_info from 'package.json';
@@ -17,7 +25,6 @@ export default {
     CLIENT_SECRET: env.get('CLIENT_SECRET').required().asString(),
     REFRESH_TOKEN: env.get('REFRESH_TOKEN').required().asString(),
     ADMIN_LIST: env.get('ADMIN_LIST').required().asArray(),
-    THUMB_BASE: env.get('THUMB_BASE').required().asString(),
     VERSION: env.get('VERSION').asString() || package_info.version,
     DEV_MODE: env.get('DEV_MODE').asBool(),
     USE_PROXY: env.get('USE_PROXY').asBool(),
