@@ -1,6 +1,6 @@
 {
     "name": "someacg-bot",
-    "version": "2.1.3",
+    "version": "2.2.0",
     "license": "MIT",
     "engines": {
         "node": "16.x"
