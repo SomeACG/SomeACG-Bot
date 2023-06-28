@@ -46,9 +46,7 @@ export default Telegraf.hears(/#投稿/, async ctx => {
             reply_message_id: replyMessage.message_id
         });
 
-        await contribution.save(err => {
-            if (err) throw err;
-        });
+        await contribution.save();
     } catch (err) {
         if (err instanceof Error) {
             ctx.reply(err.message, {

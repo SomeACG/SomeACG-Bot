@@ -4,7 +4,9 @@ import { ChannelMessage, ChannelMessageType } from '~/types/Message';
 export async function insertMessages(messages: ChannelMessage[]) {
     if (!messages.length) throw new Error('Empty message array !');
 
-    await MessageModel.insertMany(messages);
+    await MessageModel.insertMany(messages, {
+        session: global.currentMongoSession
+    });
 }
 
 export async function getMessage(message_id: number): Promise<ChannelMessage> {

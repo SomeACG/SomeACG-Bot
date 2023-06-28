@@ -5,6 +5,7 @@ import { publishArtwork } from '~/services/artwork-service';
 import { Contribution } from '~/types/Contribution';
 import { getContributionById } from '~/database/operations/contribution';
 import { wrapCommand } from '~/bot/wrappers/command-wrapper';
+import logger from '~/utils/logger';
 
 export default wrapCommand('push', async ctx => {
     if (!ctx.command.target || !ctx.command.params)
@@ -53,10 +54,14 @@ export default wrapCommand('push', async ctx => {
                     reply_to_message_id: contribution.message_id
                 }
             );
-            await ctx.telegram.deleteMessage(
-                contribution.chat_id,
-                contribution.reply_message_id
-            );
+            try {
+                await ctx.telegram.deleteMessage(
+                    contribution.chat_id,
+                    contribution.reply_message_id
+                );
+            } catch (e) {
+                logger.warn(e);
+            }
         }
         return;
     }

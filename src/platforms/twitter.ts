@@ -1,7 +1,5 @@
-import path from 'path';
 import { ArtworkInfo } from '~/types/Artwork';
 import { getTweetDetails } from './twitter-web-api/tweet';
-import { get } from 'mongoose';
 
 export default async function getArtworkInfo(
     post_url: string,

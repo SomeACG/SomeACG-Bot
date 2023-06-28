@@ -1,10 +1,27 @@
 import ArtworkModel from '~/database/models/ArtworkModel';
 import { Artwork, ArtworkWithFileId } from '~/types/Artwork';
+import { getConfig, setConfig } from './config';
+import { Config } from '~/types/Config';
 
 export async function insertArtwork(artwork: Artwork): Promise<Artwork> {
+    let current_count = await getConfig(Config.ARTWORK_COUNT);
+
+    if (!current_count) {
+        current_count = '0';
+    }
+
+    let current_count_number = parseInt(current_count);
+
+    current_count_number++;
+
+    await setConfig(Config.ARTWORK_COUNT, current_count_number.toString());
+
+    artwork.index = current_count_number;
     const artwork_instance = new ArtworkModel(artwork);
 
-    const document = await artwork_instance.save();
+    const document = await artwork_instance.save({
+        session: global.currentMongoSession
+    });
 
     return document;
 }

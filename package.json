@@ -30,7 +30,7 @@
         "koa-router": "^10.1.1",
         "minio": "^7.0.26",
         "module-alias": "^2.2.2",
-        "mongoose": "^6.1.4",
+        "mongoose": "^7.3.1",
         "pino": "^8.7.0",
         "pino-pretty": "^9.1.1",
         "telegraf": "^4.8.5",
