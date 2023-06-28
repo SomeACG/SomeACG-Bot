@@ -5,6 +5,8 @@
 
 .env*
 
+!.env.example
+
 temp
 
 test
