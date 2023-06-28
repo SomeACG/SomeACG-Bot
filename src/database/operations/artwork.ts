@@ -2,6 +2,7 @@ import ArtworkModel from '~/database/models/ArtworkModel';
 import { Artwork, ArtworkWithFileId } from '~/types/Artwork';
 import { getConfig, setConfig } from './config';
 import { Config } from '~/types/Config';
+import logger from '~/utils/logger';
 
 export async function insertArtwork(artwork: Artwork): Promise<Artwork> {
     let current_count = await getConfig(Config.ARTWORK_COUNT);

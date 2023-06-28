@@ -21,7 +21,10 @@ import { uploadOneDrive } from './storage/upload';
 import { uploadFileB2 } from './storage/blackblaze';
 import { artworkCaption } from '~/utils/caption';
 import Mongoose from '~/database';
-import { findOrInsertArtist } from '~/database/operations/artist';
+import {
+    findOrInsertArtist,
+    getArtistById
+} from '~/database/operations/artist';
 
 // @ErrCatch 不会用，暂时不用了
 export async function publishArtwork(
@@ -91,11 +94,10 @@ export async function publishArtwork(
     const push_event: PushEvent = {
         file_thumb_name: file_name_thumb,
         contribution: publish_event.contribution,
-        origin_file_modified: publish_event.origin_file_id ? true : false,
-        artist: artworkInfo.artist
+        origin_file_modified: publish_event.origin_file_id ? true : false
     };
     // 推送作品到频道
-    const pushMessages = await pushArtwork(artwork, push_event);
+    const pushMessages = await pushArtwork(artworkInfo, artwork, push_event);
     // 将频道的消息存入数据库
 
     await insertMessages(pushMessages);
@@ -118,12 +120,13 @@ export async function modifyArtwork(artwork: Artwork): Promise<ExecResult> {
         };
     }
     const photo_message = await getMessageByArtwork(artwork.index, 'photo');
+    const artist = await getArtistById(artwork.artist_id.toString());
 
     await bot.telegram.editMessageCaption(
         config.PUSH_CHANNEL,
         photo_message.message_id,
         undefined,
-        artworkCaption(artwork),
+        artworkCaption(artwork, artist),
         {
             parse_mode: 'HTML'
         }

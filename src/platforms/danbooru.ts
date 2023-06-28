@@ -13,6 +13,9 @@ export default async function getArtworkInfo(
     const matchOriginal = htmlData.match(
         /<a class="image-view-original-link" href="(.+)">/
     );
+    const matchArtist = htmlData.match(
+        /<li class="tag-type-1" data-tag-name="(.+)"/
+    );
     const matchWidth = htmlData.match(/data-width="(.+)"/);
     const matchHeight = htmlData.match(/data-height="(.+)"/);
 
@@ -27,6 +30,11 @@ export default async function getArtworkInfo(
         size: {
             width: parseInt(matchWidth[1]),
             height: parseInt(matchHeight[1])
+        },
+        artist: {
+            type: 'danbooru',
+            username: matchArtist ? matchArtist[1] : 'Unknown',
+            name: matchArtist ? matchArtist[1] : 'Unknown'
         }
     };
 }

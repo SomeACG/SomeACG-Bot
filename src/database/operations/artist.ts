@@ -10,3 +10,8 @@ export async function findOrInsertArtist(artist: Artist) {
 
     return newArtist;
 }
+
+export async function getArtistById(id: string) {
+    const artist = await artistModel.findById(id);
+    return artist;
+}

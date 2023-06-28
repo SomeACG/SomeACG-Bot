@@ -11,10 +11,16 @@ function genArtistUrl(artist: Artist) {
             return 'https://www.pixiv.net/users/' + artist.uid;
         case 'twitter':
             return 'https://twitter.com/' + artist.username;
+        case 'danbooru':
+            return 'https://danbooru.donmai.us/posts?tags=' + artist.username;
     }
 }
 
-export function artworkCaption(artwork: Artwork, event_info?: PushEvent) {
+export function artworkCaption(
+    artwork: Artwork,
+    artist: Artist,
+    event_info?: PushEvent
+) {
     // Replace special chars
     if (artwork.title) artwork.title = encodeHtmlChars(artwork.title);
     // artwork.desc = encodeHtmlChars(artwork.desc)
@@ -22,12 +28,10 @@ export function artworkCaption(artwork: Artwork, event_info?: PushEvent) {
     let caption = '';
     if (artwork.quality) caption += '#精选\n';
     if (artwork.title) caption += `<b>作品标题:</b> ${artwork.title}\n`;
-    if (event_info.artist) {
-        caption += `<b>画师主页:</b> `;
-        caption += `<a href="${genArtistUrl(event_info.artist)}">${
-            event_info.artist.name
-        }</a>\n`;
-    }
+
+    caption += `<b>画师主页:</b> `;
+    caption += `<a href="${genArtistUrl(artist)}">${artist.name}</a>\n`;
+
     if (artwork.desc)
         caption += `<b>作品描述:</b> <pre>${artwork.desc}</pre>\n\n`;
     caption += `\n来源: ${artwork.source.post_url}\n`;

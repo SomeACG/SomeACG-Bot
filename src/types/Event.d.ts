@@ -1,4 +1,3 @@
-import { Artist } from './Artwork';
 import { Contribution } from './Contribution';
 
 export type PushEvent = {
@@ -6,7 +5,6 @@ export type PushEvent = {
     contribution?: Contribution;
     origin_file_modified: boolean;
     origin_file_id?: string;
-    artist?: Artist;
 };
 
 export type PublishEvent = {

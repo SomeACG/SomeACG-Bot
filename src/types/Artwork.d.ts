@@ -41,7 +41,7 @@ export type ArtworkInfo = {
     url_origin: string;
     size: ImageSize;
     raw_tags?: string[];
-    artist?: Artist;
+    artist: Artist;
 };
 
 export type ArtworkWithFileId = Pick<Artwork, 'index' | 'source'> & {
@@ -52,7 +52,7 @@ export type ArtworkWithFileId = Pick<Artwork, 'index' | 'source'> & {
 export type Artist = {
     id?: Mongoose.Types.ObjectId;
     type: ArtworkSourceType;
-    uid: number;
+    uid?: number;
     name: string;
     username?: string;
     create_time?: Date;
