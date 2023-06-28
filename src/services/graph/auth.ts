@@ -7,7 +7,14 @@ import { Config } from '~/types/Config';
 const AUTH_URL = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
 
 export default async function getAccessToken(): Promise<string> {
-    const stored_refresh_token = await getConfig(Config.REFRESH_TOKEN);
+    let stored_refresh_token = await getConfig(Config.REFRESH_TOKEN);
+
+    if (!stored_refresh_token) {
+        logger.warn(
+            'No stored refresh token found, use process.env.REFRESH_TOKEN instead'
+        );
+        stored_refresh_token = process.env.REFRESH_TOKEN;
+    }
 
     const body = new URLSearchParams();
     body.append('client_id', config.CLIENT_ID);
