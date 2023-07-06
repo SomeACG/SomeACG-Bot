@@ -1,5 +1,5 @@
 import { ArtworkInfo } from '~/types/Artwork';
-import { getTweetDetails } from './twitter-web-api/tweet';
+import { getTweetDetails, getUserByUsername } from './twitter-web-api/tweet';
 
 export default async function getArtworkInfo(
     post_url: string,
@@ -8,6 +8,7 @@ export default async function getArtworkInfo(
     const tweet_url = new URL(post_url);
     const url_paths = tweet_url.pathname.split('/');
     const tweet = await getTweetDetails(url_paths[1], url_paths[3]);
+    const user = await getUserByUsername(url_paths[1]);
 
     if (!tweet.entities.media)
         throw new Error('This tweet does not have any photos.');
@@ -31,9 +32,9 @@ export default async function getArtworkInfo(
         },
         artist: {
             type: 'twitter',
-            name: tweet.user.name,
-            uid: tweet.user.id,
-            username: tweet.user.screen_name
+            name: user.name,
+            uid: parseInt(tweet.user_id_str),
+            username: user.screen_name
         }
     };
 }
