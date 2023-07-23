@@ -10,8 +10,11 @@ export default async function getArtworkInfo(
     const tweet = await getTweetDetails(url_paths[1], url_paths[3]);
     const user = await getUserByUsername(url_paths[1]);
 
-    if (!tweet.entities.media)
-        throw new Error('This tweet does not have any photos.');
+    if (
+        !tweet.extended_entities.media ||
+        tweet.extended_entities.media[0].type !== 'photo'
+    )
+        throw new Error('此推文中没有任何图片');
 
     const media = tweet.extended_entities?.media
         ? tweet.extended_entities.media[picture_index]
