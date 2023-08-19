@@ -129,6 +129,17 @@ const tweetDetail = (userId, params) =>
         ['threaded_conversation_with_injections']
     );
 
+const TweetResultByRestId = (tweetId) => 
+    twitterGot(`https://twitter.com/i/api${graphQLMap.TweetResultByRestId}`, {
+        variables: JSON.stringify({
+            tweetId: tweetId,
+            withCommunity: false,
+            includePromotedContent:false,
+            withVoice:false
+        }),
+        features: featuresMap.UserTweets
+    })
+
 function gatherLegacyFromData(entries, filter = 'tweet-') {
     const tweets = [];
     const filte_entries = [];
@@ -276,4 +287,5 @@ module.exports = {
     excludeRetweet,
     getSearch,
     getUserTweet,
+    TweetResultByRestId
 };

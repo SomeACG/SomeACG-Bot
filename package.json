@@ -2,9 +2,6 @@
     "name": "someacg-bot",
     "version": "2.3.0",
     "license": "MIT",
-    "engines": {
-        "node": "16.x"
-    },
     "author": {
         "name": "Revincx",
         "email": "i@revincx.icu"

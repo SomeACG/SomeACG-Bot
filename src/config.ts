@@ -15,7 +15,7 @@ import package_info from 'package.json';
 export default {
     DB_URL: env.get('DB_URL').required().asString(),
     BOT_TOKEN: env.get('BOT_TOKEN').required().asString(),
-    PORT: process.env.PORT || 3000,
+    PORT: process.env.PORT || 3001,
     PUSH_CHANNEL: env.get('PUSH_CHANNEL').required().asString(),
     BASE_DIR: path.resolve(__dirname, '..'),
     TEMP_DIR: env.get('DEV_MODE').asBool()

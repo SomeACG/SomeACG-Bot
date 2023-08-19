@@ -16,6 +16,7 @@ const graphQLEndpointsPlain = [
     '/graphql/wxoVeDnl0mP7VLhe6mTOdg/UserTweetsAndReplies',
     '/graphql/Az0-KW6F-FyYTc2OJmvUhg/UserMedia',
     '/graphql/kgZtsNyE46T3JaEf2nF9vw/Likes',
+    '/graphql/0hWvDhmW8YQ-S_ib3azIrw/TweetResultByRestId'
     // these endpoints are not available if authenticated as other clients
     // FYI, endpoints for Android: https://gist.github.com/ScamCast/2e40befbd1b61c4a80cda2745d4df1f4
 ];

@@ -7,7 +7,7 @@ export default async function getArtworkInfo(
 ): Promise<ArtworkInfo> {
     const tweet_url = new URL(post_url);
     const url_paths = tweet_url.pathname.split('/');
-    const tweet = await getTweetDetails(url_paths[1], url_paths[3]);
+    const tweet = await getTweetDetails(url_paths[3]);
     const user = await getUserByUsername(url_paths[1]);
 
     if (
