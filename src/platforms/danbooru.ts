@@ -4,37 +4,35 @@ import { ArtworkInfo } from '~/types/Artwork';
 export default async function getArtworkInfo(
     post_url: string
 ): Promise<ArtworkInfo> {
-    const { data } = await axios.get(post_url);
-    const htmlData = data as string;
+    const { data: post } = await axios.get(`${post_url}.json`, {
+        headers: {
+            'user-agent': 'curl'
+        }
+    });
 
-    const matchLarge = htmlData.match(
-        /<a class="image-view-large-link" href="(.+)">/
+    const { data: artist } = await axios.get(
+        `https://danbooru.donmai.us/artists.json?name=${post['tag_string_artist']}`,
+        {
+            headers: {
+                'user-agent': 'curl'
+            }
+        }
     );
-    const matchOriginal = htmlData.match(
-        /<a class="image-view-original-link" href="(.+)">/
-    );
-    const matchArtist = htmlData.match(
-        /<li class="tag-type-1" data-tag-name="(.+)"/
-    );
-    const matchWidth = htmlData.match(/data-width="(.+)"/);
-    const matchHeight = htmlData.match(/data-height="(.+)"/);
-
-    if (!matchLarge || !matchOriginal || !matchWidth || !matchHeight)
-        throw new Error('Now photo found in the post.');
 
     return {
         source_type: 'danbooru',
         post_url: post_url,
-        url_thumb: matchLarge[1],
-        url_origin: matchOriginal[1],
+        url_thumb: post['large_file_url'],
+        url_origin: post['file_url'],
         size: {
-            width: parseInt(matchWidth[1]),
-            height: parseInt(matchHeight[1])
+            width: parseInt(post['image_width']),
+            height: parseInt(post['image_height'])
         },
         artist: {
             type: 'danbooru',
-            username: matchArtist ? matchArtist[1] : 'Unknown',
-            name: matchArtist ? matchArtist[1] : 'Unknown'
-        }
+            name: post['tag_string_artist'],
+            id: artist[0]['id']
+        },
+        raw_tags: post['tag_string'].split(' ')
     };
 }

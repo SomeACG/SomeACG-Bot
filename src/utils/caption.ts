@@ -12,7 +12,7 @@ function genArtistUrl(artist: Artist) {
         case 'twitter':
             return 'https://twitter.com/' + artist.username;
         case 'danbooru':
-            return 'https://danbooru.donmai.us/posts?tags=' + artist.username;
+            return 'https://danbooru.donmai.us/artists/' + artist.id;
     }
 }
 
