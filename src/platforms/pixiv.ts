@@ -32,19 +32,18 @@ export default async function getArtworkInfo(
     const tags = illust.tags.tags.map(item => {
         if (item.tag === 'R-18') item.tag = 'R18';
 
+        item.tag = item.translation?.en ? item.translation.en : item.tag;
+
         item.tag = item.tag.replace(/\s/g, '_');
 
-        return item.translation?.en ? item.translation.en : item.tag;
+        return item.tag;
     });
-
-    // 处理一下
-    const desc = illust.description.replace(/<br(\s+)?\/>/g, '\n');
 
     const artworkInfo: ArtworkInfo = {
         source_type: 'pixiv',
         post_url: post_url,
         title: illust.title,
-        desc: desc,
+        desc: illust.extraData.meta.description,
         url_thumb: urls.regular,
         url_origin: urls.original,
         size: size,
