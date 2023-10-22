@@ -39,11 +39,6 @@ export type PixivIllust = {
     pageCount: number;
     width: number;
     height: number;
-    extraData: {
-        meta: {
-            description?: string;
-        };
-    };
 };
 
 export type PixivIllustPages = [

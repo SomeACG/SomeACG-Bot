@@ -39,11 +39,16 @@ export default async function getArtworkInfo(
         return item.tag;
     });
 
+    const illust_desc = illust.description
+
+        // Remoie all the html tags in the description
+        .replace(/<[^>]+>/g, '');
+
     const artworkInfo: ArtworkInfo = {
         source_type: 'pixiv',
         post_url: post_url,
         title: illust.title,
-        desc: illust.extraData.meta.description,
+        desc: illust_desc,
         url_thumb: urls.regular,
         url_origin: urls.original,
         size: size,
