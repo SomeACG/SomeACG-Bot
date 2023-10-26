@@ -21,13 +21,10 @@ export function artworkCaption(
     artist: Artist,
     event_info?: PushEvent
 ) {
-    // Replace special chars
-    if (artwork.title) artwork.title = encodeHtmlChars(artwork.title);
-    // artwork.desc = encodeHtmlChars(artwork.desc)
-
     let caption = '';
     if (artwork.quality) caption += '#精选\n';
-    if (artwork.title) caption += `<b>作品标题:</b> ${artwork.title}\n`;
+    if (artwork.title)
+        caption += `<b>作品标题:</b> ${encodeHtmlChars(artwork.title)}\n`;
 
     caption += `<b>画师主页:</b> `;
     caption += `<a href="${genArtistUrl(artist)}">${artist.name}</a>\n`;
@@ -48,7 +45,7 @@ export function artworkCaption(
 export function infoCmdCaption(artwork_info: ArtworkInfo) {
     let caption = '图片下载成功!\n';
     if (artwork_info.title)
-        caption += `<b>作品标题:</b> ${artwork_info.title}\n`;
+        caption += `<b>作品标题:</b> ${encodeHtmlChars(artwork_info.title)}\n`;
     if (artwork_info.desc)
         caption += `<b>作品描述:</b> <pre>${artwork_info.desc}</pre>\n`;
     if (artwork_info.artist) {
