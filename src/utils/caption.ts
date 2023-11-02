@@ -30,7 +30,7 @@ export function artworkCaption(
     caption += `<a href="${genArtistUrl(artist)}">${artist.name}</a>\n`;
 
     if (artwork.desc)
-        caption += `<b>作品描述:</b> <pre>${artwork.desc}</pre>\n\n`;
+        caption += `<b>作品描述:</b> <code>${artwork.desc}</code>\n\n`;
     caption += `\n来源: ${artwork.source.post_url}\n`;
     if (event_info?.contribution)
         caption += `投稿 by <a href="tg://user?id=${event_info.contribution.user_id}">${event_info.contribution.user_name}</a>\n`;
@@ -47,7 +47,7 @@ export function infoCmdCaption(artwork_info: ArtworkInfo) {
     if (artwork_info.title)
         caption += `<b>作品标题:</b> ${encodeHtmlChars(artwork_info.title)}\n`;
     if (artwork_info.desc)
-        caption += `<b>作品描述:</b> <pre>${artwork_info.desc}</pre>\n`;
+        caption += `<b>作品描述:</b> <code>${artwork_info.desc}</code>\n`;
     if (artwork_info.artist) {
         caption += `<b>画师主页:</b> `;
         caption += `<a href="${genArtistUrl(artwork_info.artist)}">${
