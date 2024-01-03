@@ -8,7 +8,7 @@ export default async function getArtworkInfoByUrl(
         /https:\/\/www.pixiv.net(\/en)?\/artworks\/(\d{1,9})(\/)?/
     );
     const matchTwitter = url.match(
-        /https:\/\/twitter.com\/(.+)\/status\/(\d+)/
+        /https:\/\/(vx)?(twitter|fixvx|fixupx).com\/(.+)\/status\/(\d+)/
     );
     const matchDanbooru = url.match(
         /https:\/\/danbooru.donmai.us\/posts\/(\d+)/
