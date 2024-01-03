@@ -28,7 +28,7 @@ export default async function getArtworkInfo(
         post_url: post_url,
         desc,
         url_thumb: media.media_url_https + '?name=medium',
-        url_origin: media.media_url_https + '?name=4096x4096',
+        url_origin: media.media_url_https + '?name=orig',
         size: {
             width: media.sizes.large.w,
             height: media.sizes.large.h
