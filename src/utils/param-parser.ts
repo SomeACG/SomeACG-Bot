@@ -1,6 +1,6 @@
 import { CommandEntity } from '~/types/Command';
 
-export function parseParams({ command }: { command: string; }): CommandEntity {
+export function parseParams(command: string): CommandEntity {
     command = command.trim();
     if (command.search(' ') == -1)
         return {
@@ -37,6 +37,7 @@ export function parseParams({ command }: { command: string; }): CommandEntity {
             const param_key = str_array[i].split('=')[0];
             const param_value = str_array[i].split('=')[1];
         command_entity.params[param_key] = param_value;
+        }
     }
     return command_entity;
 }
