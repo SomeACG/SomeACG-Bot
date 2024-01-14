@@ -4,4 +4,4 @@
 示例:
 /update index=233 quality=true
 
-_具有 UPDATE 权限的用户才能使用此命令_
+*具有 UPDATE 权限的用户才能使用此命令*
