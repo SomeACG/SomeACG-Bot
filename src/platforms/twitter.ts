@@ -1,5 +1,5 @@
 import { ArtworkInfo } from '~/types/Artwork';
-import { getTweetDetails, getUserByUsername } from './twitter-web-api/tweet';
+import { getTweetDetails } from './twitter-web-api/tweet';
 
 export default async function getArtworkInfo(
     post_url: string,
@@ -8,20 +8,19 @@ export default async function getArtworkInfo(
     const tweet_url = new URL(post_url);
     const url_paths = tweet_url.pathname.split('/');
     const tweet = await getTweetDetails(url_paths[3]);
-    const user = await getUserByUsername(url_paths[1]);
 
     if (
-        !tweet.extended_entities.media ||
-        tweet.extended_entities.media[0].type !== 'photo'
+        !tweet.legacy.extended_entities.media ||
+        tweet.legacy.extended_entities.media[0].type !== 'photo'
     )
         throw new Error('此推文中没有任何图片');
 
     const media = tweet.extended_entities?.media
-        ? tweet.extended_entities.media[picture_index]
-        : tweet.entities.media[0];
+        ? tweet.legacy.extended_entities.media[picture_index]
+        : tweet.legacy.entities.media[picture_index];
 
     // Remove t.co Links
-    const desc = tweet.full_text.replace(/https:\/\/t.co\/(\w+)/, '');
+    const desc = tweet.legacy.full_text.replace(/https:\/\/t.co\/(\w+)/, '');
 
     return {
         source_type: 'twitter',
@@ -30,14 +29,14 @@ export default async function getArtworkInfo(
         url_thumb: media.media_url_https + '?name=medium',
         url_origin: media.media_url_https + '?name=orig',
         size: {
-            width: media.sizes.large.w,
-            height: media.sizes.large.h
+            width: media.original_info.width,
+            height: media.original_info.height
         },
         artist: {
             type: 'twitter',
-            name: user.name,
+            name: tweet.core.user_results.result.legacy.name,
             uid: parseInt(tweet.user_id_str),
-            username: user.screen_name
+            username: tweet.core.user_results.result.legacy.screen_name
         }
     };
 }
