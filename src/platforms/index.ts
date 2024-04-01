@@ -5,13 +5,13 @@ export default async function getArtworkInfoByUrl(
     picture_index?: number
 ): Promise<ArtworkInfo> {
     const matchPixiv = url.match(
-        /https:\/\/www.pixiv.net(\/en)?\/artworks\/(\d{1,9})(\/)?/
+        /(https:\/\/)?(www.)?pixiv.net(\/en)?\/(artworks|i)\/(\d{1,9})(\/)?/
     );
     const matchTwitter = url.match(
-        /https:\/\/(vx)?(twitter|fixvx|fixupx).com\/(.+)\/status\/(\d+)/
+        /(https:\/\/)?(vx|fx|fixup)?(twitter|x|twittpr).com\/(.+)\/status\/(\d+)/
     );
     const matchDanbooru = url.match(
-        /https:\/\/danbooru.donmai.us\/posts\/(\d+)/
+        /(https:\/\/)?danbooru.donmai.us\/(posts|post\/show)\/(\d+)/
     );
 
     if (!picture_index) picture_index = 0;
