@@ -23,7 +23,7 @@
         "koa-bodyparser": "^4.3.0",
         "koa-router": "^10.1.1",
         "module-alias": "^2.2.2",
-        "mongoose": "^7.3.1",
+        "mongoose": "^7.3.3",
         "pino": "^8.7.0",
         "pino-pretty": "^9.1.1",
         "telegraf": "^4.8.5",
