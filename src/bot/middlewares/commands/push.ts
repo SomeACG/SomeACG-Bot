@@ -30,6 +30,16 @@ export default wrapCommand('push', async ctx => {
         contribution = await getContributionById(
             parseInt(ctx.command.params['contribute_from'])
         );
+
+    const origin_file_msg = ctx.reply_to_message as Message.DocumentMessage;
+
+    if (origin_file_msg?.document?.file_id) {
+        const file_url = await ctx.telegram.getFileLink(
+            origin_file_msg.document.file_id
+        );
+        artwork_info.url_origin = file_url.href;
+    }
+
     const result = await publishArtwork(artwork_info, {
         is_quality: ctx.command.params['quality'] ? true : false,
         picture_index: ctx.command.params['picture_index']
@@ -39,10 +49,11 @@ export default wrapCommand('push', async ctx => {
             tags_string.search(',') == -1
                 ? [tags_string]
                 : tags_string.split(/,|，/),
-        origin_file_id: ctx.reply_to_message
-            ? (ctx.reply_to_message as Message.DocumentMessage).document.file_id
-            : undefined,
-        contribution: contribution
+        contribution: contribution,
+        origin_file_name: origin_file_msg?.document?.file_name,
+        origin_file_modified: origin_file_msg?.document?.file_name
+            ? true
+            : false
     });
     if (result.succeed) {
         await ctx.resolveWait('作品发布成功~');

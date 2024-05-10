@@ -39,22 +39,13 @@ export async function publishArtwork(
         artworkInfo.url_thumb,
         'thumb-' + path.basename(new URL(artworkInfo.url_thumb).pathname)
     );
-    let file_name_origin;
     // 判断是否有文件ID传入
-    if (!publish_event.origin_file_id) {
-        file_name_origin = await downloadFile(
-            artworkInfo.url_origin,
-            path.basename(new URL(artworkInfo.url_origin).pathname)
-        );
-    } else {
-        const origin_file_link = await bot.telegram.getFileLink(
-            publish_event.origin_file_id
-        );
-        file_name_origin = await downloadFile(
-            origin_file_link.href,
-            path.basename(new URL(artworkInfo.url_origin).pathname)
-        );
-    }
+    const file_name_origin = await downloadFile(
+        artworkInfo.url_origin,
+        publish_event.origin_file_name
+            ? publish_event.origin_file_name
+            : path.basename(new URL(artworkInfo.url_origin).pathname)
+    );
     // 上传到OSS和OneDrive
     // await uploadOSS(file_name_thumb)
     await uploadFileB2(file_name_thumb);
@@ -94,7 +85,7 @@ export async function publishArtwork(
     const push_event: PushEvent = {
         file_thumb_name: file_name_thumb,
         contribution: publish_event.contribution,
-        origin_file_modified: publish_event.origin_file_id ? true : false
+        origin_file_modified: publish_event.origin_file_modified
     };
     // 推送作品到频道
     const pushMessages = await pushArtwork(artworkInfo, artwork, push_event);

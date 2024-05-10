@@ -11,7 +11,8 @@ export type PublishEvent = {
     is_quality: boolean;
     picture_index: number;
     artwork_tags: Array<string>;
-    origin_file_id?: string;
+    origin_file_name?: string;
+    origin_file_modified: boolean;
     contribution?: Contribution;
 };
 
