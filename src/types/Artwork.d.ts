@@ -47,6 +47,7 @@ export type ArtworkInfo = {
 export type ArtworkWithFileId = Pick<Artwork, 'index' | 'source'> & {
     photo_file_id: string;
     document_file_id: string;
+    photo_message_id: number;
 };
 
 export type Artist = {

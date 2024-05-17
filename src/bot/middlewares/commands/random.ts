@@ -3,6 +3,7 @@ import { wrapCommand } from '~/bot/wrappers/command-wrapper';
 import MessageModel from '~/database/models/MessageModel';
 import { getArtwork } from '~/database/operations/artwork';
 import { ChannelMessage } from '~/types/Message';
+import { pushChannelUrl } from '~/utils/caption';
 
 export default wrapCommand('random', async ctx => {
     const messages = await MessageModel.aggregate<ChannelMessage>([
@@ -26,7 +27,10 @@ export default wrapCommand('random', async ctx => {
                   },
         caption: '这是你要的壁纸~',
         ...Markup.inlineKeyboard([
-            Markup.button.url('作品来源', artwork.source.post_url),
+            Markup.button.url(
+                '查看详情',
+                pushChannelUrl(messages[0].message_id)
+            ),
             Markup.button.url(
                 '获取原图',
                 'https://t.me/SomeACGbot?start=document-' +

@@ -1,7 +1,14 @@
 import ArtworkModel from '~/database/models/ArtworkModel';
-import { Artwork, ArtworkWithFileId } from '~/types/Artwork';
+import { Artwork, ArtworkSource, ArtworkWithFileId } from '~/types/Artwork';
+import { ChannelMessage } from '~/types/Message';
 import { getConfig, setConfig } from './config';
 import { Config } from '~/types/Config';
+
+interface ArtworkWithExtra {
+    index: number;
+    source: ArtworkSource;
+    messages: ChannelMessage[];
+}
 
 export async function insertArtwork(artwork: Artwork): Promise<Artwork> {
     let current_count = await getConfig(Config.ARTWORK_COUNT);
@@ -57,13 +64,13 @@ export async function deleteArtwork(artwork_index: number): Promise<number> {
 export async function getRandomArtworks(
     limit: number
 ): Promise<ArtworkWithFileId[]> {
-    const results = await ArtworkModel.aggregate([
+    const results = await ArtworkModel.aggregate<ArtworkWithExtra>([
         {
             $lookup: {
                 from: 'messages',
                 localField: 'index',
                 foreignField: 'artwork_index',
-                as: 'message'
+                as: 'messages'
             }
         },
         {
@@ -71,7 +78,8 @@ export async function getRandomArtworks(
                 index: 1,
                 source: 1,
                 'message.type': 1,
-                'message.file_id': 1
+                'message.file_id': 1,
+                'message.message_id': 1
             }
         },
         {
@@ -81,18 +89,22 @@ export async function getRandomArtworks(
         }
     ]);
 
-    const artworks: ArtworkWithFileId[] = results.map(result => ({
-        index: result.index,
-        source: result.source,
-        photo_file_id:
-            result.message[0].type === 'photo'
-                ? result.message[0].file_id
-                : result.message[1].file_id,
-        document_file_id:
-            result.message[0].type === 'document'
-                ? result.message[0].file_id
-                : result.message[1].file_id
-    }));
+    const artworks: ArtworkWithFileId[] = results.map(result => {
+        const photo_message = result.messages.filter(
+            message => message.type === 'photo'
+        )[0];
+        const document_message = result.messages.filter(
+            message => message.type === 'document'
+        )[0];
+
+        return {
+            index: result.index,
+            source: result.source,
+            photo_file_id: photo_message.file_id,
+            document_file_id: document_message.file_id,
+            photo_message_id: photo_message.message_id
+        };
+    });
 
     return artworks;
 }
@@ -100,11 +112,7 @@ export async function getRandomArtworks(
 export async function getArtworksByTags(
     tags: string[]
 ): Promise<ArtworkWithFileId[]> {
-    // let artworks = await ArtworkModel.find({
-    //     $and: tags.map(tag => ({ "tags.name": tag.name }))
-    // })
-
-    const results = await ArtworkModel.aggregate([
+    const results = await ArtworkModel.aggregate<ArtworkWithExtra>([
         {
             $match: {
                 $and: tags.map(tag => ({ 'tags.name': tag }))
@@ -121,9 +129,10 @@ export async function getArtworksByTags(
         {
             $project: {
                 index: 1,
-                'source.post_url': 1,
+                source: 1,
                 'message.type': 1,
-                'message.file_id': 1
+                'message.file_id': 1,
+                'message.message_id': 1
             }
         },
         {
@@ -133,18 +142,22 @@ export async function getArtworksByTags(
         }
     ]);
 
-    const artworks: ArtworkWithFileId[] = results.map(result => ({
-        index: result.index,
-        source: result.source,
-        photo_file_id:
-            result.message[0].type === 'photo'
-                ? result.message[0].file_id
-                : result.message[1].file_id,
-        document_file_id:
-            result.message[0].type === 'document'
-                ? result.message[0].file_id
-                : result.message[1].file_id
-    }));
+    const artworks: ArtworkWithFileId[] = results.map(result => {
+        const photo_message = result.messages.filter(
+            message => message.type === 'photo'
+        )[0];
+        const document_message = result.messages.filter(
+            message => message.type === 'document'
+        )[0];
+
+        return {
+            index: result.index,
+            source: result.source,
+            photo_file_id: photo_message.file_id,
+            document_file_id: document_message.file_id,
+            photo_message_id: photo_message.message_id
+        };
+    });
 
     return artworks;
 }

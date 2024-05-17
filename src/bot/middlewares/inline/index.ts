@@ -3,6 +3,7 @@ import {
     getArtworksByTags,
     getRandomArtworks
 } from '~/database/operations/artwork';
+import { pushChannelUrl } from '~/utils/caption';
 
 export default Telegraf.on('inline_query', async ctx => {
     const query = ctx.inlineQuery.query;
@@ -33,7 +34,10 @@ export default Telegraf.on('inline_query', async ctx => {
                 photo_file_id: artwork.photo_file_id,
                 caption: '这是你要的壁纸~',
                 reply_markup: Markup.inlineKeyboard([
-                    Markup.button.url('作品来源', artwork.source.post_url),
+                    Markup.button.url(
+                        '查看详情',
+                        pushChannelUrl(artwork.photo_message_id)
+                    ),
                     Markup.button.url(
                         '获取原图',
                         `https://t.me/${ctx.me}?start=document-${artwork.index}`

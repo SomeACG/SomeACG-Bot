@@ -23,9 +23,9 @@ export default Telegraf.action(/publish-/, async ctx => {
 
         await ctx.telegram.sendMessage(
             ctx.from.id,
-            '请修改此命令并添加tags参数后发送给我:\n<pre>' +
+            '请修改此命令并添加tags参数后发送给我:\n<code>' +
                 pushCommand +
-                '</pre>',
+                '</code>',
             {
                 parse_mode: 'HTML'
             }

@@ -1,3 +1,4 @@
+import config from '~/config';
 import { Artist, Artwork, ArtworkInfo } from '~/types/Artwork';
 import { PushEvent } from '~/types/Event';
 
@@ -14,6 +15,12 @@ function genArtistUrl(artist: Artist) {
         case 'danbooru':
             return 'https://danbooru.donmai.us/artists/' + artist.id;
     }
+}
+
+export function pushChannelUrl(message_id: number) {
+    const channel_username = config.PUSH_CHANNEL.slice(1);
+
+    return `https://t.me/${channel_username}/${message_id}`;
 }
 
 export function artworkCaption(
