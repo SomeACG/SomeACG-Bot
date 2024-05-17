@@ -3,7 +3,7 @@ import { wrapCommand } from '~/bot/wrappers/command-wrapper';
 import MessageModel from '~/database/models/MessageModel';
 import { getArtwork } from '~/database/operations/artwork';
 import { ChannelMessage } from '~/types/Message';
-import { pushChannelUrl } from '~/utils/caption';
+import { pushChannelUrl, randomCaption } from '~/utils/caption';
 
 export default wrapCommand('random', async ctx => {
     const messages = await MessageModel.aggregate<ChannelMessage>([
@@ -16,8 +16,11 @@ export default wrapCommand('random', async ctx => {
     ]);
     if (messages.length == 0)
         return await ctx.directlyReply('诶呀，获取图片失败了~');
+
     const artwork = await getArtwork(messages[0].artwork_index);
+
     return await ctx.replyWithPhoto(messages[0].file_id, {
+        parse_mode: 'HTML',
         reply_parameters:
             ctx.chat.type == 'private'
                 ? undefined
@@ -25,7 +28,7 @@ export default wrapCommand('random', async ctx => {
                       message_id: ctx.message.message_id,
                       allow_sending_without_reply: true
                   },
-        caption: '这是你要的壁纸~',
+        caption: randomCaption(artwork),
         ...Markup.inlineKeyboard([
             Markup.button.url(
                 '查看详情',

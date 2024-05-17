@@ -1,5 +1,10 @@
 import config from '~/config';
-import { Artist, Artwork, ArtworkInfo } from '~/types/Artwork';
+import {
+    Artist,
+    Artwork,
+    ArtworkInfo,
+    ArtworkWithMessages
+} from '~/types/Artwork';
 import { PushEvent } from '~/types/Event';
 
 function encodeHtmlChars(text: string) {
@@ -80,6 +85,29 @@ export function contributeCaption(artwork_info: ArtworkInfo) {
         caption += '\n';
     }
     caption += `图片尺寸: ${artwork_info.size.width}x${artwork_info.size.height}`;
+
+    return caption;
+}
+
+export function randomCaption(
+    artwork: Artwork | ArtworkWithMessages,
+    tags?: string[]
+) {
+    let caption = '';
+    if (artwork.title && artwork.source.post_url)
+        caption += `<a href="${artwork.source.post_url}">${encodeHtmlChars(
+            artwork.title
+        )}</a>\n\n`;
+
+    caption += `这是你要的`;
+
+    if (tags && tags.length > 0) {
+        caption += ' ';
+        caption += tags.map(str => `#${str}`).join(' ');
+        caption += ' ';
+    }
+
+    caption += '壁纸~';
 
     return caption;
 }

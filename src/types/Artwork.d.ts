@@ -1,4 +1,5 @@
 import Mongoose from '~/database';
+import { ChannelMessage } from './Message';
 
 type ArtworkSourceType = 'pixiv' | 'twitter' | 'danbooru';
 
@@ -48,6 +49,11 @@ export type ArtworkWithFileId = Pick<Artwork, 'index' | 'source'> & {
     photo_file_id: string;
     document_file_id: string;
     photo_message_id: number;
+};
+
+export type ArtworkWithMessages = Partial<Artwork> & {
+    photo_message: ChannelMessage<'photo'>;
+    document_message: ChannelMessage<'document'>;
 };
 
 export type Artist = {

@@ -3,15 +3,18 @@ import {
     getArtworksByTags,
     getRandomArtworks
 } from '~/database/operations/artwork';
-import { pushChannelUrl } from '~/utils/caption';
+import { pushChannelUrl, randomCaption } from '~/utils/caption';
 
 export default Telegraf.on('inline_query', async ctx => {
     const query = ctx.inlineQuery.query;
+    const tags: string[] = [];
     let artwork_results = [];
     if (!query) {
         artwork_results = await getRandomArtworks(20);
     } else {
-        const tags = query.indexOf(' ') == -1 ? [query] : query.split(' ');
+        if (query.indexOf(' ') == -1) tags.push(query);
+        else tags.push(...query.split(' '));
+
         artwork_results = await getArtworksByTags(tags);
     }
 
@@ -31,12 +34,13 @@ export default Telegraf.on('inline_query', async ctx => {
             artwork_results.map((artwork, index) => ({
                 type: 'photo',
                 id: ctx.inlineQuery.id + '-' + index,
-                photo_file_id: artwork.photo_file_id,
-                caption: '这是你要的壁纸~',
+                photo_file_id: artwork.photo_message.file_id,
+                caption: randomCaption(artwork, tags),
+                parse_mode: 'HTML',
                 reply_markup: Markup.inlineKeyboard([
                     Markup.button.url(
                         '查看详情',
-                        pushChannelUrl(artwork.photo_message_id)
+                        pushChannelUrl(artwork.photo_message.message_id)
                     ),
                     Markup.button.url(
                         '获取原图',
