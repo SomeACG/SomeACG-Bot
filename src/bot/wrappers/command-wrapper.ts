@@ -76,10 +76,13 @@ export class WarpperContext extends Context<Update.MessageUpdate> {
     }
     async directlyReply(message: string, parse_mode?: ParseMode) {
         return await this.reply(message, {
-            reply_to_message_id:
+            reply_parameters:
                 this.chat.type == 'private'
                     ? undefined
-                    : this.message.message_id,
+                    : {
+                          message_id: this.message.message_id,
+                          allow_sending_without_reply: true
+                      },
             parse_mode: parse_mode
         });
     }

@@ -36,10 +36,13 @@ bot.use(
         return await ctx.reply(
             `<b>当前版本：</b>${config.VERSION}\n<b>工作环境：</b>${environment}`,
             {
-                reply_to_message_id:
+                reply_parameters:
                     ctx.chat.type == 'private'
                         ? undefined
-                        : ctx.message.message_id,
+                        : {
+                              message_id: ctx.message.message_id,
+                              allow_sending_without_reply: true
+                          },
                 parse_mode: 'HTML'
             }
         );

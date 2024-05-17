@@ -15,8 +15,13 @@ export default Telegraf.hears(/#投稿/, async ctx => {
     try {
         const artworkInfo = await getArtworkInfoByUrl(ctx.message.text);
         const replyMessage = await ctx.reply(contributeCaption(artworkInfo), {
-            reply_to_message_id: ctx.message.message_id,
-            disable_web_page_preview: true,
+            reply_parameters: {
+                message_id: ctx.message.message_id,
+                allow_sending_without_reply: true
+            },
+            link_preview_options: {
+                is_disabled: true
+            },
             ...Markup.inlineKeyboard([
                 [
                     Markup.button.callback(
@@ -50,7 +55,10 @@ export default Telegraf.hears(/#投稿/, async ctx => {
     } catch (err) {
         if (err instanceof Error) {
             ctx.reply(err.message, {
-                reply_to_message_id: ctx.message.message_id
+                reply_parameters: {
+                    message_id: ctx.message.message_id,
+                    allow_sending_without_reply: true
+                }
             });
             return;
         }

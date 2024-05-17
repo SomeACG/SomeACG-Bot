@@ -3,6 +3,7 @@ import { getMessage } from '~/database/operations/message';
 import { wrapCommand } from '~/bot/wrappers/command-wrapper';
 import { Artwork } from '~/types/Artwork';
 import { getArtwork } from '~/database/operations/artwork';
+import { MessageOriginChannel } from 'telegraf/typings/core/types/typegram';
 
 export default wrapCommand('delete', async ctx => {
     if (!ctx.command.params['index'] && !ctx.is_reply)
@@ -12,16 +13,19 @@ export default wrapCommand('delete', async ctx => {
     await ctx.wait('正在删除作品...', true);
     let artwork_index = -1;
     if (ctx.is_reply) {
-        if (!ctx.reply_to_message?.forward_from_message_id)
+        if (!ctx.reply_to_message?.is_automatic_forward)
             return await ctx.resolveWait('回复的消息不是有效的频道消息！');
         const message = await getMessage(
-            ctx.reply_to_message.forward_from_message_id
+            (ctx.reply_to_message.forward_origin as MessageOriginChannel)
+                .message_id
         );
         artwork_index = message.artwork_index;
     }
     let artwork: Artwork;
     if (ctx.reply_to_message) {
-        const message_id: number = ctx.reply_to_message.forward_from_message_id;
+        const message_id: number = (
+            ctx.reply_to_message.forward_origin as MessageOriginChannel
+        ).message_id;
         const message = await getMessage(message_id);
         artwork = await getArtwork(message.artwork_index);
         artwork_index = artwork.index;

@@ -17,8 +17,13 @@ export default wrapCommand('random', async ctx => {
         return await ctx.directlyReply('诶呀，获取图片失败了~');
     const artwork = await getArtwork(messages[0].artwork_index);
     return await ctx.replyWithPhoto(messages[0].file_id, {
-        reply_to_message_id:
-            ctx.chat.type == 'private' ? undefined : ctx.message.message_id,
+        reply_parameters:
+            ctx.chat.type == 'private'
+                ? undefined
+                : {
+                      message_id: ctx.message.message_id,
+                      allow_sending_without_reply: true
+                  },
         caption: '这是你要的壁纸~',
         ...Markup.inlineKeyboard([
             Markup.button.url('作品来源', artwork.source.post_url),

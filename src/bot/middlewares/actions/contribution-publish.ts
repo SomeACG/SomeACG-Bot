@@ -1,10 +1,13 @@
 import { Telegraf } from 'telegraf';
 import { getContributionById } from '~/database/operations/contribution';
+import { CallbackQuery } from 'telegraf/typings/core/types/typegram';
 import logger from '~/utils/logger';
 
 export default Telegraf.action(/publish-/, async ctx => {
-    const query = ctx.callbackQuery;
-    const query_params = query.data?.split('-');
+    const query = ctx.callbackQuery as CallbackQuery & { data: string };
+
+    const query_params = query.data.split('-');
+
     try {
         const contribution = await getContributionById(
             parseInt(query_params[1])

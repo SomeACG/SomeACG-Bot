@@ -27,7 +27,10 @@ export default wrapCommand('info', async ctx => {
         {
             caption,
             parse_mode: 'HTML',
-            reply_to_message_id: ctx.message.message_id
+            reply_parameters: {
+                message_id: ctx.message.message_id,
+                allow_sending_without_reply: true
+            }
         }
     );
     return await ctx.deleteWaiting();

@@ -1,3 +1,4 @@
+import { MessageOriginChannel } from 'telegraf/typings/core/types/typegram';
 import { wrapCommand } from '~/bot/wrappers/command-wrapper';
 import { getArtwork } from '~/database/operations/artwork';
 import { getMessage } from '~/database/operations/message';
@@ -8,7 +9,7 @@ export default wrapCommand('update', async ctx => {
         return await ctx.directlyReply('请回复一条消息或指定要更改的作品序号!');
     if (
         !ctx.command.params['index'] &&
-        !ctx.reply_to_message?.forward_from_message_id
+        !ctx.reply_to_message?.is_automatic_forward
     )
         return await ctx.directlyReply('回复的消息不是有效的频道消息！');
     await ctx.wait('正在更新作品信息...', true);
@@ -17,8 +18,8 @@ export default wrapCommand('update', async ctx => {
         artwork_index = parseInt(ctx.command.params['index']);
     if (ctx.reply_to_message) {
         const message = await getMessage(
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            ctx.reply_to_message.forward_from_message_id!
+            (ctx.reply_to_message.forward_origin as MessageOriginChannel)
+                .message_id
         );
         artwork_index = message.artwork_index;
     }

@@ -62,7 +62,10 @@ export default wrapCommand('push', async ctx => {
                 contribution.chat_id,
                 '您的投稿已经审核通过并发布到频道~',
                 {
-                    reply_to_message_id: contribution.message_id
+                    reply_parameters: {
+                        message_id: contribution.message_id,
+                        allow_sending_without_reply: true
+                    }
                 }
             );
             try {

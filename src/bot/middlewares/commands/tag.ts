@@ -1,3 +1,4 @@
+import { MessageOriginChannel } from 'telegraf/typings/core/types/typegram';
 import { wrapCommand } from '~/bot/wrappers/command-wrapper';
 import { getArtwork } from '~/database/operations/artwork';
 import { getMessage } from '~/database/operations/message';
@@ -14,13 +15,15 @@ export default wrapCommand('tag', async ctx => {
         return await ctx.directlyReply(
             '参数不正确，请在命令中设置标签并用英文逗号隔开！'
         );
-    if (ctx.is_reply && !ctx.reply_to_message.forward_from_message_id)
+    if (ctx.is_reply && !ctx.reply_to_message.is_automatic_forward)
         return await ctx.resolveWait('回复的消息不是有效的频道消息！');
     await ctx.wait('正在修改作品标签...', true);
     const tag_array = ctx.command.target.split(/,|，/);
     let artwork: Artwork;
     if (ctx.reply_to_message) {
-        const message_id: number = ctx.reply_to_message.forward_from_message_id;
+        const message_id: number = (
+            ctx.reply_to_message.forward_origin as MessageOriginChannel
+        ).message_id;
         const message = await getMessage(message_id);
         artwork = await getArtwork(message.artwork_index);
     } else artwork = await getArtwork(parseInt(ctx.command.params['index']));
