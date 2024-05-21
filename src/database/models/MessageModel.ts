@@ -1,3 +1,4 @@
+// @deprecated
 import Mongoose from '~/database';
 import { ChannelMessage } from '~/types/Message';
 

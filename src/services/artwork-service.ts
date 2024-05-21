@@ -101,7 +101,11 @@ export async function publishArtwork(
             post_url: artworkInfo.post_url,
             picture_index: publish_event.picture_index
         },
-        artist_id: artist.id
+        artist_id: artist.id,
+
+        // @deprecated, @TODO should be removed in the future version
+        file_name: origin_files[0],
+        size: artworkInfo.photos[0].size
     });
 
     const push_event: PushEvent = {

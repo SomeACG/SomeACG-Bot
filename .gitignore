@@ -12,3 +12,5 @@ temp
 test
 
 yarn-error.log
+
+src/scripts/*.ts

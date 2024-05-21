@@ -1,3 +1,4 @@
+// @deprecated
 import MessageModel from '~/database/models/MessageModel';
 import { ChannelMessage, ChannelMessageType } from '~/types/Message';
 
