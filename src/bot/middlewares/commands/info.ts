@@ -15,7 +15,7 @@ export default wrapCommand('info', async ctx => {
         ctx.command.target,
         ctx.command.params['picture_index']
             ? semiIntArray(ctx.command.params['picture_index'])
-            : undefined
+            : [-1] // -1 means all pictures, it should be handled in the platforms module
     );
     await ctx.wait('正在获取图片信息并下载图片，请稍后~~');
 

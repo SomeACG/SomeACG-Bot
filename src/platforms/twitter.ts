@@ -11,6 +11,15 @@ export default async function getArtworkInfo(
 
     if (!tweet.media) throw new Error('此推文中没有任何图片');
 
+    if (indexes.length === 1 && indexes[0] === -1)
+        indexes = Array.from(
+            { length: tweet.media.photos.length },
+            (_, i) => i
+        );
+
+    if (indexes[indexes.length - 1] > tweet.media.photos.length - 1)
+        throw new Error('图片序号超出范围');
+
     // Remove t.co Links
     const desc = tweet.text.replace(/https:\/\/t.co\/(\w+)/, '');
     const photos = tweet.media.photos

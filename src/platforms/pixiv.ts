@@ -14,6 +14,9 @@ export default async function getArtworkInfo(
         'https://www.pixiv.net/ajax/illust/' + pixiv_id
     );
 
+    if (indexes.length === 1 && indexes[0] === -1)
+        indexes = Array.from({ length: illust.pageCount }, (_, i) => i);
+
     if (indexes[indexes.length - 1] > illust.pageCount - 1)
         throw new Error('Picture index out of range');
 
