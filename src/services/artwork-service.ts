@@ -25,6 +25,11 @@ import {
     findOrInsertArtist,
     getArtistById
 } from '~/database/operations/artist';
+import { Photo } from '~/types/Photo';
+import {
+    insertPhotos,
+    removePhotoByArtworkIndex
+} from '~/database/operations/photo';
 
 // @ErrCatch 不会用，暂时不用了
 export async function publishArtwork(
@@ -35,21 +40,41 @@ export async function publishArtwork(
     global.currentMongoSession.startTransaction();
 
     // 下载文件
-    const file_name_thumb = await downloadFile(
-        artworkInfo.url_thumb,
-        'thumb-' + path.basename(new URL(artworkInfo.url_thumb).pathname)
+    const thumb_files = await Promise.all(
+        artworkInfo.photos.map(async photo => {
+            const file_name = await downloadFile(
+                photo.url_thumb,
+                path.basename(new URL(photo.url_thumb).pathname)
+            );
+            return file_name;
+        })
     );
     // 判断是否有文件ID传入
-    const file_name_origin = await downloadFile(
-        artworkInfo.url_origin,
-        publish_event.origin_file_name
-            ? publish_event.origin_file_name
-            : path.basename(new URL(artworkInfo.url_origin).pathname)
+    const origin_files = await Promise.all(
+        artworkInfo.photos.map(async photo => {
+            const file_name = await downloadFile(
+                photo.url_origin,
+                publish_event.origin_file_name
+                    ? publish_event.origin_file_name
+                    : path.basename(new URL(photo.url_origin).pathname)
+            );
+            return file_name;
+        })
     );
+
     // 上传到OSS和OneDrive
     // await uploadOSS(file_name_thumb)
-    await uploadFileB2(file_name_thumb);
-    await uploadOneDrive(file_name_origin);
+    await Promise.all(
+        thumb_files.map(async file_name => {
+            await uploadFileB2(file_name);
+        })
+    );
+
+    await Promise.all(
+        origin_files.map(async file_name => {
+            await uploadOneDrive(file_name);
+        })
+    );
 
     // 获取标签ID
     const tags = await getTagsByNamesAndInsert(publish_event.artwork_tags);
@@ -67,10 +92,7 @@ export async function publishArtwork(
 
     const artwork = await insertArtwork({
         index: -1,
-        file_name: file_name_origin,
         quality: publish_event.is_quality,
-        img_thumb: file_name_thumb,
-        size: artworkInfo.size,
         title: artworkInfo.title,
         desc: artworkInfo.desc,
         tags: tags,
@@ -83,7 +105,8 @@ export async function publishArtwork(
     });
 
     const push_event: PushEvent = {
-        file_thumb_name: file_name_thumb,
+        thumb_files,
+        origin_files,
         contribution: publish_event.contribution,
         origin_file_modified: publish_event.origin_file_modified
     };
@@ -91,7 +114,21 @@ export async function publishArtwork(
     const pushMessages = await pushArtwork(artworkInfo, artwork, push_event);
     // 将频道的消息存入数据库
 
-    await insertMessages(pushMessages);
+    await insertMessages([...pushMessages.photos, ...pushMessages.documents]);
+
+    const photos: Photo[] = artworkInfo.photos.map((photo, index) => ({
+        artwork_id: artwork._id,
+        artwork_index: artwork.index,
+        size: photo.size,
+        file_name: origin_files[index],
+        thumb_file_id: pushMessages.photos[index].file_id,
+        document_file_id: pushMessages.documents[index].file_id,
+        thumb_message_id: pushMessages.photos[index].message_id,
+        document_message_id: pushMessages.documents[index].message_id,
+        create_time: new Date()
+    }));
+
+    await insertPhotos(photos);
 
     return {
         succeed: true,
@@ -139,14 +176,20 @@ export async function delArtwork(artwork_index: number): Promise<ExecResult> {
             message: 'Artwork 数据库删除失败'
         };
     }
+
     const messages = await getMessagesByArtwork(artwork_index);
+
     for (const message of messages) {
         await bot.telegram.deleteMessage(
             config.PUSH_CHANNEL,
             message.message_id
         );
     }
+
     const message_delete_count = await deleteMessagesByArtwork(artwork_index);
+
+    await removePhotoByArtworkIndex(artwork_index);
+
     if (message_delete_count < 1) {
         return {
             succeed: false,

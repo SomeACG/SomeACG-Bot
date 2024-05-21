@@ -1,9 +1,11 @@
 import { CommandEntity } from '~/types/Command';
+import logger from './logger';
 
 const urlPattern =
     /^(((ht|f)tps?):\/\/)?([^!@#$%^&*?.\s-]([^!@#$%^&*?.\s]{0,63}[^!@#$%^&*?.\s])?\.)+[a-z]{2,6}\/?/g;
 
 export function parseParams(command: string): CommandEntity {
+    logger.debug(`parsing command: ${command}`);
     command = command.trim();
     if (command.search(' ') == -1)
         return {
@@ -45,4 +47,17 @@ export function parseParams(command: string): CommandEntity {
         }
     }
     return command_entity;
+}
+
+export function semiArray(str: string): string[] {
+    return str.search(',') == -1 ? [str] : str.split(/,|，/);
+}
+
+export function semiIntArray(str: string): number[] {
+    return str.search(',') == -1
+        ? [parseInt(str)]
+        : str
+              .split(/,|，/)
+              .map(item => parseInt(item))
+              .sort((a, b) => a - b);
 }

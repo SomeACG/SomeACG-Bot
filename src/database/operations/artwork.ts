@@ -1,13 +1,9 @@
 import ArtworkModel from '~/database/models/ArtworkModel';
-import {
-    Artwork,
-    ArtworkSource,
-    ArtworkWithFileId,
-    ArtworkWithMessages
-} from '~/types/Artwork';
+import { Artwork, ArtworkSource, ArtworkWithMessages } from '~/types/Artwork';
 import { ChannelMessage } from '~/types/Message';
 import { getConfig, setConfig } from './config';
 import { Config } from '~/types/Config';
+import Mongoose from '..';
 
 interface ArtworkAggregate {
     index: number;
@@ -16,7 +12,11 @@ interface ArtworkAggregate {
     messages: ChannelMessage[];
 }
 
-export async function insertArtwork(artwork: Artwork): Promise<Artwork> {
+export async function insertArtwork(artwork: Artwork): Promise<
+    Artwork & {
+        _id: Mongoose.Types.ObjectId;
+    }
+> {
     let current_count = await getConfig(Config.ARTWORK_COUNT);
 
     if (!current_count) {

@@ -22,17 +22,21 @@ export default async function getArtworkInfo(
     return {
         source_type: 'danbooru',
         post_url: post_url,
-        url_thumb: post['large_file_url'],
-        url_origin: post['file_url'],
-        size: {
-            width: parseInt(post['image_width']),
-            height: parseInt(post['image_height'])
-        },
         artist: {
             type: 'danbooru',
             name: post['tag_string_artist'],
             id: artist[0]['id']
         },
-        raw_tags: post['tag_string'].split(' ')
+        raw_tags: post['tag_string'].split(' '),
+        photos: [
+            {
+                url_thumb: post['large_file_url'],
+                url_origin: post['file_url'],
+                size: {
+                    width: parseInt(post['image_width']),
+                    height: parseInt(post['image_height'])
+                }
+            }
+        ]
     };
 }

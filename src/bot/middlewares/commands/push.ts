@@ -6,6 +6,7 @@ import { Contribution } from '~/types/Contribution';
 import { getContributionById } from '~/database/operations/contribution';
 import { wrapCommand } from '~/bot/wrappers/command-wrapper';
 import logger from '~/utils/logger';
+import { semiIntArray } from '~/utils/param-parser';
 
 export default wrapCommand('push', async ctx => {
     if (!ctx.command.target || !ctx.command.params)
@@ -24,6 +25,8 @@ export default wrapCommand('push', async ctx => {
     const artwork_info = await getArtworkInfoByUrl(
         ctx.command.target,
         ctx.command.params['picture_index']
+            ? semiIntArray(ctx.command.params['picture_index'])
+            : undefined
     );
     let contribution: Contribution | undefined;
     if (ctx.command.params['contribute_from'])
@@ -37,14 +40,14 @@ export default wrapCommand('push', async ctx => {
         const file_url = await ctx.telegram.getFileLink(
             origin_file_msg.document.file_id
         );
-        artwork_info.url_origin = file_url.href;
+        artwork_info.photos[0].url_origin = file_url.href;
     }
 
     const result = await publishArtwork(artwork_info, {
         is_quality: ctx.command.params['quality'] ? true : false,
         picture_index: ctx.command.params['picture_index']
-            ? parseInt(ctx.command.params['picture_index'])
-            : 0,
+            ? semiIntArray(ctx.command.params['picture_index'])
+            : [0],
         artwork_tags:
             tags_string.search(',') == -1
                 ? [tags_string]

@@ -2,7 +2,7 @@ import { ArtworkInfo } from '~/types/Artwork';
 
 export default async function getArtworkInfoByUrl(
     url: string,
-    picture_index?: number
+    indexes?: number[]
 ): Promise<ArtworkInfo> {
     const matchPixiv = url.match(
         /(https:\/\/)?(www.)?pixiv.net(\/en)?\/(artworks|i)\/(\d{1,9})(\/)?/
@@ -14,10 +14,10 @@ export default async function getArtworkInfoByUrl(
         /(https:\/\/)?danbooru.donmai.us\/(posts|post\/show)\/(\d+)/
     );
 
-    if (!picture_index) picture_index = 0;
+    if (!indexes) indexes = [0];
 
     let module: {
-        default: (url: string, picture_index: number) => Promise<ArtworkInfo>;
+        default: (url: string, indexes: number[]) => Promise<ArtworkInfo>;
     };
 
     if (matchPixiv) {
@@ -38,5 +38,5 @@ export default async function getArtworkInfoByUrl(
             '不支持的链接类型, 目前仅仅支持 Pixiv,Twitter,Danbooru'
         );
 
-    return await module.default(url, picture_index);
+    return await module.default(url, indexes);
 }

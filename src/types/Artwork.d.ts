@@ -6,7 +6,7 @@ type ArtworkSourceType = 'pixiv' | 'twitter' | 'danbooru';
 export type ArtworkSource = {
     type: ArtworkSourceType;
     post_url: string;
-    picture_index: number;
+    picture_index: number[];
 };
 
 export type ArtworkTag = {
@@ -24,9 +24,9 @@ export type Artwork = {
     quality: boolean;
     title?: string;
     desc?: string;
-    file_name: string;
-    img_thumb: string;
-    size: ImageSize;
+    file_name?: string;
+    img_thumb?: string;
+    size?: ImageSize;
     tags: Array<ArtworkTag>;
     source: ArtworkSource;
     create_time?: Date;
@@ -38,9 +38,11 @@ export type ArtworkInfo = {
     post_url: string;
     title?: string;
     desc?: string;
-    url_thumb: string;
-    url_origin: string;
-    size: ImageSize;
+    photos: {
+        url_thumb: string;
+        url_origin: string;
+        size: ImageSize;
+    }[];
     raw_tags?: string[];
     artist: Artist;
 };

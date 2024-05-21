@@ -35,16 +35,18 @@ export async function getMessageByArtwork(
     artwork_index: number,
     message_type: ChannelMessageType
 ): Promise<ChannelMessage> {
-    const message = await MessageModel.findOne({
+    const messages = await MessageModel.find({
         artwork_index: artwork_index,
         type: message_type
     });
 
-    if (!message) {
+    messages.sort((a, b) => a.message_id - b.message_id);
+
+    if (!messages) {
         throw new Error('Channel message not found');
     }
 
-    return message;
+    return messages[0];
 }
 
 export async function deleteMessagesByArtwork(artwork_index: number) {

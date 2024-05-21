@@ -21,7 +21,7 @@ const artworkSchema = new Mongoose.Schema<Artwork>({
     source: new Mongoose.Schema<ArtworkSource>({
         type: String,
         post_url: String,
-        picture_index: Number
+        picture_index: [Number]
     }),
     create_time: {
         type: Date,

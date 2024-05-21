@@ -71,7 +71,11 @@ export function infoCmdCaption(artwork_info: ArtworkInfo) {
         caption += artwork_info.raw_tags.map(str => `#${str}`).join(' ');
         caption += '\n';
     }
-    caption += `<b>尺寸:</b> ${artwork_info.size.width}x${artwork_info.size.height}`;
+    caption += `<b>尺寸:</b> `;
+
+    caption += artwork_info.photos
+        .map(photo => `${photo.size.width}x${photo.size.height}`)
+        .join('/');
 
     return caption;
 }
@@ -84,7 +88,7 @@ export function contributeCaption(artwork_info: ArtworkInfo) {
         caption += artwork_info.raw_tags.map(str => `#${str}`).join(' ');
         caption += '\n';
     }
-    caption += `图片尺寸: ${artwork_info.size.width}x${artwork_info.size.height}`;
+    caption += `图片尺寸: ${artwork_info.photos[0].size.width}x${artwork_info.photos[0].size.height}`;
 
     return caption;
 }

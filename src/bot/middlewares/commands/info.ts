@@ -4,6 +4,7 @@ import path from 'path';
 import downloadFile from '~/utils/download';
 import { wrapCommand } from '~/bot/wrappers/command-wrapper';
 import { infoCmdCaption } from '~/utils/caption';
+import { semiIntArray } from '~/utils/param-parser';
 
 export default wrapCommand('info', async ctx => {
     if (!ctx.command.target)
@@ -13,20 +14,34 @@ export default wrapCommand('info', async ctx => {
     const artwork_info = await getArtworkInfoByUrl(
         ctx.command.target,
         ctx.command.params['picture_index']
+            ? semiIntArray(ctx.command.params['picture_index'])
+            : undefined
     );
     await ctx.wait('正在获取图片信息并下载图片，请稍后~~');
-    const file_name = await downloadFile(
-        artwork_info.url_origin,
-        path.basename(new URL(artwork_info.url_origin).pathname)
+
+    const files = await Promise.all(
+        artwork_info.photos.map(async photo => {
+            const file_name = await downloadFile(
+                photo.url_origin,
+                path.basename(new URL(photo.url_origin).pathname)
+            );
+            return file_name;
+        })
     );
+
     const caption = infoCmdCaption(artwork_info);
-    await ctx.replyWithDocument(
+
+    await ctx.replyWithMediaGroup(
+        files.map(file_name => ({
+            type: 'document',
+            media: {
+                source: path.resolve(config.TEMP_DIR, file_name)
+            },
+            caption:
+                file_name === files[files.length - 1] ? caption : undefined,
+            parse_mode: 'HTML'
+        })),
         {
-            source: path.resolve(config.TEMP_DIR, file_name)
-        },
-        {
-            caption,
-            parse_mode: 'HTML',
             reply_parameters: {
                 message_id: ctx.message.message_id,
                 allow_sending_without_reply: true

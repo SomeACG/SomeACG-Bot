@@ -16,9 +16,12 @@ const bot = new Telegraf(
     config.BOT_TOKEN,
     config.USE_PROXY
         ? {
-              telegram: { agent }
+              telegram: { agent },
+              handlerTimeout: 600000
           }
-        : undefined
+        : {
+              handlerTimeout: 600000
+          }
 );
 
 bot.use(async (ctx, next) => {

@@ -5,7 +5,7 @@ import { PixivAjaxResp, PixivIllust, PixivIllustPages } from '~/types/Pixiv';
 
 export default async function getArtworkInfo(
     post_url: string,
-    picture_index = 0
+    indexes = [0]
 ): Promise<ArtworkInfo> {
     const pixiv_id = path.basename(post_url);
     const {
@@ -14,7 +14,7 @@ export default async function getArtworkInfo(
         'https://www.pixiv.net/ajax/illust/' + pixiv_id
     );
 
-    if (picture_index > illust.pageCount - 1)
+    if (indexes[indexes.length - 1] > illust.pageCount - 1)
         throw new Error('Picture index out of range');
 
     const {
@@ -23,11 +23,18 @@ export default async function getArtworkInfo(
         `https://www.pixiv.net/ajax/illust/${pixiv_id}/pages?lang=zh`
     );
 
-    const urls = illust_pages[picture_index]['urls'];
-    const size = {
-        width: illust_pages[picture_index]['width'],
-        height: illust_pages[picture_index]['height']
-    };
+    const photos = illust_pages
+        .filter((_, index) => indexes.includes(index))
+        .map(item => {
+            return {
+                url_thumb: item.urls.regular,
+                url_origin: item.urls.original,
+                size: {
+                    width: item.width,
+                    height: item.height
+                }
+            };
+        });
 
     const tags = illust.tags.tags.map(item => {
         if (item.tag === 'R-18') item.tag = 'R18';
@@ -49,15 +56,13 @@ export default async function getArtworkInfo(
         post_url: post_url,
         title: illust.title,
         desc: illust_desc,
-        url_thumb: urls.regular,
-        url_origin: urls.original,
-        size: size,
         raw_tags: tags,
         artist: {
             type: 'pixiv',
             uid: parseInt(illust.userId),
             name: illust.userName
-        }
+        },
+        photos
     };
 
     return artworkInfo;
