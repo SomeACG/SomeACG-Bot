@@ -10,7 +10,7 @@ import { parseParams } from '~/utils/param-parser';
 export default Telegraf.command('debug', async ctx => {
     const command = parseParams(ctx.message.text);
     if (!command.target) {
-        return await ctx.reply('No debug type specfiied !', {
+        return await ctx.reply('No debug type specfiied!', {
             reply_parameters: {
                 message_id: ctx.message.message_id,
                 allow_sending_without_reply: true
@@ -25,10 +25,38 @@ export default Telegraf.command('debug', async ctx => {
                     allow_sending_without_reply: true
                 }
             });
+        case 'file_id':
+            const msg = ctx.message.reply_to_message as Partial<
+                Message.PhotoMessage & Message.DocumentMessage
+            >;
+
+            let file_id = '';
+
+            if (msg?.photo) file_id = msg.photo[msg.photo.length - 1].file_id;
+            if (msg?.document) file_id = msg.document.file_id;
+
+            return await ctx.reply(
+                file_id
+                    ? `file_id: <code>${file_id}</code>`
+                    : 'No file found in the message',
+                {
+                    reply_parameters: {
+                        message_id: ctx.message.message_id,
+                        allow_sending_without_reply: true
+                    },
+                    parse_mode: 'HTML'
+                }
+            );
         case 'dump':
             return await ctx.reply(
                 '<pre>' +
-                    JSON.stringify(ctx.message, undefined, '    ') +
+                    JSON.stringify(
+                        ctx.message.reply_to_message
+                            ? ctx.message.reply_to_message
+                            : ctx.message,
+                        undefined,
+                        '    '
+                    ) +
                     '</pre>',
                 {
                     reply_parameters: {
@@ -69,7 +97,7 @@ export default Telegraf.command('debug', async ctx => {
                 });
             }
         default:
-            return await ctx.reply('Debug target not found', {
+            return await ctx.reply(`Debug type '${command.target}' not found`, {
                 reply_parameters: {
                     message_id: ctx.message.message_id,
                     allow_sending_without_reply: true
