@@ -1,8 +1,10 @@
 import { Telegraf, Markup } from 'telegraf';
+import path from 'path';
 import config from '~/config';
 import ContributionModel from '~/database/models/CountributionModel';
 import getArtworkInfoByUrl from '~/platforms';
 import { contributeCaption } from '~/utils/caption';
+import downloadFile from '~/utils/download';
 
 export default Telegraf.hears(/#投稿/, async ctx => {
     if (
@@ -20,8 +22,12 @@ export default Telegraf.hears(/#投稿/, async ctx => {
                 allow_sending_without_reply: true
             },
             link_preview_options: {
-                is_disabled: true
+                is_disabled: false,
+                url: 'https://pre.someacg.top/' + artworkInfo.post_url,
+                prefer_large_media: true,
+                show_above_text: true
             },
+            parse_mode: 'HTML',
             ...Markup.inlineKeyboard([
                 [
                     Markup.button.callback(
