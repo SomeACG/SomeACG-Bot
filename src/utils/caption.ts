@@ -11,6 +11,10 @@ function encodeHtmlChars(text: string) {
     return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+function replaceHtmlTags(text: string) {
+    return text.replace(/<br(\s)?(\/)?>/g, '\n');
+}
+
 function genArtistUrl(artist: Artist) {
     switch (artist.type) {
         case 'pixiv':
@@ -44,7 +48,9 @@ export function artworkCaption(
         caption += `投稿 by <a href="tg://user?id=${event_info.contribution.user_id}">${event_info.contribution.user_name}</a>\n`;
 
     if (artwork.desc)
-        caption += `\n<blockquote expandable>${artwork.desc}</blockquote>\n\n`;
+        caption += `\n<blockquote expandable>${replaceHtmlTags(
+            artwork.desc
+        )}</blockquote>\n\n`;
 
     if (artwork.quality) caption += '#精选 ';
 
@@ -71,7 +77,9 @@ export function infoCmdCaption(artwork_info: ArtworkInfo) {
         .map(photo => `${photo.size.width}x${photo.size.height}`)
         .join('/');
     if (artwork_info.desc)
-        caption += `<blockquote expandable>${artwork_info.desc}</blockquote>\n`;
+        caption += `<blockquote expandable>${replaceHtmlTags(
+            artwork_info.desc
+        )}</blockquote>\n`;
     if (artwork_info.raw_tags && artwork_info.raw_tags.length > 0) {
         caption += '\n';
         caption += '<blockquote expandable>';

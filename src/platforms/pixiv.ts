@@ -49,10 +49,10 @@ export default async function getArtworkInfo(
         return item.tag;
     });
 
-    const illust_desc = illust.description
+    const illust_desc = illust.description;
 
-        // Remoie all the html tags in the description
-        .replace(/<[^>]+>/g, '');
+    // Remoie all the html tags in the description
+    // .replace(/<[^>]+>/g, '');
 
     const artworkInfo: ArtworkInfo = {
         source_type: 'pixiv',
