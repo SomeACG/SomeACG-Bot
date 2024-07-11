@@ -50,7 +50,9 @@ export function artworkCaption(
     if (artwork.desc)
         caption += `\n<blockquote expandable>${replaceHtmlTags(
             artwork.desc
-        )}</blockquote>\n\n`;
+        )}</blockquote>\n`;
+
+    caption += '\n';
 
     if (artwork.quality) caption += '#精选 ';
 
