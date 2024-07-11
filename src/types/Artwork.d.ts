@@ -33,6 +33,9 @@ export type Artwork = {
     artist_id?: Mongoose.Types.ObjectId;
 };
 
+export type ArtworkStrProps = 'title' | 'desc' | 'file_name' | 'img_thumb';
+export type ArtworkBoolProps = 'quality';
+
 export type ArtworkInfo = {
     source_type: ArtworkSourceType;
     post_url: string;

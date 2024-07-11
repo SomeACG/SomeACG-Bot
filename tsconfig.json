@@ -67,8 +67,7 @@
         /* Advanced Options */
         "skipLibCheck": true /* Skip type checking of declaration files. */,
         "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
-        // "ignoreDeprecations": "5.0",
-        "suppressImplicitAnyIndexErrors": true
+        // "ignoreDeprecations": "5.0"
     },
     "include": ["src/**/*", "test/**/*", "docs/**/*"],
     "exclude": ["node_modules", "**/*.spec.ts", "**/*.ts.bak"]

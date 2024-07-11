@@ -3,6 +3,8 @@ import { wrapCommand } from '~/bot/wrappers/command-wrapper';
 import { getArtwork } from '~/database/operations/artwork';
 import { getMessage } from '~/database/operations/message';
 import { modifyArtwork } from '~/services/artwork-service';
+import { ArtworkBoolProps, ArtworkStrProps } from '~/types/Artwork';
+import { ParamNames } from '~/types/Command';
 
 export default wrapCommand('update', async ctx => {
     if (!ctx.command.params['index'] && !ctx.is_reply)
@@ -24,16 +26,27 @@ export default wrapCommand('update', async ctx => {
         artwork_index = message.artwork_index;
     }
     const artwork = await getArtwork(artwork_index);
-    const param_keys = Object.keys(ctx.command.params);
+    const param_keys: ParamNames[] = Object.keys(ctx.command.params);
+
     for (const key of param_keys) {
         if (key in artwork) {
-            switch (typeof artwork[key]) {
-                case 'string':
-                    artwork[key] = ctx.command.params[key];
-                    break;
-                case 'boolean':
-                    artwork[key] = Boolean(ctx.command.params[key]);
-                    break;
+            if (Object.prototype.hasOwnProperty.call(artwork, key)) {
+                const descriptor = Object.getOwnPropertyDescriptor(
+                    artwork,
+                    key
+                );
+
+                switch (typeof descriptor.value) {
+                    case 'string':
+                        artwork[key as ArtworkStrProps] =
+                            ctx.command.params[key];
+                        break;
+                    case 'boolean':
+                        artwork[key as ArtworkBoolProps] = Boolean(
+                            ctx.command.params[key]
+                        );
+                        break;
+                }
             }
         }
     }
