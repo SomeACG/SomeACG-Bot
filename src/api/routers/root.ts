@@ -21,7 +21,7 @@ export default rootRouter.get(
         } catch (err) {
             ctx.body = {
                 code: 400,
-                message: 'Bad Request： ' + err
+                message: 'Bad Request: ' + err
             };
         }
     }
