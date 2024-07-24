@@ -1,12 +1,18 @@
 import { CommandEntity } from '~/types/Command';
 import logger from './logger';
+import { MessageEntity } from 'telegraf/typings/core/types/typegram';
 
 const urlPattern =
     /^(((ht|f)tps?):\/\/)?([^!@#$%^&*?.\s-]([^!@#$%^&*?.\s]{0,63}[^!@#$%^&*?.\s])?\.)+[a-z]{2,6}\/?/g;
 
-export function parseParams(command: string): CommandEntity {
+export function parseParams(
+    command: string,
+    entities?: MessageEntity[]
+): CommandEntity {
     logger.debug(`parsing command: ${command}`);
+
     command = command.trim();
+
     if (command.search(' ') == -1)
         return {
             name:
@@ -48,6 +54,26 @@ export function parseParams(command: string): CommandEntity {
             });
         }
     }
+
+    // exprimental: parse from entities
+
+    if (entities && entities.length > 0) {
+        command_entity.urls = entities
+            .filter(entity => entity.type === 'url')
+            .map(entity =>
+                command.substring(entity.offset, entity.offset + entity.length)
+            );
+
+        command_entity.hashtags = entities
+            .filter(entity => entity.type === 'hashtag')
+            .map(entity =>
+                command.substring(
+                    entity.offset + 1,
+                    entity.offset + entity.length
+                )
+            );
+    }
+
     return command_entity;
 }
 

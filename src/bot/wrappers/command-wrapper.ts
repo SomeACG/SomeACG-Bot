@@ -50,7 +50,7 @@ export class WarpperContext extends Context<Update.MessageUpdate> {
     constructor(ctx: NarrowedContext<Context, tt.MountMap['text']>) {
         super(ctx.update, ctx.telegram, ctx.botInfo);
         this.raw_ctx = ctx;
-        this.command = parseParams(ctx.message.text);
+        this.command = parseParams(ctx.message.text, ctx.message.entities);
         if (ctx.message.reply_to_message) this.is_reply = true;
         else this.is_reply = false;
         if (this.is_reply)

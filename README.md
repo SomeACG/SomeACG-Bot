@@ -19,6 +19,7 @@
 * [Pixiv](https://www.pixiv.net/)
 * [Twitter](https://twitter.com/?lang=en)
 * [Danbooru](https://danbooru.donmai.us/)
+* [Bilibili 动态](https://t.bilibili.com)
 
 目前所使用的 PaaS 托管平台：[Heroku](https://www.heroku.com/)
 

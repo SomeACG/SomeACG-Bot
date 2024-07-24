@@ -13,6 +13,9 @@ export default async function getArtworkInfoByUrl(
     const matchDanbooru = url.match(
         /(https:\/\/)?danbooru.donmai.us\/(posts|post\/show)\/(\d+)/
     );
+    const matchBiliDynamic = url.match(
+        /(https:\/\/)?((t.|www.)?bilibili.com(\/opus)?\/(\d+))/
+    );
 
     if (!indexes) indexes = [0];
 
@@ -32,10 +35,14 @@ export default async function getArtworkInfoByUrl(
         module = await import('~/platforms/danbooru');
         url = matchDanbooru[0];
     }
+    if (matchBiliDynamic) {
+        module = await import('~/platforms/bilibili');
+        url = matchBiliDynamic[0];
+    }
 
     if (!module)
         throw new Error(
-            '不支持的链接类型, 目前仅仅支持 Pixiv,Twitter,Danbooru'
+            '不支持的链接类型, 目前仅仅支持 Pixiv,Twitter,Danbooru, Bilibili 动态'
         );
 
     return await module.default(url, indexes);

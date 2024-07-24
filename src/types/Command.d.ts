@@ -21,4 +21,6 @@ export type CommandEntity = {
     name: string;
     target?: string;
     params?: CommandParams;
+    urls?: string[];
+    hashtags?: string[];
 };

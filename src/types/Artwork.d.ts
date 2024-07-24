@@ -1,7 +1,7 @@
 import Mongoose from '~/database';
 import { ChannelMessage } from './Message';
 
-type ArtworkSourceType = 'pixiv' | 'twitter' | 'danbooru';
+type ArtworkSourceType = 'pixiv' | 'twitter' | 'danbooru' | 'bilibili';
 
 export type ArtworkSource = {
     type: ArtworkSourceType;

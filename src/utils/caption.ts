@@ -23,6 +23,8 @@ function genArtistUrl(artist: Artist) {
             return 'https://twitter.com/' + artist.username;
         case 'danbooru':
             return 'https://danbooru.donmai.us/artists/' + artist.id;
+        case 'bilibili':
+            return 'https://space.bilibili.com/' + artist.uid + '/dynamic';
     }
 }
 

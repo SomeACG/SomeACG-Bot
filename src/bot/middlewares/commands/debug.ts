@@ -66,6 +66,34 @@ export default Telegraf.command('debug', async ctx => {
                     parse_mode: 'HTML'
                 }
             );
+        case 'parser':
+            if (!ctx.message.reply_to_message)
+                return await ctx.reply('Reply a message to parse', {
+                    reply_parameters: {
+                        message_id: ctx.message.message_id,
+                        allow_sending_without_reply: true
+                    }
+                });
+
+            const target_msg = ctx.message
+                .reply_to_message as Message.TextMessage;
+
+            return await ctx.reply(
+                '<pre>' +
+                    JSON.stringify(
+                        parseParams(target_msg.text, target_msg.entities),
+                        undefined,
+                        '    '
+                    ) +
+                    '</pre>',
+                {
+                    reply_parameters: {
+                        message_id: ctx.message.message_id,
+                        allow_sending_without_reply: true
+                    },
+                    parse_mode: 'HTML'
+                }
+            );
         case 'artwork':
             try {
                 const reply_to_message = ctx.message
