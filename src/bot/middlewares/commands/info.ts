@@ -7,12 +7,12 @@ import { infoCmdCaption } from '~/utils/caption';
 import { semiIntArray } from '~/utils/param-parser';
 
 export default wrapCommand('info', async ctx => {
-    if (!ctx.command.target)
+    if (!ctx.command.urls || ctx.command.urls.length == 0)
         return await ctx.directlyReply(
             '使用方法:\n/info <参数> [作品链接]\n可选参数: picture_index 图片序号，默认为0'
         );
     const artwork_info = await getArtworkInfoByUrl(
-        ctx.command.target,
+        ctx.command.urls[0],
         ctx.command.params['picture_index']
             ? semiIntArray(ctx.command.params['picture_index'])
             : [-1] // -1 means all pictures, it should be handled in the platforms module

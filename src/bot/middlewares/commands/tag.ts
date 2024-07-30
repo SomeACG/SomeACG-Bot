@@ -11,14 +11,27 @@ export default wrapCommand('tag', async ctx => {
         return await ctx.directlyReply(
             '参数不正确，请回复一条消息或在在参数中指定作品序号！'
         );
-    if (!ctx.command.target)
-        return await ctx.directlyReply(
-            '参数不正确，请在命令中设置标签并用英文逗号隔开！'
-        );
+    if (
+        !ctx.command.target &&
+        !(!ctx.command.hashtags || ctx.command.hashtags.length == 0)
+    )
+        return await ctx.directlyReply('参数不正确，请在命令中添加标签！');
     if (ctx.is_reply && !ctx.reply_to_message.is_automatic_forward)
         return await ctx.resolveWait('回复的消息不是有效的频道消息！');
     await ctx.wait('正在修改作品标签...', true);
-    const tag_array = ctx.command.target.split(/,|，/);
+
+    const tags_set = new Set<string>();
+
+    if (ctx.command.target) {
+        const tags_string = ctx.command.target as string;
+        if (tags_string.search(',') == -1) tags_set.add(tags_string);
+        else tags_string.split(/,|，/).forEach(tag => tags_set.add(tag));
+    }
+
+    if (ctx.command.hashtags) {
+        ctx.command.hashtags.forEach(tag => tags_set.add(tag));
+    }
+
     let artwork: Artwork;
     if (ctx.reply_to_message) {
         const message_id: number = (
@@ -27,7 +40,7 @@ export default wrapCommand('tag', async ctx => {
         const message = await getMessage(message_id);
         artwork = await getArtwork(message.artwork_index);
     } else artwork = await getArtwork(parseInt(ctx.command.params['index']));
-    artwork.tags = await getTagsByNamesAndInsert(tag_array);
+    artwork.tags = await getTagsByNamesAndInsert(Array.from(tags_set));
     const exec_result = await modifyArtwork(artwork);
     if (exec_result.succeed) return await ctx.resolveWait('作品标签修改成功~');
     else return await ctx.resolveWait('修改失败: ' + exec_result.message);

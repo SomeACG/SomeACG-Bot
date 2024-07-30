@@ -14,7 +14,7 @@ export default async function downloadFile(
 
     const headers = {};
 
-    if (url.includes('pixiv.net')) {
+    if (url.includes('pximg.net')) {
         Object.assign(headers, {
             referer: 'https://www.pixiv.net/'
         });

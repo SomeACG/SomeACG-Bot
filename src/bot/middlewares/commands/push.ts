@@ -9,11 +9,14 @@ import logger from '~/utils/logger';
 import { semiIntArray } from '~/utils/param-parser';
 
 export default wrapCommand('push', async ctx => {
-    if (!ctx.command.target || !ctx.command.params)
+    if (!ctx.command.urls || ctx.command.urls.length == 0)
         return await ctx.directlyReply(
-            '命令语法不正确\n命令语法: /push [args(key=value)] <target>'
+            '命令语法不正确\n命令语法: /push [args(key=value)] <url>'
         );
-    if (!ctx.command.params['tags'])
+    if (
+        !ctx.command.params['tags'] &&
+        (!ctx.command.hashtags || ctx.command.hashtags.length == 0)
+    )
         return await ctx.directlyReply('请至少设置一个标签!');
     if (
         ctx.reply_to_message &&
@@ -21,9 +24,9 @@ export default wrapCommand('push', async ctx => {
     )
         return await ctx.directlyReply('回复的消息必须是一个文件!');
     await ctx.wait('正在发布作品...');
-    const tags_string = ctx.command.params['tags'] as string;
+    const tags_set = new Set<string>();
     const artwork_info = await getArtworkInfoByUrl(
-        ctx.command.target,
+        ctx.command.urls[0],
         ctx.command.params['picture_index']
             ? semiIntArray(ctx.command.params['picture_index'])
             : undefined
@@ -43,16 +46,22 @@ export default wrapCommand('push', async ctx => {
         artwork_info.photos[0].url_origin = file_url.href;
     }
 
+    if (ctx.command.params['tags']) {
+        const tags_string = ctx.command.params['tags'] as string;
+        if (tags_string.search(',') == -1) tags_set.add(tags_string);
+        else tags_string.split(/,|，/).forEach(tag => tags_set.add(tag));
+    }
+
+    if (ctx.command.hashtags) {
+        ctx.command.hashtags.forEach(tag => tags_set.add(tag));
+    }
+
     const result = await publishArtwork(artwork_info, {
         is_quality: ctx.command.params['quality'] ? true : false,
         picture_index: ctx.command.params['picture_index']
             ? semiIntArray(ctx.command.params['picture_index'])
             : [0],
-        artwork_tags:
-            tags_string.search(',') == -1
-                ? [tags_string]
-                : tags_string.split(/,|，/),
-        contribution: contribution,
+        artwork_tags: Array.from(tags_set),
         origin_file_name: origin_file_msg?.document?.file_name,
         origin_file_modified: origin_file_msg?.document?.file_name
             ? true
