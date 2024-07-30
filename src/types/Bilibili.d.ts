@@ -1,8 +1,13 @@
-export type BiliResponse = {
+export type BiliResponse<T> = {
     code: number;
     message: string;
-    ttl: number;
-    data: BiliDaynamicData;
+    ttl?: number;
+    data: T;
+};
+
+export type BiliFingerData = {
+    b_3: string;
+    b_4: string;
 };
 
 export type BiliDaynamicData = {

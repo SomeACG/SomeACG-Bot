@@ -12,15 +12,24 @@ export default async function downloadFile(
     logger.info('Start download file ' + file_name);
     const file_path = path.resolve(config.TEMP_DIR, file_name);
 
+    const headers = {};
+
+    if (url.includes('pixiv.net')) {
+        Object.assign(headers, {
+            referer: 'https://www.pixiv.net/'
+        });
+    }
+
+    if (url.includes('hdslb.com')) {
+        Object.assign(headers, {
+            referer: 'https://www.bilibili.com/'
+        });
+    }
+
     try {
         const response = await axios.get(url, {
             responseType: 'arraybuffer',
-            headers: {
-                referer:
-                    url.search('pximg.net') == -1
-                        ? ''
-                        : 'https://www.pixiv.net/'
-            }
+            headers
         });
 
         fs.writeFileSync(file_path, response.data);
