@@ -29,6 +29,8 @@ export default wrapCommand('tag', async ctx => {
     }
 
     if (ctx.command.hashtags) {
+        // 使用 hashtags 时屏蔽 target 的内容
+        tags_set.clear();
         ctx.command.hashtags.forEach(tag => tags_set.add(tag));
     }
 
