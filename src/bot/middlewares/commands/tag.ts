@@ -13,7 +13,7 @@ export default wrapCommand('tag', async ctx => {
         );
     if (
         !ctx.command.target &&
-        !(!ctx.command.hashtags || ctx.command.hashtags.length == 0)
+        (!ctx.command.hashtags || ctx.command.hashtags.length == 0)
     )
         return await ctx.directlyReply('参数不正确，请在命令中添加标签！');
     if (ctx.is_reply && !ctx.reply_to_message.is_automatic_forward)
@@ -28,7 +28,7 @@ export default wrapCommand('tag', async ctx => {
         else tags_string.split(/,|，/).forEach(tag => tags_set.add(tag));
     }
 
-    if (ctx.command.hashtags) {
+    if (ctx.command.hashtags?.length > 0) {
         // 使用 hashtags 时屏蔽 target 的内容
         tags_set.clear();
         ctx.command.hashtags.forEach(tag => tags_set.add(tag));

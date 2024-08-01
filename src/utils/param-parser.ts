@@ -2,9 +2,6 @@ import { CommandEntity } from '~/types/Command';
 import logger from './logger';
 import { MessageEntity } from 'telegraf/typings/core/types/typegram';
 
-const urlPattern =
-    /^(((ht|f)tps?):\/\/)?([^!@#$%^&*?.\s-]([^!@#$%^&*?.\s]{0,63}[^!@#$%^&*?.\s])?\.)+[a-z]{2,6}\/?/g;
-
 export function parseParams(
     command: string,
     entities?: MessageEntity[]
@@ -13,58 +10,28 @@ export function parseParams(
 
     command = command.trim();
 
-    if (command.search(' ') == -1)
-        return {
-            name:
-                command.search('@') == -1
-                    ? command.substring(1)
-                    : command.split('@')[0].substring(1),
-            params: {}
-        };
     const str_array = command.split(' ');
-    let last_param_index = 0;
-    if (
-        str_array[str_array.length - 1].search('=') != -1 &&
-        str_array[str_array.length - 1].search(urlPattern) == -1
-    ) {
-        last_param_index = str_array.length - 1;
-    } else {
-        last_param_index = str_array.length - 2;
-    }
 
-    const command_entity: CommandEntity = {
+    const cmd_entity: CommandEntity = {
         name:
-            str_array[0].search('@') == -1
-                ? str_array[0].substring(1)
-                : str_array[0].split('@')[0].substring(1),
-        params: {},
-        target:
-            last_param_index == str_array.length - 1
-                ? undefined
-                : str_array[last_param_index + 1]
+            str_array[0].indexOf('@') == -1
+                ? str_array[0].slice(1)
+                : str_array[0].slice(1, str_array[0].indexOf('@')),
+        params: {}
     };
 
-    // command_entity.params = last_param_index == 0 ? {} : []
-    for (let i = 1; i <= last_param_index; i++) {
-        if (!urlPattern.test(str_array[i])) {
-            const param_key = str_array[i].split('=')[0];
-            const param_value = str_array[i].split('=')[1];
-            Object.defineProperty(command_entity.params, param_key, {
-                value: param_value
-            });
-        }
-    }
+    if (str_array.length == 1) return cmd_entity;
 
     // exprimental: parse from entities
 
-    if (entities && entities.length > 0) {
-        command_entity.urls = entities
+    if (entities?.length > 0) {
+        cmd_entity.urls = entities
             .filter(entity => entity.type === 'url')
             .map(entity =>
                 command.substring(entity.offset, entity.offset + entity.length)
             );
 
-        command_entity.hashtags = entities
+        cmd_entity.hashtags = entities
             .filter(entity => entity.type === 'hashtag')
             .map(entity =>
                 command.substring(
@@ -74,11 +41,34 @@ export function parseParams(
             );
     }
 
-    return command_entity;
-}
+    for (let i = 1; i < str_array.length; i++) {
+        if (i == str_array.length - 1) {
+            // This part is url, skip param parse
+            if (cmd_entity.urls?.indexOf(str_array[i]) > -1) {
+                cmd_entity.target = str_array[i];
+                break;
+            }
+            // This part is hashtag, skip param parse
+            if (cmd_entity.hashtags?.indexOf(str_array[i].slice(1)) > -1) break;
 
-export function semiArray(str: string): string[] {
-    return str.search(',') == -1 ? [str] : str.split(/,|，/);
+            // last part without equal sign, it's target
+            if (str_array[i].indexOf('=') == -1) {
+                cmd_entity.target = str_array[i];
+                break;
+            }
+        }
+
+        if (str_array[i].indexOf('=') > -1) {
+            // parse params
+            const param_pair = str_array[i].split('=');
+            const param_name = param_pair.shift();
+
+            if (param_name)
+                cmd_entity.params[param_name] = param_pair.join('=');
+        }
+    }
+
+    return cmd_entity;
 }
 
 export function semiIntArray(str: string): number[] {
