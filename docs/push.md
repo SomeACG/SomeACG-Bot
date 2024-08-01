@@ -6,7 +6,7 @@ tags: 图片标签，用逗号隔开
 
 可选参数:
 quality: 是否精选
-picture\_index: 图片序号，多个序号可以使用英文隔开
+index: 图片序号，多个序号可以使用英文隔开
 contribure\_from: 投稿来源
 示例:
 `/push tags=少女 quality=1 https://www.pixiv.net/artworks/80365250`

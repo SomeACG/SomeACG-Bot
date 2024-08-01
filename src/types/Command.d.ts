@@ -6,7 +6,7 @@
 export type ParamNames =
     | 'user'
     | 'index'
-    | 'picture_index'
+    | 'index'
     | 'tags'
     | 'contribute_from'
     | 'desc'

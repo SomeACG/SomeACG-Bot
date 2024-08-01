@@ -27,8 +27,8 @@ export default wrapCommand('push', async ctx => {
     const tags_set = new Set<string>();
     const artwork_info = await getArtworkInfoByUrl(
         ctx.command.urls[0],
-        ctx.command.params['picture_index']
-            ? semiIntArray(ctx.command.params['picture_index'])
+        ctx.command.params['index']
+            ? semiIntArray(ctx.command.params['index'])
             : undefined
     );
     let contribution: Contribution | undefined;
@@ -58,8 +58,8 @@ export default wrapCommand('push', async ctx => {
 
     const result = await publishArtwork(artwork_info, {
         is_quality: ctx.command.params['quality'] ? true : false,
-        picture_index: ctx.command.params['picture_index']
-            ? semiIntArray(ctx.command.params['picture_index'])
+        picture_index: ctx.command.params['index']
+            ? semiIntArray(ctx.command.params['index'])
             : [0],
         artwork_tags: Array.from(tags_set),
         origin_file_name: origin_file_msg?.document?.file_name,

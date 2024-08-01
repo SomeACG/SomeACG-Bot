@@ -17,7 +17,7 @@ export default Telegraf.action(/publish-/, async ctx => {
 
         let pushCommand = '/push';
         if (query_params[2] == 'q') pushCommand += ' quality=true';
-        pushCommand += ' picture_index=0';
+        pushCommand += ' index=0';
         pushCommand += ' contribute_from=' + contribution.message_id;
         pushCommand += ' ' + contribution.post_url;
 
