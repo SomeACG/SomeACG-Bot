@@ -65,7 +65,8 @@ export default wrapCommand('push', async ctx => {
         origin_file_name: origin_file_msg?.document?.file_name,
         origin_file_modified: origin_file_msg?.document?.file_name
             ? true
-            : false
+            : false,
+        contribution
     });
     if (result.succeed) {
         await ctx.resolveWait('作品发布成功~');
