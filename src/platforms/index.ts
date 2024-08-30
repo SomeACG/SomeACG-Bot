@@ -14,7 +14,7 @@ export default async function getArtworkInfoByUrl(
         /(https:\/\/)?danbooru.donmai.us\/(posts|post\/show)\/(\d+)/
     );
     const matchBiliDynamic = url.match(
-        /(https:\/\/)?((t.|www.)?bilibili.com(\/opus)?\/(\d+))/
+        /(https:\/\/)?((t.|m.|www.)?bilibili.com(\/opus)?\/(\d+))/
     );
 
     if (!indexes) indexes = [0];
