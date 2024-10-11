@@ -13,17 +13,20 @@ export default async function getArtworkInfo(
             : url.pathname.split('/').pop();
 
     if (!dynamic_id) {
-        throw new Error('Bilibili URL is invalid');
+        throw new Error('无效的B站动态链接');
     }
 
     const dynamic = await getDynamicInfo(dynamic_id);
 
-    if (dynamic.module_dynamic.major.type !== 'MAJOR_TYPE_OPUS') {
-        throw new Error('Dynamic is not a bilibili opus post');
+    if (
+        !dynamic.module_dynamic.major ||
+        dynamic.module_dynamic.major.type !== 'MAJOR_TYPE_OPUS'
+    ) {
+        throw new Error('B站动态类型似乎不正确');
     }
 
     if (dynamic.module_dynamic.major.opus.pics.length === 0) {
-        throw new Error('Dynamic does not contain any images');
+        throw new Error('该动态中似乎没有图片');
     }
 
     if (indexes.length === 1 && indexes[0] === -1)

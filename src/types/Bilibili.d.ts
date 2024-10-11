@@ -19,7 +19,7 @@ export type BiliDaynamicData = {
                 mid: number;
             };
             module_dynamic: {
-                major: {
+                major?: {
                     type: string; // Should be 'MAJOR_TYPE_OPUS',
                     opus?: {
                         pics: BiliDyanamicPic[];
