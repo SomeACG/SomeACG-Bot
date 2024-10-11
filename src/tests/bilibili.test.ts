@@ -5,7 +5,7 @@ import downloadFile from '../utils/download';
 describe('Bilibili API Test', () => {
     test('Dynamic API Test', async () => {
         const dynamic = await getDynamicInfo('956651175804928018');
-        expect(dynamic.module_author.mid).toBe('12727107');
+        expect(dynamic.modules.module_author.mid).toBe('12727107');
     });
 
     test('Image Download Test', async () => {

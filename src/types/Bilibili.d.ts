@@ -20,7 +20,7 @@ export type BiliDynamicModule = {
         major?: {
             type: string; // Should be 'MAJOR_TYPE_OPUS',
             opus?: {
-                pics: BiliDyanamicPic[];
+                pics: BiliDynamicPic[];
                 summary?: {
                     text: string;
                 };
@@ -28,19 +28,21 @@ export type BiliDynamicModule = {
             };
         };
     };
-}
+};
 
 export type BiliDynamicData = {
     item: {
         modules: BiliDynamicModule;
+        id_str: string;
         orig?: {
+            id_str: string;
             modules: BiliDynamicModule;
-        }
+        };
         type: string;
     };
 };
 
-export type BiliDyanamicPic = {
+export type BiliDynamicPic = {
     height: number;
     width: number;
     sizes: number; // float
