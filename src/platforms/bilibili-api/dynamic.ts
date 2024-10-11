@@ -1,6 +1,6 @@
 import {
     BiliResponse,
-    BiliDaynamicData,
+    BiliDynamicData,
     BiliFingerData
 } from '~/types/Bilibili';
 import axios, { commonHeaders } from '~/utils/axios';
@@ -250,7 +250,7 @@ export async function getDynamicInfo(dynamic_id: string) {
 
     baseParams.append('id', dynamic_id);
 
-    const { data } = await axios.get<BiliResponse<BiliDaynamicData>>(API_PATH, {
+    const { data } = await axios.get<BiliResponse<BiliDynamicData>>(API_PATH, {
         params: baseParams,
         headers
     });
@@ -259,5 +259,5 @@ export async function getDynamicInfo(dynamic_id: string) {
         throw new Error(data.message);
     }
 
-    return data.data.item.modules;
+    return data.data.item;
 }
