@@ -16,7 +16,13 @@ export default async function getArtworkInfo(
         throw new Error('无效的B站动态链接');
     }
 
-    const dynamic = await getDynamicInfo(dynamic_id);
+    const dynamic_info = await getDynamicInfo(dynamic_id);
+
+
+    let dynamic = dynamic_info.modules;
+    if ( dynamic_info.orig && dynamic_info.type === 'DYNAMIC_TYPE_FORWARD' ) {
+        dynamic = dynamic_info.orig.modules;
+    }
 
     if (
         !dynamic.module_dynamic.major ||
