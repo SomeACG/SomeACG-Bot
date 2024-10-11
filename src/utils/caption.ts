@@ -62,6 +62,16 @@ export function artworkCaption(
         caption += `#${tag.name} `;
     }
 
+    // When the caption length is longer than 1024, cut off the description
+    if (caption.length > 1024) {
+        artwork.desc =
+            artwork.desc?.slice(
+                0,
+                1024 - caption.length + artwork.desc.length - 3
+            ) + '...';
+        caption = artworkCaption(artwork, artist, event_info);
+    }
+
     return caption;
 }
 
@@ -89,6 +99,16 @@ export function infoCmdCaption(artwork_info: ArtworkInfo) {
         caption += '<blockquote expandable>';
         caption += artwork_info.raw_tags.map(str => `#${str}`).join(' ');
         caption += '</blockquote>';
+    }
+
+    // When the caption length is longer than 1024, cut off the description
+    if (caption.length > 1024) {
+        artwork_info.desc =
+            artwork_info.desc?.slice(
+                0,
+                1024 - caption.length + artwork_info.desc.length - 3
+            ) + '...';
+        caption = infoCmdCaption(artwork_info);
     }
 
     return caption;
