@@ -7,12 +7,37 @@ import {
 } from '~/types/Artwork';
 import { PushEvent } from '~/types/Event';
 
+const MAX_CAPTION_LENGTH = 1024;
+
 function encodeHtmlChars(text: string) {
     return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function replaceHtmlTags(text: string) {
     return text.replace(/<br(\s)?(\/)?>/g, '\n');
+}
+/**
+ * Cut off description text and remove unclosed tags
+ *
+ * @param {string} text The text should escaped the </br> tag
+ * @param {number} length
+ * @return {*}
+ */
+function cutDescription(description: string, totalLength: number) {
+    const unclosedTagRegex = /<([a-zA-Z]+)(?:(?!<\/\1>).)*$/g;
+
+    const expect_slice =
+        MAX_CAPTION_LENGTH - totalLength + description.length - 3;
+
+    let desc_cut = description.slice(0, expect_slice);
+
+    desc_cut = desc_cut.replace(unclosedTagRegex, '');
+
+    if (desc_cut[desc_cut.length - 1] === '<') {
+        desc_cut = desc_cut.slice(0, desc_cut.length - 1);
+    }
+
+    return desc_cut + '...';
 }
 
 function genArtistUrl(artist: Artist) {
@@ -63,12 +88,11 @@ export function artworkCaption(
     }
 
     // When the caption length is longer than 1024, cut off the description
-    if (caption.length > 1024) {
-        artwork.desc =
-            artwork.desc?.slice(
-                0,
-                1024 - caption.length + artwork.desc.length - 3
-            ) + '...';
+    if (caption.length > MAX_CAPTION_LENGTH) {
+        artwork.desc = cutDescription(
+            replaceHtmlTags(artwork.desc),
+            caption.length
+        );
         caption = artworkCaption(artwork, artist, event_info);
     }
 
@@ -102,12 +126,11 @@ export function infoCmdCaption(artwork_info: ArtworkInfo) {
     }
 
     // When the caption length is longer than 1024, cut off the description
-    if (caption.length > 1024) {
-        artwork_info.desc =
-            artwork_info.desc?.slice(
-                0,
-                1024 - caption.length + artwork_info.desc.length - 3
-            ) + '...';
+    if (caption.length > MAX_CAPTION_LENGTH) {
+        artwork_info.desc = cutDescription(
+            replaceHtmlTags(artwork_info.desc),
+            caption.length
+        );
         caption = infoCmdCaption(artwork_info);
     }
 
