@@ -6,6 +6,8 @@ import { modifyArtwork } from '~/services/artwork-service';
 import { ArtworkBoolProps, ArtworkStrProps } from '~/types/Artwork';
 import { ParamNames } from '~/types/Command';
 
+const MODIFIABLE_PROPS = ['title', 'desc', 'quality', 'file_name'];
+
 export default wrapCommand('update', async ctx => {
     if (!ctx.command.params['index'] && !ctx.is_reply)
         return await ctx.directlyReply('请回复一条消息或指定要更改的作品序号!');
@@ -29,24 +31,16 @@ export default wrapCommand('update', async ctx => {
     const param_keys: ParamNames[] = Object.keys(ctx.command.params);
 
     for (const key of param_keys) {
-        if (key in artwork) {
-            if (Object.prototype.hasOwnProperty.call(artwork, key)) {
-                const descriptor = Object.getOwnPropertyDescriptor(
-                    artwork,
-                    key
-                );
-
-                switch (typeof descriptor.value) {
-                    case 'string':
-                        artwork[key as ArtworkStrProps] =
-                            ctx.command.params[key];
-                        break;
-                    case 'boolean':
-                        artwork[key as ArtworkBoolProps] = Boolean(
-                            ctx.command.params[key]
-                        );
-                        break;
-                }
+        if (key in artwork && MODIFIABLE_PROPS.includes(key)) {
+            switch (typeof artwork[key as ArtworkStrProps | ArtworkBoolProps]) {
+                case 'string':
+                    artwork[key as ArtworkStrProps] = ctx.command.params[key];
+                    break;
+                case 'boolean':
+                    artwork[key as ArtworkBoolProps] = Boolean(
+                        ctx.command.params[key]
+                    );
+                    break;
             }
         }
     }

@@ -30,6 +30,7 @@ import {
     insertPhotos,
     removePhotoByArtworkIndex
 } from '~/database/operations/photo';
+import logger from '~/utils/logger';
 
 // @ErrCatch 不会用，暂时不用了
 export async function publishArtwork(

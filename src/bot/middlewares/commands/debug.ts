@@ -5,6 +5,8 @@ import {
 } from 'telegraf/typings/core/types/typegram';
 import { getArtwork } from '~/database/operations/artwork';
 import { getMessage } from '~/database/operations/message';
+import { Artwork } from '~/types/Artwork';
+import logger from '~/utils/logger';
 import { parseParams } from '~/utils/param-parser';
 
 export default Telegraf.command('debug', async ctx => {
@@ -104,6 +106,13 @@ export default Telegraf.command('debug', async ctx => {
                         .message_id
                 );
                 const artwork = await getArtwork(message.artwork_index);
+
+                // In case that the title or desc field has special characters
+                // Just remove them
+
+                artwork.title = '...';
+                artwork.desc = '...';
+
                 return await ctx.reply(
                     '<pre>' +
                         JSON.stringify(artwork, undefined, '    ') +
@@ -117,6 +126,7 @@ export default Telegraf.command('debug', async ctx => {
                     }
                 );
             } catch (err) {
+                logger.error(err);
                 return await ctx.reply('Cannot get artwork info', {
                     reply_parameters: {
                         message_id: ctx.message.message_id,
