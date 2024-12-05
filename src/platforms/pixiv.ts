@@ -7,7 +7,9 @@ export default async function getArtworkInfo(
     post_url: string,
     indexes = [0]
 ): Promise<ArtworkInfo> {
-    const pixiv_id = path.basename(post_url);
+    const pixiv_id = post_url.includes('illust_id=')
+        ? /illust_id=(\d{7,9})/.exec(post_url)[1]
+        : path.basename(post_url);
     const {
         data: { body: illust }
     } = await axios.get<PixivAjaxResp<PixivIllust>>(

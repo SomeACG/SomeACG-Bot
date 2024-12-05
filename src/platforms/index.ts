@@ -5,7 +5,7 @@ export default async function getArtworkInfoByUrl(
     indexes?: number[]
 ): Promise<ArtworkInfo> {
     const matchPixiv = url.match(
-        /(https:\/\/)?(www.)?pixiv.net(\/en)?\/(artworks|i)\/(\d{1,9})(\/)?/
+        /(https:\/\/)?(www\.)?pixiv\.net\/(((en\/)?(artworks|i)\/(\d{1,9})(\/)?)|(member_illust\.php\?(\S+)?illust_id=(\d{1,9})))/
     );
     const matchTwitter = url.match(
         /(https:\/\/)?(vx|fx|fixup)?(twitter|x|twittpr).com\/(.+)\/status\/(\d+)/
