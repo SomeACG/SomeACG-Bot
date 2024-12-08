@@ -71,8 +71,13 @@ export function artworkCaption(
     caption += `来源: ${artwork.source.post_url}\n`;
     caption += `画师: `;
     caption += `<a href="${genArtistUrl(artist)}">${artist.name}</a>\n`;
-    if (event_info?.contribution)
-        caption += `投稿 by <a href="tg://user?id=${event_info.contribution.user_id}">${event_info.contribution.user_name}</a>\n`;
+    if (event_info?.contribution) {
+        const user_link =
+            event_info.contribution.user_id > 0
+                ? `tg://user?id=${event_info.contribution.user_id}`
+                : `https://t.me/${event_info.contribution.user_tg_username}?profile`;
+        caption += `投稿 by <a href="${user_link}">${event_info.contribution.user_name}</a>\n`;
+    }
 
     if (artwork.desc)
         caption += `\n<blockquote expandable>${replaceHtmlTags(

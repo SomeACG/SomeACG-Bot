@@ -10,6 +10,9 @@
         "type": "github",
         "url": "https://github.com/SomeACG/SomeACG-Bot.git"
     },
+    "engines": {
+        "node": "16.x"
+    },
     "dependencies": {
         "@types/koa": "^2.13.4",
         "@types/koa-bodyparser": "^4.3.5",
@@ -35,8 +38,8 @@
     "scripts": {
         "postinstall": "husky install",
         "build": "tsc --outDir ./dist && cp -r docs ./dist",
-        "dev": "tsc --outDir ./dist && cp -r docs ./dist && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist DEV_MODE=1 DOTENV_NAME=development LOG_LEVEL=debug node --inspect -r tsconfig-paths/register ./dist/src/app.js",
-        "dev:prod": "tsc --outDir ./dist && cp -r docs ./dist && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist DOTENV_NAME=production node --inspect -r tsconfig-paths/register ./dist/src/app.js",
+        "dev": "tsc --outDir ./dist && cp -r docs ./dist && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist DOTENV_NAME=development LOG_LEVEL=debug node --inspect -r tsconfig-paths/register ./dist/src/app.js",
+        "dev:prod": "tsc --outDir ./dist && cp -r docs ./dist && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist DEV_MODE=1 DOTENV_NAME=production node --inspect -r tsconfig-paths/register ./dist/src/app.js",
         "start": "mkdir -p ./dist/temp && cp -r docs ./dist && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js",
         "lint": "prettier --write . && eslint --ext .ts src --fix"
     },
