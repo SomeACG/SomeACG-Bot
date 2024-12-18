@@ -21,7 +21,7 @@
 * [Danbooru](https://danbooru.donmai.us/)
 * [Bilibili 动态](https://t.bilibili.com)
 
-目前所使用的 PaaS 托管平台：[Heroku](https://www.heroku.com/)
+目前所使用的 PaaS 托管平台：[Fly.io](https://fly.io/)
 
 ### 配置文件
 

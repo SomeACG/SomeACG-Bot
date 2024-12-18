@@ -14,5 +14,3 @@ test
 yarn-error.log
 
 src/scripts/*.ts
-
-fly.toml

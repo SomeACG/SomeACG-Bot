@@ -36,7 +36,7 @@
         "typescript": "^5.5.3"
     },
     "scripts": {
-        "postinstall": "husky install",
+        "prepare": "husky install",
         "build": "tsc --outDir ./dist && cp -r docs ./dist",
         "dev": "tsc --outDir ./dist && cp -r docs ./dist && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist DOTENV_NAME=development LOG_LEVEL=debug node --inspect -r tsconfig-paths/register ./dist/src/app.js",
         "dev:prod": "tsc --outDir ./dist && cp -r docs ./dist && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist DEV_MODE=1 DOTENV_NAME=production node --inspect -r tsconfig-paths/register ./dist/src/app.js",
@@ -44,6 +44,7 @@
         "lint": "prettier --write . && eslint --ext .ts src --fix"
     },
     "devDependencies": {
+        "@flydotio/dockerfile": "^0.5.9",
         "@jest/globals": "^29.5.0",
         "@types/gm": "^1.18.12",
         "@types/jest": "^29.5.2",
