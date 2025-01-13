@@ -13,6 +13,6 @@ test
 
 yarn-error.log
 
-src/scripts/*.ts
+src/scripts
 
 fly.toml

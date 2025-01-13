@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Adjust NODE_VERSION as desired
-ARG NODE_VERSION=16.15.0
+ARG NODE_VERSION=20.16.0
 FROM node:${NODE_VERSION}-slim as base
 
 LABEL fly_launch_runtime="Node.js"
@@ -11,7 +11,7 @@ WORKDIR /app
 
 # Set production environment
 ENV NODE_ENV="production"
-ARG YARN_VERSION=1.22.18
+ARG YARN_VERSION=1.22.22
 RUN npm install -g yarn@$YARN_VERSION --force
 
 
@@ -20,7 +20,7 @@ FROM base as build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python
+    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python3
 
 # Install node modules
 COPY package.json yarn.lock ./
