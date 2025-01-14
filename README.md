@@ -49,6 +49,7 @@
 * USE_PROXY：启动时设置此环境变量为1时，程序会读取系统内设置的 `HTTPS_PROXY_HOST` 和 `HTTPS_PROXY_PORT` 作为 Telegram Bot API 的连接代理。
 * DEV_MODE：启动时设置此环境变量为1时，机器人将不再回复除了默认管理员以外的任何用户的指令，以避免其他用户的干扰。同时设置了此变量后程序会使用 `./temp` 作为临时下载目录，未设置时将会使用 `/tmp` 作为临时下载目录。
 * SP_SITE_ID：如果使用 SharePoint 站点作为存储源，则需要配置此变量为站点 ID。
+* BOT_LAUNCH_WAIT: 启动 Bot 时等待一定的时长，用来防止 PaaS 平台的上一部署仍在运行对 Telegram API 造成抢占。单位：秒。
 * 数据库环境：由于程序使用了 MongoDB 的数据库事务功能来进行失败时的回滚操作，而 MongoDB 的事务功能需要数据库运行在 Replica Set 模式下才能正常使用。如果需要在本地进行开发测试，请先确保 MongoDB 数据库已经正确配置了 Replica 模式。
 
 ### 测试
