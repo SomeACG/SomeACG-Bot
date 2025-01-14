@@ -1,11 +1,12 @@
 import { describe, expect, test } from '@jest/globals';
-import { getDynamicInfo } from '../platforms/bilibili-api/dynamic';
+import DynamicFetcher from '../platforms/bilibili-api/dynamic';
 import downloadFile from '../utils/download';
 
 describe('Bilibili API Test', () => {
     test('Dynamic API Test', async () => {
-        const dynamic = await getDynamicInfo('956651175804928018');
-        expect(dynamic.modules.module_author.mid).toBe('12727107');
+        const fetcher = new DynamicFetcher('956651175804928018');
+        const dynamic = await fetcher.detail();
+        expect(dynamic.item.modules.module_author.mid).toBe('12727107');
     });
 
     test('Image Download Test', async () => {
