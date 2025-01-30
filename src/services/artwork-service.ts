@@ -45,7 +45,8 @@ export async function publishArtwork(
         artworkInfo.photos.map(async photo => {
             const file_name = await downloadFile(
                 photo.url_thumb,
-                path.basename(new URL(photo.url_thumb).pathname)
+                path.basename(new URL(photo.url_thumb).pathname),
+                'thumbnails'
             );
             return file_name;
         })
@@ -67,7 +68,7 @@ export async function publishArtwork(
     // await uploadOSS(file_name_thumb)
     await Promise.all(
         thumb_files.map(async file_name => {
-            await uploadFileB2(file_name);
+            await uploadFileB2(file_name, 'thumbnails');
         })
     );
 

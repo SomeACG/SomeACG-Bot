@@ -6,11 +6,18 @@ import logger from './logger';
 
 export default async function downloadFile(
     url: string,
-    file_name?: string
+    file_name?: string,
+    sub_dir = ''
 ): Promise<string> {
     file_name = file_name ? file_name : path.basename(url);
     logger.info('Start download file ' + file_name);
-    const file_path = path.resolve(config.TEMP_DIR, file_name);
+    const file_path = path.resolve(config.TEMP_DIR, sub_dir, file_name);
+
+    if (sub_dir && !fs.existsSync(path.resolve(config.TEMP_DIR, sub_dir))) {
+        fs.mkdirSync(path.resolve(config.TEMP_DIR, sub_dir), {
+            recursive: true
+        });
+    }
 
     const headers = {};
 

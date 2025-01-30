@@ -19,7 +19,7 @@ export async function pushArtwork(
         event_info.thumb_files.map(file_name => ({
             type: 'photo',
             media: {
-                source: path.resolve(config.TEMP_DIR, file_name)
+                source: path.resolve(config.TEMP_DIR, 'thumbnails', file_name)
             },
             caption:
                 file_name === event_info.thumb_files[0] ? caption : undefined,

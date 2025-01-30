@@ -19,7 +19,7 @@ const s3 = new AWS.S3({
     credentials: credentials
 });
 
-export async function uploadFileB2(file_name: string) {
+export async function uploadFileB2(file_name: string, sub_dir = '') {
     let extname = path.extname(file_name).substring(1);
 
     if (extname == 'jpg') extname = 'jpeg';
@@ -28,7 +28,9 @@ export async function uploadFileB2(file_name: string) {
         {
             Bucket: 'someacg',
             Key: B2_UPLOAD_PATH + file_name,
-            Body: fs.createReadStream(path.resolve(config.TEMP_DIR, file_name)),
+            Body: fs.createReadStream(
+                path.resolve(config.TEMP_DIR, sub_dir, file_name)
+            ),
             ContentType: 'image/' + path.extname(file_name).substring(1)
         },
         err => {
