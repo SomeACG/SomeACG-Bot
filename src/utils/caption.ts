@@ -9,12 +9,16 @@ import { PushEvent } from '~/types/Event';
 
 const MAX_CAPTION_LENGTH = 1024;
 
-function encodeHtmlChars(text: string) {
-    return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function replaceHtmlBrackets(text: string) {
+    return text.replace(/<(?![/ab])/g, '&lt;').replace(/(?<!["/ab])>/g, '&gt;');
 }
 
-function replaceHtmlTags(text: string) {
+function replaceHtmlBr(text: string) {
     return text.replace(/<br(\s)?(\/)?>/g, '\n');
+}
+
+function escapeHtmlTags(text: string) {
+    return replaceHtmlBrackets(replaceHtmlBr(text));
 }
 /**
  * Cut off description text and remove unclosed tags
@@ -66,7 +70,7 @@ export function artworkCaption(
 ) {
     let caption = '';
     if (artwork.title)
-        caption += `<b>${encodeHtmlChars(artwork.title)}</b> \n\n`;
+        caption += `<b>${replaceHtmlBrackets(artwork.title)}</b> \n\n`;
 
     caption += `来源: ${artwork.source.post_url}\n`;
     caption += `画师: `;
@@ -80,7 +84,7 @@ export function artworkCaption(
     }
 
     if (artwork.desc)
-        caption += `\n<blockquote expandable>${replaceHtmlTags(
+        caption += `\n<blockquote expandable>${escapeHtmlTags(
             artwork.desc
         )}</blockquote>\n`;
 
@@ -95,7 +99,7 @@ export function artworkCaption(
     // When the caption length is longer than 1024, cut off the description
     if (caption.length > MAX_CAPTION_LENGTH) {
         artwork.desc = cutDescription(
-            replaceHtmlTags(artwork.desc),
+            escapeHtmlTags(artwork.desc),
             caption.length
         );
         caption = artworkCaption(artwork, artist, event_info);
@@ -107,7 +111,7 @@ export function artworkCaption(
 export function infoCmdCaption(artwork_info: ArtworkInfo) {
     let caption = '图片下载成功!\n\n';
     if (artwork_info.title)
-        caption += `<b>${encodeHtmlChars(artwork_info.title)}</b>\n`;
+        caption += `<b>${replaceHtmlBrackets(artwork_info.title)}</b>\n`;
     if (artwork_info.artist) {
         caption += `画师: `;
         caption += `<a href="${genArtistUrl(artwork_info.artist)}">${
@@ -120,7 +124,7 @@ export function infoCmdCaption(artwork_info: ArtworkInfo) {
         .map(photo => `${photo.size.width}x${photo.size.height}`)
         .join('/');
     if (artwork_info.desc)
-        caption += `<blockquote expandable>${replaceHtmlTags(
+        caption += `<blockquote expandable>${escapeHtmlTags(
             artwork_info.desc
         )}</blockquote>\n`;
     if (artwork_info.raw_tags && artwork_info.raw_tags.length > 0) {
@@ -133,7 +137,7 @@ export function infoCmdCaption(artwork_info: ArtworkInfo) {
     // When the caption length is longer than 1024, cut off the description
     if (caption.length > MAX_CAPTION_LENGTH) {
         artwork_info.desc = cutDescription(
-            replaceHtmlTags(artwork_info.desc),
+            escapeHtmlTags(artwork_info.desc),
             caption.length
         );
         caption = infoCmdCaption(artwork_info);
@@ -162,7 +166,7 @@ export function randomCaption(
 ) {
     let caption = '';
     if (artwork.title && artwork.source.post_url)
-        caption += `<a href="${artwork.source.post_url}">${encodeHtmlChars(
+        caption += `<a href="${artwork.source.post_url}">${replaceHtmlBrackets(
             artwork.title
         )}</a>\n\n`;
 
