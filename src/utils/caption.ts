@@ -10,7 +10,9 @@ import { PushEvent } from '~/types/Event';
 const MAX_CAPTION_LENGTH = 1024;
 
 function replaceHtmlBrackets(text: string) {
-    return text.replace(/<(?![/ab])/g, '&lt;').replace(/(?<!["/ab])>/g, '&gt;');
+    return text
+        .replace(/<(?![/abs])/g, '&lt;')
+        .replace(/(?<!["/abg])>/g, '&gt;');
 }
 
 function replaceHtmlBr(text: string) {
