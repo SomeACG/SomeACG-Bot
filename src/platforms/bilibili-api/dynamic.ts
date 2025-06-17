@@ -10,6 +10,7 @@ import * as crypto from 'crypto';
 import { fakeDmCoverImgStr, genExClimbWuzhi } from './utils';
 
 import { WbiSign } from './sign';
+import logger from '~/utils/logger';
 
 const API_PATH = 'https://api.bilibili.com/x/polymer/web-dynamic/v1/detail';
 
@@ -42,9 +43,24 @@ export default class DynamicFetcher {
             'https://space.bilibili.com/1/dynamic'
         );
 
-        this.spm_prefix = data.match(
-            /<meta name="spm_prefix" content="([^"]+?)">/
-        )[1];
+        const spm_prefix_match_1 = data.match(
+            /<meta name="spm_prefix" content="([\d.]+)">/
+        );
+
+        if (spm_prefix_match_1) {
+            return (this.spm_prefix = spm_prefix_match_1[1]);
+        }
+
+        const spm_prefix_match_2 = data.match(/spmId: "([\d.]+)"/);
+
+        if (spm_prefix_match_2) {
+            return (this.spm_prefix = spm_prefix_match_2[1]);
+        }
+        // 如果没有匹配到，则使用默认值
+
+        logger.warn('未能从页面中获取 spm_prefix，使用默认值 333.1387');
+        // 这里使用默认值
+        return (this.spm_prefix = '333.1387');
     }
 
     async submitGateway(): Promise<void> {
