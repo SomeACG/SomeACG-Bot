@@ -104,6 +104,7 @@ export async function publishArtwork(
             picture_index: publish_event.picture_index
         },
         artist_id: artist.id,
+        create_time: new Date(),
 
         // @deprecated, @TODO should be removed in the future version
         file_name: origin_files[0],
