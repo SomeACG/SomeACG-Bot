@@ -31,6 +31,7 @@ import {
     removePhotoByArtworkIndex
 } from '~/database/operations/photo';
 import logger from '~/utils/logger';
+import { getImageSize } from '~/utils/sharp';
 
 // @ErrCatch 不会用，暂时不用了
 export async function publishArtwork(
@@ -62,6 +63,14 @@ export async function publishArtwork(
             );
             return file_name;
         })
+    );
+
+    const origin_sizes = await Promise.all(
+        origin_files.map(async (file_name, index) =>
+            publish_event.origin_file_modified
+                ? await getImageSize(file_name)
+                : artworkInfo.photos[index].size
+        )
     );
 
     // 上传到OSS和OneDrive
@@ -108,7 +117,7 @@ export async function publishArtwork(
 
         // @deprecated, @TODO should be removed in the future version
         file_name: origin_files[0],
-        size: artworkInfo.photos[0].size
+        size: origin_sizes[0]
     });
 
     const push_event: PushEvent = {
@@ -123,10 +132,10 @@ export async function publishArtwork(
 
     await insertMessages([...pushMessages.photos, ...pushMessages.documents]);
 
-    const photos: Photo[] = artworkInfo.photos.map((photo, index) => ({
+    const photos: Photo[] = artworkInfo.photos.map((_, index) => ({
         artwork_id: artwork._id,
         artwork_index: artwork.index,
-        size: photo.size,
+        size: origin_sizes[index],
         file_name: origin_files[index],
         thumb_file_id: pushMessages.photos[index].file_id,
         document_file_id: pushMessages.documents[index].file_id,
