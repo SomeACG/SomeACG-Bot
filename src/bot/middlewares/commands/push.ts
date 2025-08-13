@@ -63,6 +63,7 @@ export default wrapCommand('push', async ctx => {
             : [0],
         artwork_tags: Array.from(tags_set),
         origin_file_name: origin_file_msg?.document?.file_name,
+        origin_file_id: origin_file_msg?.document?.file_id,
         origin_file_modified: origin_file_msg?.document?.file_name
             ? true
             : false,

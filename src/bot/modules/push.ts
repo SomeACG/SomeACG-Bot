@@ -27,19 +27,38 @@ export async function pushArtwork(
         }))
     )) as Message.PhotoMessage[];
 
-    const sendDocumentMessages = (await bot.telegram.sendMediaGroup(
-        config.PUSH_CHANNEL,
-        event_info.origin_files.map(file_name => ({
-            type: 'document',
-            media: {
-                source: path.resolve(config.TEMP_DIR, file_name)
-            },
-            caption: event_info.origin_file_modified
-                ? '* <i>此原图经过处理</i>'
-                : undefined,
-            parse_mode: 'HTML'
-        }))
-    )) as Message.DocumentMessage[];
+    const sendDocumentMessages: Message.DocumentMessage[] = [];
+
+    if (event_info.origin_file_modified && event_info.origin_file_id) {
+        const message = await bot.telegram.sendDocument(
+            config.PUSH_CHANNEL,
+            event_info.origin_file_id,
+            {
+                caption: event_info.origin_file_modified
+                    ? '* <i>此原图经过处理</i>'
+                    : undefined,
+                parse_mode: 'HTML'
+            }
+        );
+
+        sendDocumentMessages.push(message);
+    } else {
+        const messages = await bot.telegram.sendMediaGroup(
+            config.PUSH_CHANNEL,
+            event_info.origin_files.map(file_name => ({
+                type: 'document',
+                media: {
+                    source: path.resolve(config.TEMP_DIR, file_name)
+                },
+                caption: event_info.origin_file_modified
+                    ? '* <i>此原图经过处理</i>'
+                    : undefined,
+                parse_mode: 'HTML'
+            }))
+        );
+
+        sendDocumentMessages.push(...(messages as Message.DocumentMessage[]));
+    }
 
     const photoMessages: ChannelMessage[] = sendPhotoMessages.map(msg => ({
         type: 'photo',

@@ -14,6 +14,7 @@ export type PublishEvent = {
     artwork_tags: Array<string>;
     origin_file_name?: string;
     origin_file_modified: boolean;
+    origin_file_id?: string;
     contribution?: Contribution;
 };
 

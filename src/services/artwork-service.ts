@@ -124,7 +124,8 @@ export async function publishArtwork(
         thumb_files,
         origin_files,
         contribution: publish_event.contribution,
-        origin_file_modified: publish_event.origin_file_modified
+        origin_file_modified: publish_event.origin_file_modified,
+        origin_file_id: publish_event.origin_file_id
     };
     // 推送作品到频道
     const pushMessages = await pushArtwork(artworkInfo, artwork, push_event);
