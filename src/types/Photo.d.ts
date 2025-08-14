@@ -7,6 +7,7 @@ export type Photo = {
         width: number;
         height: number;
     };
+    file_size: number;
     file_name: string;
     thumb_name?: string;
     thumb_file_id: string;

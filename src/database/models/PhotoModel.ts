@@ -8,6 +8,7 @@ const photoSchema = new Mongoose.Schema<Photo>({
         width: Number,
         height: Number
     },
+    file_size: Number,
     file_name: String,
     thumb_file_id: String,
     document_file_id: String,
