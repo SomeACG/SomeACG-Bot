@@ -17,8 +17,6 @@ import {
     updateArtwork,
     deleteArtwork
 } from '~/database/operations/artwork';
-import { uploadOneDrive } from './storage/upload';
-import { uploadFileB2 } from './storage/blackblaze';
 import { artworkCaption } from '~/utils/caption';
 import Mongoose from '~/database';
 import {
@@ -30,7 +28,6 @@ import {
     insertPhotos,
     removePhotoByArtworkIndex
 } from '~/database/operations/photo';
-import logger from '~/utils/logger';
 import { getImageSize, getFileSize } from '~/utils/sharp';
 
 // @ErrCatch 不会用，暂时不用了
@@ -77,19 +74,40 @@ export async function publishArtwork(
         origin_files.map(async file_name => await getFileSize(file_name))
     );
 
-    // 上传到OSS和OneDrive
-    // await uploadOSS(file_name_thumb)
-    await Promise.all(
-        thumb_files.map(async file_name => {
-            await uploadFileB2(file_name, 'thumbnails');
-        })
-    );
-
-    await Promise.all(
-        origin_files.map(async file_name => {
-            await uploadOneDrive(file_name);
-        })
-    );
+    // 上传原图文件到云存储
+    switch (config.STORAGE_TYPE) {
+        case 'b2':
+            if (
+                !config.B2_ENDPOINT ||
+                !config.B2_KEY_ID ||
+                !config.B2_KEY ||
+                !config.B2_BUCKET
+            ) {
+                throw new Error('B2 storage configuration is incomplete!');
+            }
+            const blackblaze = await import('./storage/blackblaze');
+            await Promise.all(
+                thumb_files.map(async file_name => {
+                    await blackblaze.uploadFileB2(file_name, 'thumbnails');
+                })
+            );
+            break;
+        case 'sharepoint':
+            if (!config.CLIENT_ID || !config.CLIENT_SECRET) {
+                throw new Error(
+                    'SharePoint storage configuration is incomplete!'
+                );
+            }
+            const sharepoint = await import('./storage/upload');
+            await Promise.all(
+                origin_files.map(async file_name => {
+                    await sharepoint.uploadOneDrive(file_name);
+                })
+            );
+            break;
+        default:
+            throw new Error(`Unsupported storage type: ${config.STORAGE_TYPE}`);
+    }
 
     // 获取标签ID
     const tags = await getTagsByNamesAndInsert(publish_event.artwork_tags);

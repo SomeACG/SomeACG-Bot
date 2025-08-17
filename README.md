@@ -10,9 +10,7 @@
 
 数据库：[MongoDB](https://www.mongodb.com/)
 
-缩略图存储：[Blackblaze](https://www.backblaze.com/)
-
-高清图存储：[OneDrive](https://www.office.com/onedrive)
+云存储：[Blackblaze](https://www.backblaze.com/) | [OneDrive](https://www.office.com/onedrive)
 
 所支持的图源平台：
 
@@ -29,18 +27,20 @@
 
 其中各项配置的说明如下：
 
-| 名称          | 示例                                                         | 说明                         |
-| ------------- | ------------------------------------------------------------ | ---------------------------- |
-| BOT_TOKEN     | `123456789:ABCDEFGYgsSi`                                     | Telegram 机器人的 Bot Token  |
-| PUSH_CHANNEL  | `@SomeACG`                                                   | 壁纸推送的目标频道           |
-| CLIENT_ID     | `8e9771c9-a07c-45f6-93e3-9bc4062125d0`                       | Microsoft Graph 的客户端 ID  |
-| CLIENT_SECRET | `jCO8Q~Wt6kJJQLYGBD5O6Kk8EjO76sQIYlm9c_xZ`                   | Microsoft Graph 的客户端密钥 |
-| ADMIN_LIST    | `123456732`                                                  | 默认管理员的 User ID         |
-| DB_URL        | `mongodb://localhost:27017/SomeACG?replicaSet=rs0`           | MongoDB 数据库连接字符串     |
-| B2_ENDPOINT   | `s3.us-west-001.backblazeb2.com`                             | Blackblaze 的存储桶地址      |
-| B2_KEY_ID     | `1b002831244`                                                | Blackblaze 的应用 ID         |
-| B2_KEY        | `O923+1uaJH686d7hTw2`                                        | Blackblaze 的应用密钥        |
-| PIXIV_COOKIE  | `yuid_b=IyTgsd8; PHPSESSID=91263823_7H4nvJHtguiu6yYiu7OIOIomS;` | Pixiv 的网站 Cookie          |
+| 名称          | 示例                                                         | 说明                                               |
+| ------------- | ------------------------------------------------------------ | -------------------------------------------------- |
+| BOT_TOKEN     | `123456789:ABCDEFGYgsSi`                                     | Telegram 机器人的 Bot Token                        |
+| PUSH_CHANNEL  | `@SomeACG`                                                   | 壁纸推送的目标频道                                 |
+| STORAGE_TYPE  | `sharepoint`                                                 | 云存储类型，目前只支持 sharepoint 和 b2            |
+| STORAGE_BASE  | `SomeACG`                                                    | 云存储的目标上传目录，开头无斜杠，留空上传至根目录 |
+| CLIENT_ID     | `8e9771c9-a07c-45f6-93e3-9bc4062125d0`                       | Microsoft Graph 的客户端 ID                        |
+| CLIENT_SECRET | `jCO8Q~Wt6kJJQLYGBD5O6Kk8EjO76sQIYlm9c_xZ`                   | Microsoft Graph 的客户端密钥                       |
+| ADMIN_LIST    | `123456732`                                                  | 默认管理员的 User ID                               |
+| DB_URL        | `mongodb://localhost:27017/SomeACG?replicaSet=rs0`           | MongoDB 数据库连接字符串                           |
+| B2_ENDPOINT   | `s3.us-west-001.backblazeb2.com`                             | Blackblaze 的存储桶地址                            |
+| B2_KEY_ID     | `1b002831244`                                                | Blackblaze 的应用 ID                               |
+| B2_KEY        | `O923+1uaJH686d7hTw2`                                        | Blackblaze 的应用密钥                              |
+| PIXIV_COOKIE  | `yuid_b=IyTgsd8; PHPSESSID=91263823_7H4nvJHtguiu6yYiu7OIOIomS;` | Pixiv 的网站 Cookie                                |
 
 一些其他需要注意的配置项：
 
