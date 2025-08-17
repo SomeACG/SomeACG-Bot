@@ -6,6 +6,7 @@ import { Artwork, ArtworkInfo } from '~/types/Artwork';
 import { PushEvent } from '~/types/Event';
 import { ChannelMessage } from '~/types/Message';
 import { artworkCaption } from '~/utils/caption';
+import { resizeFitChannelPhoto } from '~/utils/sharp';
 
 export async function pushArtwork(
     artwork_info: ArtworkInfo,
@@ -14,15 +15,31 @@ export async function pushArtwork(
 ): Promise<{ photos: ChannelMessage[]; documents: ChannelMessage[] }> {
     const caption = artworkCaption(artwork, artwork_info.artist, event_info);
 
+    const thumb_file_paths = event_info.thumb_files.map(file_name =>
+        path.resolve(config.TEMP_DIR, 'thumbnails', file_name)
+    );
+
+    const origin_file_paths = event_info.origin_files.map(file_name =>
+        path.resolve(config.TEMP_DIR, file_name)
+    );
+
+    const resized_channel_photos = await Promise.all(
+        origin_file_paths.map(async (file_path, index) => {
+            return await resizeFitChannelPhoto(
+                file_path,
+                thumb_file_paths[index]
+            );
+        })
+    );
+
     const sendPhotoMessages = (await bot.telegram.sendMediaGroup(
         config.PUSH_CHANNEL,
-        event_info.thumb_files.map(file_name => ({
+        resized_channel_photos.map((file_path, index) => ({
             type: 'photo',
             media: {
-                source: path.resolve(config.TEMP_DIR, 'thumbnails', file_name)
+                source: file_path
             },
-            caption:
-                file_name === event_info.thumb_files[0] ? caption : undefined,
+            caption: index === 0 ? caption : undefined,
             parse_mode: 'HTML'
         }))
     )) as Message.PhotoMessage[];
@@ -45,14 +62,11 @@ export async function pushArtwork(
     } else {
         const messages = await bot.telegram.sendMediaGroup(
             config.PUSH_CHANNEL,
-            event_info.origin_files.map(file_name => ({
+            origin_file_paths.map(origin_file_path => ({
                 type: 'document',
                 media: {
-                    source: path.resolve(config.TEMP_DIR, file_name)
+                    source: origin_file_path
                 },
-                caption: event_info.origin_file_modified
-                    ? '* <i>此原图经过处理</i>'
-                    : undefined,
                 parse_mode: 'HTML'
             }))
         );

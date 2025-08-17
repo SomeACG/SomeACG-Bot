@@ -40,7 +40,7 @@
     "scripts": {
         "prepare": "husky install",
         "build": "tsc --outDir ./dist && cp -r docs ./dist",
-        "dev": "npm run build && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist DOTENV_NAME=development LOG_LEVEL=debug node --inspect -r tsconfig-paths/register -r wirebird-client/inject ./dist/src/app.js",
+        "dev": "npm run build && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist DEV_MODE=1 DOTENV_NAME=development LOG_LEVEL=debug node --inspect -r tsconfig-paths/register -r wirebird-client/inject ./dist/src/app.js",
         "dev:prod": "npm run build && mkdir -p ./dist/temp && TS_NODE_BASEURL=./dist DEV_MODE=1 DOTENV_NAME=production node --inspect -r tsconfig-paths/register ./dist/src/app.js",
         "start": "mkdir -p ./dist/temp && cp -r docs ./dist && TS_NODE_BASEURL=./dist node -r tsconfig-paths/register ./dist/src/app.js",
         "lint": "prettier --write . && eslint --ext .ts src --fix"
