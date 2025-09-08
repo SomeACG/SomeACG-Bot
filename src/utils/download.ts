@@ -34,6 +34,8 @@ export default async function downloadFile(
     }
 
     try {
+        logger.debug('Downloading file from URL: ' + url);
+
         const response = await axios.get(url, {
             responseType: 'arraybuffer',
             headers

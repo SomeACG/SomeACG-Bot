@@ -1,6 +1,11 @@
 import { ArtworkInfo } from '~/types/Artwork';
 import { getTweetDetails } from './twitter-web-api/fxtwitter';
 
+function cleanUrl(url: string) {
+    // Remove url query parameters
+    return new URL(url).origin + new URL(url).pathname;
+}
+
 export default async function getArtworkInfo(
     post_url: string,
     indexes = [0]
@@ -26,8 +31,8 @@ export default async function getArtworkInfo(
         .filter((_, index) => indexes.includes(index))
         .map(photo => {
             return {
-                url_thumb: photo.url + '?name=medium',
-                url_origin: photo.url + '?name=orig',
+                url_thumb: cleanUrl(photo.url) + '?name=medium',
+                url_origin: cleanUrl(photo.url) + '?name=orig',
                 size: {
                     width: photo.width,
                     height: photo.height
