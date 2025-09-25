@@ -11,6 +11,7 @@ import { fakeDmCoverImgStr, genExClimbWuzhi } from './utils';
 
 import { WbiSign } from './sign';
 import logger from '~/utils/logger';
+import { AxiosError } from 'axios';
 
 const API_PATH = 'https://api.bilibili.com/x/polymer/web-dynamic/v1/detail';
 
@@ -39,28 +40,35 @@ export default class DynamicFetcher {
     }
 
     async initSpmPrefix() {
-        const { data } = await axios.get(
-            'https://space.bilibili.com/1/dynamic'
-        );
+        let spm_prefix = '';
 
-        const spm_prefix_match_1 = data.match(
-            /<meta name="spm_prefix" content="([\d.]+)">/
-        );
+        const regex1 = /<meta name="spm_prefix" content="([\d.]+)">/;
+        const regex2 = /spmId: "([\d.]+)"/;
 
-        if (spm_prefix_match_1) {
-            return (this.spm_prefix = spm_prefix_match_1[1]);
+        try {
+            const { data } = await axios.get(
+                'https://space.bilibili.com/1/dynamic'
+            );
+
+            if (regex1.test(data)) spm_prefix = data.match(regex1)[1];
+            else if (regex2.test(data)) spm_prefix = data.match(regex2)[1];
+        } catch (err) {
+            logger.warn('initSpmPrefix fetch error: ' + (err as Error).message);
+
+            const axiosError = err as AxiosError;
+
+            const data = axiosError.response?.data as string | undefined;
+
+            if (data) {
+                if (regex1.test(data)) spm_prefix = data.match(regex1)[1];
+                else if (regex2.test(data)) spm_prefix = data.match(regex2)[1];
+            }
         }
 
-        const spm_prefix_match_2 = data.match(/spmId: "([\d.]+)"/);
+        if (!spm_prefix)
+            logger.warn('未能从页面中获取 spm_prefix，使用默认值 333.1387');
 
-        if (spm_prefix_match_2) {
-            return (this.spm_prefix = spm_prefix_match_2[1]);
-        }
-        // 如果没有匹配到，则使用默认值
-
-        logger.warn('未能从页面中获取 spm_prefix，使用默认值 333.1387');
-        // 这里使用默认值
-        return (this.spm_prefix = '333.1387');
+        return (this.spm_prefix = spm_prefix || '333.1387');
     }
 
     async submitGateway(): Promise<void> {
