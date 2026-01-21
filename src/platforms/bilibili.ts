@@ -1,6 +1,7 @@
 import { ArtworkInfo } from '~/types/Artwork';
-// import { getOpusInfo } from './bili-alt-api/opus';
-import DynamicFetcher from './bilibili-api/dynamic';
+import config from '~/config';
+import axios from '~/utils/axios';
+import type { AltBiliDynamicData, BiliResponse } from '~/types/Bilibili';
 
 export default async function getArtworkInfo(
     post_url: string,
@@ -17,21 +18,26 @@ export default async function getArtworkInfo(
         throw new Error('无效的B站动态链接');
     }
 
-    const fetcher = new DynamicFetcher(dynamic_id);
+    const BILI_ALT_API = config.BILI_ALT_API;
 
-    const dynamic_info = await fetcher.detail();
+    if (!BILI_ALT_API) {
+        throw new Error('未配置 BILI_ALT_API，无法获取B站动态');
+    }
 
-    let dynamic = dynamic_info.item.modules;
+    const resp = await axios.get<BiliResponse<AltBiliDynamicData>>(
+        `${BILI_ALT_API}/api/dynamic/${dynamic_id}`
+    );
+
+    const dynamic_info = resp.data.data;
+
+    let dynamic = dynamic_info.modules;
 
     // For forwarded dynamic, use the original dynamic as artwork source
-    if (
-        dynamic_info.item.orig &&
-        dynamic_info.item.type === 'DYNAMIC_TYPE_FORWARD'
-    ) {
-        dynamic = dynamic_info.item.orig.modules;
+    if (dynamic_info.orig && dynamic_info.type === 'DYNAMIC_TYPE_FORWARD') {
+        dynamic = dynamic_info.orig.modules;
 
         // Replace the post_url dynamic id with the original dynamic id
-        post_url = post_url.replace(dynamic_id, dynamic_info.item.orig.id_str);
+        post_url = post_url.replace(dynamic_id, dynamic_info.orig.id_str);
     }
 
     if (

@@ -34,5 +34,6 @@ export default {
     B2_KEY_ID: env.get('B2_KEY_ID').asString(),
     B2_KEY: env.get('B2_KEY').asString(),
     PIXIV_COOKIE: env.get('PIXIV_COOKIE').asString(),
-    SP_SITE_ID: env.get('SP_SITE_ID').asString()
+    SP_SITE_ID: env.get('SP_SITE_ID').asString(),
+    BILI_ALT_API: env.get('BILI_ALT_API').asString()
 };

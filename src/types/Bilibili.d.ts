@@ -48,3 +48,20 @@ export type BiliDynamicPic = {
     sizes: number; // float
     url: string;
 };
+
+export type AltBiliDynamicData = {
+    basic: {
+        comment_id_str: string;
+        comment_type: number;
+        jump_url: string;
+        rid_str: string;
+    };
+    orig?: {
+        id_str: string;
+        modules: BiliDynamicModule;
+    };
+    id_str: string;
+    modules: BiliDynamicModule;
+    type: string;
+    visible: boolean;
+};
