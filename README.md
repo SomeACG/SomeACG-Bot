@@ -41,6 +41,7 @@
 | B2_KEY_ID     | `1b002831244`                                                | Blackblaze 的应用 ID                               |
 | B2_KEY        | `O923+1uaJH686d7hTw2`                                        | Blackblaze 的应用密钥                              |
 | PIXIV_COOKIE  | `yuid_b=IyTgsd8; PHPSESSID=91263823_7H4nvJHtguiu6yYiu7OIOIomS;` | Pixiv 的网站 Cookie                                |
+| BILI_ALT_API  | `https://api.bilibili.com`                                   | 用来请求B站API的外部接口地址，需单独部署           |
 
 一些其他需要注意的配置项：
 

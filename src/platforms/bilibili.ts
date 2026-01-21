@@ -2,6 +2,8 @@ import { ArtworkInfo } from '~/types/Artwork';
 import config from '~/config';
 import axios from '~/utils/axios';
 import type { AltBiliDynamicData, BiliResponse } from '~/types/Bilibili';
+import logger from '~/utils/logger';
+import DynamicFetcher from './bilibili-api/dynamic';
 
 export default async function getArtworkInfo(
     post_url: string,
@@ -18,17 +20,23 @@ export default async function getArtworkInfo(
         throw new Error('无效的B站动态链接');
     }
 
+    let dynamic_info: AltBiliDynamicData;
+
     const BILI_ALT_API = config.BILI_ALT_API;
 
     if (!BILI_ALT_API) {
-        throw new Error('未配置 BILI_ALT_API，无法获取B站动态');
+        logger.warn('BILI_ALT_API未设置，可能无法获取B站动态内容');
+
+        const fetcher = new DynamicFetcher(dynamic_id);
+        const info = await fetcher.detail();
+
+        dynamic_info = info.item;
+    } else {
+        const resp = await axios.get<BiliResponse<AltBiliDynamicData>>(
+            `${BILI_ALT_API}/api/dynamic/${dynamic_id}`
+        );
+        dynamic_info = resp.data.data;
     }
-
-    const resp = await axios.get<BiliResponse<AltBiliDynamicData>>(
-        `${BILI_ALT_API}/api/dynamic/${dynamic_id}`
-    );
-
-    const dynamic_info = resp.data.data;
 
     let dynamic = dynamic_info.modules;
 

@@ -31,15 +31,7 @@ export type BiliDynamicModule = {
 };
 
 export type BiliDynamicData = {
-    item: {
-        modules: BiliDynamicModule;
-        id_str: string;
-        orig?: {
-            id_str: string;
-            modules: BiliDynamicModule;
-        };
-        type: string;
-    };
+    item: AltBiliDynamicData;
 };
 
 export type BiliDynamicPic = {
