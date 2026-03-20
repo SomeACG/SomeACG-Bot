@@ -11,7 +11,7 @@
         "url": "https://github.com/SomeACG/SomeACG-Bot.git"
     },
     "engines": {
-        "node": "20.x"
+        "node": "^20.x"
     },
     "dependencies": {
         "@renmu/bili-api": "^2.4.0",
@@ -28,6 +28,8 @@
         "koa-router": "^10.1.1",
         "module-alias": "^2.2.2",
         "mongoose": "^8.9.5",
+        "node-addon-api": "^8.6.0",
+        "node-gyp": "^12.2.0",
         "pino": "^8.7.0",
         "pino-pretty": "^9.1.1",
         "sharp": "^0.34.5",
