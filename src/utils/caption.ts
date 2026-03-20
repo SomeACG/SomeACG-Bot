@@ -8,6 +8,7 @@ import {
 import { PushEvent } from '~/types/Event';
 
 const MAX_CAPTION_LENGTH = 1024;
+const MAX_TITLE_LENGTH = 60;
 
 function replaceHtmlBrackets(text: string) {
     return text
@@ -71,8 +72,10 @@ export function artworkCaption(
     event_info?: PushEvent
 ) {
     let caption = '';
-    if (artwork.title)
+    if (artwork.title) {
+        artwork.title = artwork.title.slice(0, MAX_TITLE_LENGTH);
         caption += `<b>${replaceHtmlBrackets(artwork.title)}</b> \n\n`;
+    }
 
     caption += `来源: ${artwork.source.post_url}\n`;
     caption += `画师: `;
@@ -112,8 +115,10 @@ export function artworkCaption(
 
 export function infoCmdCaption(artwork_info: ArtworkInfo) {
     let caption = '图片下载成功!\n\n';
-    if (artwork_info.title)
+    if (artwork_info.title) {
+        artwork_info.title = artwork_info.title.slice(0, MAX_TITLE_LENGTH);
         caption += `<b>${replaceHtmlBrackets(artwork_info.title)}</b>\n`;
+    }
     if (artwork_info.artist) {
         caption += `画师: `;
         caption += `<a href="${genArtistUrl(artwork_info.artist)}">${
@@ -174,10 +179,12 @@ export function randomCaption(
     tags?: string[]
 ) {
     let caption = '';
-    if (artwork.title && artwork.source.post_url)
+    if (artwork.title && artwork.source.post_url) {
+        artwork.title = artwork.title.slice(0, MAX_TITLE_LENGTH);
         caption += `<a href="${artwork.source.post_url}">${replaceHtmlBrackets(
             artwork.title
         )}</a>\n\n`;
+    }
 
     caption += `这是你要的`;
 
