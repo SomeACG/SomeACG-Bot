@@ -137,15 +137,18 @@ export function infoCmdCaption(artwork_info: ArtworkInfo) {
     }
 
     // When the caption length is longer than 1024, cut off the description
-    while (caption.length > MAX_CAPTION_LENGTH && artwork_info.raw_tags && artwork_info.raw_tags.length > 0) {
-        artwork_info.raw_tags.pop();
-        caption = infoCmdCaption(artwork_info);
-    }
     if (caption.length > MAX_CAPTION_LENGTH && artwork_info.desc) {
         artwork_info.desc = cutDescription(
             escapeHtmlTags(artwork_info.desc),
             caption.length
         );
+        caption = infoCmdCaption(artwork_info);
+    }
+    while (
+        caption.length > MAX_CAPTION_LENGTH &&
+        artwork_info.raw_tags?.length > 0
+    ) {
+        artwork_info.raw_tags.pop();
         caption = infoCmdCaption(artwork_info);
     }
 
